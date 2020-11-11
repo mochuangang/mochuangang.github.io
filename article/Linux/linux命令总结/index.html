@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Linux]Linux命令总结 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/linux命令总结/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/linux.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                            
+                        </div>
+                        <h1>[Linux]Linux命令总结</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2018-06-09
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="linux-命令总结">linux 命令总结</h1>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br></pre></td><td class="code"><pre><span class="line">1111、mkdir make directorys 创建目录 -p 递归创建，-v 显示创建目录的过程，例子：mkdir /data 再根下创建data目录 </span><br><span class="line">2、ls    list（列表）     列表目录文件 例子: ls /  列根目录下内容和文件</span><br><span class="line">      -l(long)长格式，-d(directorys)查看目录，-F 给不同文件结尾增加不同标识符， -p 只给目录结尾加斜线</span><br><span class="line">      -a(all) 显示所有文件(包括隐藏文件)，默认以.开头的文件都是隐藏文件，不显示。</span><br><span class="line">      -t 按修改时间排序 ，-r 反转排序，倒序</span><br><span class="line">      -i inode节点号，-h  与-l 一起，以易于阅读的格式输出文件大小,(例如 1K 234M 2G)</span><br><span class="line">      --time-style=long-iso  格式化时间</span><br><span class="line">3、cd    change directory 改变目录路径 例子：cd /etc</span><br><span class="line">4、pwd    print work directory 打印工作目录(显示当前所在路径)</span><br><span class="line">5、touch  -a,改变访问时间，-m 修改时间                   创建文件或更新文件的时间戳，如果文件不存在就创建新文件，</span><br><span class="line">                               如果文件存在就改变文件的访问时间atime</span><br><span class="line"></span><br><span class="line">6、vi   相当于windows记事本，简单。例子 vi oldboy.txt</span><br><span class="line">7、vim  复杂编辑器  功能复杂，高亮，自动缩进(写shell/python脚本用)</span><br><span class="line">8、echo  打印输出内容，配合&quot;&gt;或者&gt;&gt;&quot;,可以为文件覆盖及追加内容,还有一个较复杂不常用的类似命令printf </span><br><span class="line">            -n不换行输出，-e 可以使用转义字符  （\n 回车，\t tab键）</span><br><span class="line">                   例子:echo &apos;I am study linux.&apos;</span><br><span class="line">		    多行追加输出:echo &apos;</span><br><span class="line">                                1111</span><br><span class="line">				                2222</span><br><span class="line">                                3333</span><br><span class="line">                                 &apos;&gt;&gt;oldboy.txt</span><br><span class="line">9、cat  查看文件内容(编辑，追加内容)，-n 显示行号，例子: cat &gt;oldboy.txt</span><br><span class="line">多行追加</span><br><span class="line">cat &gt;&gt;/data/oldboy.txt&lt;&lt;EOF </span><br><span class="line">I am studying linux</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">10、xargs 从标准输入获取内容创建和执行命令行， -n 数字，分组</span><br><span class="line">例子: xargs -n 2 &lt;oldboy.txt 两个为一组输出   </span><br><span class="line"></span><br><span class="line">11、cp -[aifpru] [源文件] [目标文件] copy 拷贝文件或者目录，默认不能拷贝目录，要想拷贝目录要加参数-r或-a</span><br><span class="line">        -a: 相当于 -pdr</span><br><span class="line">		-r: 递归拷贝，用于复制目录及目录里面的内容</span><br><span class="line">        -p: 连同档案的属性一起复制过去，而非使用默认属性</span><br><span class="line">12、mv  move    移动文件或目录</span><br><span class="line">13、rm -rf [目标文件] 删除文件或目录，要删除目录需要-r</span><br><span class="line">    -r 递归删除目录，-f 强制删除</span><br><span class="line">14、*****find   查找    -type 文件类型 (f(file)),d(directory),c(character),b(block),s(socket),l(link)),-name &quot;文件名&quot;, </span><br><span class="line">                                   -mtime +时间 ,按修改时间查找，-ctime -atime</span><br><span class="line">                                   +7 7天以前</span><br><span class="line">                                   7 第7天</span><br><span class="line">                                   -7 最近7天</span><br><span class="line">  find查找删除文件或者目录的两种常用方式，</span><br><span class="line">    1、find /tmp -type f -name &quot;*.txt&quot;</span><br><span class="line">       find /tmp -type f -name &quot;*.txt&quot; -exec rm &#123;&#125; \;</span><br><span class="line">       find /tmp -type f -name &quot;*.txt&quot; |xatgs</span><br><span class="line">    2、find /tmp -type f -name &quot;*.txt&quot; |xargs rm -f</span><br><span class="line">使用find命令移动文件 mv `find /data -type -name &quot;oldboy.txt&quot;` /tmp 查找到/data目录下的oldboy.txt文件移动到/tmp目录下</span><br><span class="line"></span><br><span class="line">15、*****grep linux三剑客老三   过滤需要的内容， -v 排除内容，例子：grep -v oldboy test.txt</span><br><span class="line">               -o 只显示匹配到的内容</span><br><span class="line">            #Context control</span><br><span class="line">            -B(before) 除了显示匹配的一行之外，并显示该行之前的num行</span><br><span class="line">            -A(alter)  除了显示匹配的一行之外，并显示该行之后的num行</span><br><span class="line">            -C（）除了显示匹配的一行之外，并显示该行之前后</span><br><span class="line">            -n 对匹配的内容打印行号 </span><br><span class="line">            -i 不区分大小写</span><br><span class="line">——了显示匹配的一行之外，显示该行de[root@oldboy tmp]# grep -v oldboy test.txt </span><br><span class="line">test</span><br><span class="line">liyao</span><br><span class="line">！取反，-a and 交集，并且，- o or 并集 或者 -maxdepth 查找深度</span><br><span class="line">16、head 头部，读取文件的前n行，默认前10行， -n 接数字，习惯去掉n -2  例子：head -2 test.txt 读取文件前两行</span><br><span class="line"></span><br><span class="line">17、tail 尾部，读取文件的后n行，默认后10行， -n 接数字 ,习惯去掉n -2   例子：tail -2 test.txt 读取文件的后两行</span><br><span class="line"></span><br><span class="line">18、tree  查看结构 -a 显示全部结构，-i 不显示- ,-F显示区分目录和文件，-L 显示层级 ，tree -L 1显示一层，例子: tree -dL 2 只显示2层目录</span><br><span class="line">     如果需要更新补丁则执行 yum update,   需要装的命令 yum install lrzsz telnet tree nmap nc -y</span><br><span class="line">     出现乱码 怎么调整, LANG=en 改变字符集</span><br><span class="line">     覆盖文件不提示怎么做，cp前加\或者使用命令全路径， 例子: 1、\cp /mnt/test.txt /tmp，2、 /bin/cp /mnt/test.txt /tmp</span><br><span class="line">19、alias 查看和设置别名，例子：查看别名，直接输入alias,设置别名 alias cp=&apos;cp -i&apos;</span><br><span class="line"></span><br><span class="line">20、unalias 取消别名  unalias cp</span><br><span class="line"></span><br><span class="line">    定义别名永久生效: /etc/profile全局生效， ~/.bashrc  当前用户生效 </span><br><span class="line">    别名的作用：1、通过给危险命令加一些保护参数，防止人为误操作。</span><br><span class="line">           2、把很多复杂的字符串或命令变成一个简单的字符串或者命令。</span><br><span class="line">21、seq=sequence  序列</span><br><span class="line"></span><br><span class="line">22、sed  stream editor   linux三剑客老二，刘编辑器，实现对文件的增删改换查。</span><br><span class="line">         例子：sed -n &apos;20,30&apos; p ett.txt,打印输出ett.txt文件的第20行到30行， </span><br><span class="line">         参数:    -n取消默认输出，-i 修改内容，-e允许多项编辑 </span><br><span class="line">         功能命令: </span><br><span class="line">         p打印 </span><br><span class="line">         g与s联合使用时，表示对当前行全局匹配替换</span><br><span class="line">         s常说的查找并替换，用一个字符串替换成另一个</span><br><span class="line">         sed &apos;s#oldgirl#cangjing#g&apos; oldboy.txt, </span><br><span class="line">         #是分隔符 ，oldgirl表示要替换的内容，cangjing表示想要替换为什么内容</span><br><span class="line">         可以用/@登替换。</span><br><span class="line">23、 awk  过滤、输出内容，是一门语言。NR 表示行号, 例子：awk &apos;NR&gt;19&amp;&amp;NR&lt;31&apos; ett.txt,输出20到30行</span><br><span class="line">     $1 第一列， $2第二列依次类推 $0表示一行</span><br><span class="line">     -F 指定分隔符   NF表示最后一列  </span><br><span class="line">24、useradd  添加用户   语法：useradd 用户名 ，例子：useradd oldboy</span><br><span class="line"></span><br><span class="line">25、passwd 为用户设置或修改密码 语法:passwd oldboy 为oldboy设置修改密码，直接passwd是当前用户修改密码</span><br><span class="line">     非交互式更改密码 ：echo &quot;123456&quot; |passwd --stdin oldboy</span><br><span class="line">26、uname 打印系统信息 -m 32or64， -r系统内核，-a(all),-n显示主机名，hostname命令</span><br><span class="line"></span><br><span class="line">27、hostname  显示和设置主机名，默认是显示主机名，设置主机名可以hostname +名字(临时生效)</span><br><span class="line"></span><br><span class="line">28、runlevel: 查看当前系统运行级别</span><br><span class="line"></span><br><span class="line">29、init:     切换运行级别，后面接对应级别的数字：例如：init 6就是重启linux服务了</span><br><span class="line"></span><br><span class="line">30、shutdown(halt,init 0)  关机命令  shutdown -h now 关机，</span><br><span class="line"></span><br><span class="line">31、reboot（init 6）重启，shutdown -r now </span><br><span class="line"></span><br><span class="line">32、history   查看及清理历史记录 -c 清空所有</span><br><span class="line"></span><br><span class="line">33、dmseg     命令可以查看系统故障信息</span><br><span class="line"></span><br><span class="line">34、ifup和ifdown 启动和停止网卡，可以接网卡名，ifup eth0</span><br><span class="line"></span><br><span class="line">35、nl  nl - number lines显示行号</span><br><span class="line"></span><br><span class="line">36、less 和more 相反，回车一次一行，空格一次一屏，按b可以一次回退一屏</span><br><span class="line"></span><br><span class="line">37、more 按页一次一屏，回车一次一行，空格一次一屏，只能往下走，不能回退</span><br><span class="line"></span><br><span class="line">38、wc 显示总行数， -l（lines）总行数，-L 最大行的长度</span><br><span class="line"></span><br><span class="line">39、chkconfig  设置服务开机自启动的命令，</span><br><span class="line">     --list 查看自动服务， --level levels</span><br><span class="line">      chkconfig --level [levels] sshd off[on] 设置某个级别的服务开关毕</span><br><span class="line">      例子:chkconfig --level 2 sshd off,</span><br><span class="line">     chkconfig --list 显示所有服务</span><br><span class="line">     chkconfig --list ssd 查看指定服务是否开机自启动</span><br><span class="line">	  </span><br><span class="line">	 </span><br><span class="line">40、tar 打包(z c v f j x X N p P C --exclude)</span><br><span class="line"></span><br><span class="line">41、tr   替换translate or delete characters(逐个字符替换)</span><br><span class="line"></span><br><span class="line">42、stat 显示文件和文件系统状态(查看文件属性)</span><br><span class="line"></span><br><span class="line">43、file 查看文件和文件系统状态(查看文件属性)</span><br><span class="line"></span><br><span class="line">44、last 查看用户登录信息，/var/log/wtmp数据文件</span><br><span class="line"></span><br><span class="line">45、lastlog 显示最近登录的用户信息。(var/log/lastlog数据文件)</span><br><span class="line"></span><br><span class="line">46、df 查看文件系统磁盘空间，-i inode -h人类可读</span><br><span class="line"></span><br><span class="line">47、dumpe2fs 查看文件系统内部信息(元数据)</span><br><span class="line"></span><br><span class="line">48、tree 大树的意思，显示目录树， -L layer层数 -d显示目录</span><br><span class="line"></span><br><span class="line">49、id   查看用户信息 id +用户名</span><br><span class="line"></span><br><span class="line">50、ln 创建软硬链接 -s 创建软链接</span><br><span class="line"></span><br><span class="line">51、du  查看文件和目录大小 -sh</span><br><span class="line">52、fdisk 磁盘分区(2T以下的磁盘)</span><br><span class="line">    -c 关闭DOS-compatible兼容模式</span><br><span class="line">    -u 以扇区为单位进行分区</span><br><span class="line">52、tune2fs -c 0 -i 0 /dev/sdb1</span><br><span class="line">    -c 0  count 关闭每挂载多少次进行磁盘检查的功能</span><br><span class="line">    -i 0  interval 关闭每隔180天进行磁盘检查的功能</span><br><span class="line">53、mount 挂载磁盘</span><br><span class="line">54、umount 卸载磁盘</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">xargs 搭配用法：</span><br><span class="line">find /log -type f -name &quot;*.log&quot; -mtime +15 |xargs rm -f 查找/log目录，删除15以前修改过的文件</span><br><span class="line">find /log -type d -name &quot;*oldboy&quot; -mtimr +30 |xargs rm -rf 查找/log目录下，删除修改日期在30天以前。且以oldboy结尾的目录</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">特使符号:</span><br><span class="line">&gt;或者1&gt;   输出重定向:  把前面输出的东西输入到后边的文件中，会清除文件原有的内容，</span><br><span class="line">&gt;&gt;或者1&gt;&gt; 追加重定向:  把前面输出的东西追加到后边的文件尾部，不会清除文件原有内容。</span><br><span class="line">0&lt;或&lt;     输入重定向:  输入重定向用于改变命令的输入，后面指定输入内容，前面跟文件名。</span><br><span class="line">0&lt;&lt;或&lt;&lt;   追加输入重定向: 后跟字符串用来表示“输入结束”，也可用ctrl+d来结束输入</span><br><span class="line">          例子:把EOF中的内容追加到根/目录下data目录下的oldboy.txt文件中</span><br><span class="line">           cat &gt;&gt;/data/oldboy.txt&lt;&lt; EOF</span><br><span class="line">            I am studying linux</span><br><span class="line">	    EOF</span><br><span class="line">2&gt;        错误重定向： 把错误信息输入到后边文件中，会删除问价原有的内容</span><br><span class="line">2&gt;&gt;       错误追加重定向: 把错误信息追加到后边的文件中，不会删除文件原有的内容。</span><br><span class="line">说明:</span><br><span class="line">1、箭头的指向就是数据的流向。</span><br><span class="line">2、数字说明:</span><br><span class="line">1.标准输入(stdin):       代码为0，使用&lt;或&lt;&lt;。数据流向从右到左。</span><br><span class="line">2.标准正常输入(stdout):  代码为1，使用&gt;或&gt;&gt;.数据流向从左向右。</span><br><span class="line">3.标准错误输出(stderr):  代码为2，使用2&gt;或2&gt;&gt;。</span><br><span class="line">例子: echo &apos;oldboy&apos; 1&gt;a.txt 2&gt;b.txt  把正确的输入到a.txt文件中，错误信息输入到b.txt文件中</span><br><span class="line"></span><br><span class="line">正确和错误的信息都放到一个文件里有3种方式：</span><br><span class="line">1、echo &apos;oldboy&apos; 1&gt;a.txt 2&gt;a.txt</span><br><span class="line">2、echo &apos;oldboy&apos; &gt;a.txt 2&gt;&amp;1(常用的方法)</span><br><span class="line">3、echo &apos;oldboy&apos; &amp;&gt;a.txt</span><br><span class="line"></span><br><span class="line">“&gt;”意思为重定向，会清除文件里所有以前数据，</span><br><span class="line">“&gt;&gt;”为内容追加，只在文件尾部追加需要的内容，还有一个比较复杂不常用的类似命令printf.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">相对路径和绝对路径:</span><br><span class="line">Windows绝对路径:</span><br><span class="line">E:\2018-老男孩IT教育-常用运维工具，从头(盘符)开始的路径</span><br><span class="line"></span><br><span class="line">linux绝对路径:cat /etc/sysconfig/network-scripts/ifcfg=etc0;</span><br><span class="line">相对路径:不从/根开始，不从头开始的路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">特殊符号:</span><br><span class="line">| 管道</span><br><span class="line">.. 上一级目录</span><br><span class="line">* 通配符 表示任意</span><br><span class="line">. 当前目录</span><br><span class="line">/ 所有目录的顶点，也是路径的分隔符</span><br><span class="line">; 命令分隔符</span><br><span class="line">&#123;&#125; 序列</span><br><span class="line">~ 当前用户的家目录</span><br><span class="line">- 用户上一次所在的目录，由OLDPWD变量控制</span><br><span class="line">&amp;&amp; 并且，相当于and</span><br><span class="line">linux特殊变量:</span><br><span class="line">临时生效</span><br><span class="line">export HISTSIZE=5 命令行历史记录数量</span><br><span class="line">export HISTFILESIZE=5 命令行命令对应文件的记录数 ~/.bash_history</span><br><span class="line">export TMOUT =10 ,连接的超市时间控制变量</span><br><span class="line"></span><br><span class="line">永久生效：</span><br><span class="line">echo &apos;export TMOUT=300&apos; &gt;&gt;/etc/profile</span><br><span class="line">echo &apos;export HISTSIZE=300&apos; &gt;&gt;/etc/profile</span><br><span class="line">echo &apos;export HISTFILESIZE=5&apos; &gt;&gt;/etc/profile</span><br><span class="line"></span><br><span class="line">只查看ett.txt文件(100行)内第20行到第30行的内容(企业面试题)</span><br><span class="line">head -30 ett.txt |tail -11</span><br><span class="line">seq -n &apos;20,30&apos; p ett.txt</span><br><span class="line">awk &apos;NR&gt;19&amp;&amp;NR&lt;31&apos; ett.txt</span><br><span class="line">awk &apos;&#123;if(NR&lt;31 &amp;&amp; NR&gt;19) printf $0&quot;\n&quot;&#125;&apos; ett.txt</span><br><span class="line"> awk &apos;NR==1 &#123;print $0&#125;&apos; /etc/passwd 打印一行</span><br><span class="line">awk -F &quot;:&quot; &apos;NR==1 &#123;print $5,$6,$7&#125;&apos; /etc/passwd 以：为分隔符打印出第5，第6，第7段</span><br><span class="line"></span><br><span class="line">grep 20 -A 10 ett.txt ,显示当前行，并显示该行之后的10行</span><br><span class="line">-A 显示当前行，并显示该行之后的num行</span><br><span class="line">-B 显示当前行，并显示该行之前的num行</span><br><span class="line">-C 显示当前行，并显示该行之前后的num行</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Linux三剑客（只适合grep,sed,awk）正则表达式,对普通命令不适合（通配符）</span><br><span class="line">^   以...开头， ^d，意思是以d开头</span><br><span class="line">$   以...结尾， /$, 意思是以/结尾</span><br><span class="line">\   转义字符</span><br><span class="line">.   代表任意一个字符</span><br><span class="line">.* 代表所有</span><br></pre></td></tr></table></figure>
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Linux/linux基础优化/" data-toggle="tooltip" data-placement="top" title="[Linux]Linux系统基础优化">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#linux-命令总结"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">linux &#x547D;&#x4EE4;&#x603B;&#x7ED3;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

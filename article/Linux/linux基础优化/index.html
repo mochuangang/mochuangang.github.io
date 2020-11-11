@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Java] Java基础 - 莫传刚 | Blog
+          [Linux]Linux系统基础优化 - 莫传刚 | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/article/Java/">
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/linux基础优化/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -71,7 +71,7 @@
 <style type="text/css">
     header.intro-header{
         
-            background-image: url('/img/article_header/article_header.png')
+            background-image: url('/img/article_header/linux.jpg')
             /*post*/
         
     }
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>[Java] Java基础</h1>
-                        <h2 class="subheading">Linux基础.</h2>
+                        <h1>[Linux]Linux系统基础优化</h1>
+                        <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by 莫传刚 on
-                            2020-11-09
+                            2018-06-09
                         </span>
                     </div>
                 
@@ -212,118 +212,36 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="第一章-java概述">第一章 Java概述</h1>
-<h2 id="11-java历史">1.1 Java历史</h2>
-<p>Java诞生于SUN（Stanford University Network），09年SUN被Oracle（甲骨文）收购。</p>
-<p>Java之父是詹姆斯.高斯林(James Gosling)。</p>
-<p>1996年发布JDK1.0版。</p>
-<p>目前最新的版本是Java12。我们学习的Java8。</p>
-<h2 id="12-java语言最主要的特点">1.2 Java语言最主要的特点</h2>
-<ul>
-<li>特点一：面向对象</li>
-</ul>
-<p>两个基本概念：类、对象</p>
-<p>三大特性：封装、继承、多态</p>
-<ul>
-<li>特点二：健壮性</li>
-</ul>
-<p>吸收了C/C++语言的优点，但去掉了其影响程序健壮性的部分（如指针、内存的申请与释放等），提供了一个相对安全的内存管理和访问机制</p>
-<ul>
-<li>特点三：跨平台性</li>
-</ul>
-<p>跨平台性：通过Java语言编写的应用程序在不同的系统平台上都可以运行。“Write once , Run Anywhere”一次编写，处处运行。</p>
-<p>原理：只要在需要运行 java 应用程序的操作系统上，先安装一个Java虚拟机 (JVM Java Virtual Machine) 即可。由JVM来负责Java程序在该系统中的运行。因为有了JVM，同一个Java 程序在三个不同的操作系统中都可以执行。这样就实现了Java 程序的跨平台性。</p>
-<p><img src="/img/article/java/1557828366412.png" alt="1557828366412"></p>
-<h2 id="13-java环境搭建">1.3 Java环境搭建</h2>
-<h3 id="131-jdk-jre-jvm">1.3.1 JDK、JRE、JVM</h3>
-<p>Java开发人员需要安装JDK。如果仅仅是运行Java程序，那么只需要按照JRE。</p>
-<p>JDK（Java Development kits）：Java开发工具包。</p>
-<p>JRE（Java Runtime Environment）：Java运行环境。</p>
-<p>JVM（Java Virtual Machine）：Java虚拟机。</p>
-<p>JDK = JRE + 开发工具（javac.exe,java.exe,javadoc.exe等）</p>
-<p>JRE = JVM + 核心类库（常用类：String、日期时间、数学、集合、IO、网络、多线程等）</p>
-<p><img src="/img/article/java/1553593811117.png" alt="1553593811117"></p>
-<h3 id="132-java环境搭建">1.3.2  Java环境搭建</h3>
-<p>1、安装JDK</p>
-<p><img src="/img/article/java/1553644600381.png" alt="1553644600381"></p>
-<p>2、配置JDK的开发工具目录到path环境变量中</p>
-<pre><code>例如：D:\ProgramFiles\Java\jdk1.8.0_51\bin;
-
-注意：这个安装目录以你自己的安装目录为准
-</code></pre>
-<p><img src="/img/article/java/1553644724825.png" alt="1553644724825"></p>
-<p>（1）为什么配置path？</p>
-<pre><code>希望在命令行使用javac.exe等工具时，任意目录下都可以找到这个工具所在的目录。
-</code></pre>
-<p>（2）如何配置环境变量？</p>
-<pre><code>【计算机】右键【属性】，选择【高级系统设置】，选择【高级】，选择【环境变量】，选择【系统环境变量】，编辑path，在【**path原有值**】的前面加入D:\ProgramFiles\Java\jdk1.8.0_51\bin;
-</code></pre>
-<h2 id="14-第一个java应用程序">1.4 第一个Java应用程序</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        System.out.print(<span class="string">"Hello Java!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="141-java程序的开发步骤">1.4.1 Java程序的开发步骤</h3>
-<p>三步：</p>
-<p>1、编辑/编写源代码</p>
-<p>要求：源文件必须是.java文件</p>
-<p>2、编译</p>
-<p>目的：把源文件编译为.class字节码文件（因为JVM只认识字节码）</p>
-<p>工具：javac.exe</p>
-<p>格式：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac 源文件名.java</span><br></pre></td></tr></table></figure>
-<p>3、运行</p>
-<p>工具：java.exe</p>
-<p>格式：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java 类名</span><br><span class="line">java 字节码文件名</span><br></pre></td></tr></table></figure>
-<p>要求：可以被运行的类，必须包含main方法</p>
-<h3 id="142-java程序的结构与格式">1.4.2 Java程序的结构与格式</h3>
-<p>结构：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">类&#123;</span><br><span class="line">    方法&#123;</span><br><span class="line">        语句;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>格式：</p>
-<p>（1）每一级缩进一个Tab键</p>
-<p>（2）{}的左半部分在行尾，右半部分单独一行，与和它成对的&quot;{&quot;的行首对齐</p>
-<h3 id="143-java程序的入口">1.4.3 Java程序的入口</h3>
-<p>Java程序的入口是main方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="144-java注释">1.4.4 Java注释</h3>
-<p>1、单行注释</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注释内容</span></span><br></pre></td></tr></table></figure>
-<p>2、多行注释</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">注释内容</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<p>3、文档注释</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">文档注释（后面注解部分讲解）</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<h2 id="15-编写java程序时应该注意的问题">1.5 编写Java程序时应该注意的问题</h2>
-<p>1、字符编码问题</p>
-<p>当cmd命令行窗口的字符编码与.java源文件的字符编码不一致，如何解决？</p>
-<p><img src="/img/article/java/1557881223916.png" alt="1557881223916"></p>
-<p>解决方案一：</p>
-<pre><code>在Notepad++等编辑器中，修改源文件的字符编码
-</code></pre>
-<p><img src="/img/article/java/1557881271819.png" alt="1557881271819"></p>
-<p>解决方案二：</p>
-<pre><code>在使用javac命令式，可以指定源文件的字符编码
-</code></pre>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac -encoding utf-<span class="number">8</span> Review01.java</span><br></pre></td></tr></table></figure>
-<p>2、大小写问题</p>
-<p>（1）源文件名：</p>
-<pre><code>不区分大小写，我们建议大家还是区分
-</code></pre>
-<p>（2）字节码文件名与类名</p>
-<pre><code>区分大小写
-</code></pre>
-<p>（3）代码中</p>
-<pre><code>区分大小写
-</code></pre>
-<p>3、源文件名与类名一致问题？</p>
-<p>（1）源文件名是否必须与类名一致？public呢？</p>
-<p>如果这个类不是public，那么源文件名可以和类名不一致。</p>
-<p>如果这个类是public，那么要求源文件名必须与类名一致。</p>
-<p>我们建议大家，不管是否是public，都与源文件名保持一致，而且一个源文件尽量只写一个类，目的是为了好维护。</p>
-<p>（2）一个源文件中是否可以有多个类？public呢？</p>
-<p>一个源文件中可以有多个类，编译后会生成多个.class字节码文件。</p>
-<p>但是一个源文件只能有一个public的类。</p>
-<p>（3）main必须在public的类中吗？</p>
-<p>不是。</p>
-<p>但是后面写代码时，基本上main习惯上都在public类中。</p>
-
+                <h1 id="1系统基础优化">1.系统基础优化</h1>
+<p>[TOC]</p>
+<h2 id="1-hosts文件配置">1. hosts文件配置</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">\cp /etc/hosts&#123;,.bak&#125;</span><br><span class="line">cat &gt;/etc/hosts&lt;&lt;EOF</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">172.16.1.5      lb01</span><br><span class="line">172.16.1.6      lb02</span><br><span class="line">172.16.1.7      web01</span><br><span class="line">172.16.1.8      web02</span><br><span class="line">172.16.1.9      web03</span><br><span class="line">172.16.1.51     db01 db01.etiantian.org</span><br><span class="line">172.16.1.31     nfs01</span><br><span class="line">172.16.1.41     backup</span><br><span class="line">172.16.1.61     m01</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="2-更改yum源">2. 更改yum源</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#更改为阿里云源</span><br><span class="line"> wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo</span><br><span class="line"> </span><br><span class="line"> #epel源</span><br><span class="line"> wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo</span><br></pre></td></tr></table></figure>
+<p>##3. 关闭selinux</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#临时修改</span><br><span class="line">setenforce 0</span><br><span class="line"></span><br><span class="line">#检查</span><br><span class="line">getenforce</span><br><span class="line"></span><br><span class="line">#永久修改</span><br><span class="line">sed -i.bak &apos;s/SELINUX=enforcing/SELINUX=disabled/&apos; /etc/selinux/config</span><br><span class="line">#修改后检查</span><br><span class="line">grep SELINUX=disabled /etc/selinux/config</span><br></pre></td></tr></table></figure>
+<p>##4. 关闭iptables</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#关闭iptables         </span><br><span class="line">/etc/init.d/iptables stop</span><br><span class="line"></span><br><span class="line">#关闭开机启动项</span><br><span class="line">chkconfig iptables off</span><br></pre></td></tr></table></figure>
+<p>##5. 精简开机自启动服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#精简开机自启动服务</span><br><span class="line">export LANG=en</span><br><span class="line">chkconfig|egrep -v &quot;crond|sshd|network|rsyslog|sysstat&quot;|awk &apos;&#123;print &quot;chkconfig&quot;,$1,&quot;off&quot;&#125;&apos;|bash</span><br><span class="line"></span><br><span class="line">#检查</span><br><span class="line">chkconfig --list|grep 3:on</span><br></pre></td></tr></table></figure>
+<p>##6. 设置一个用户(oldboy)可以sudo提权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#提权oldboy可以sudo(可选配置)</span><br><span class="line">useradd oldboy</span><br><span class="line">echo 123456|passwd --stdin oldboy</span><br><span class="line">\cp /etc/sudoers /etc/sudoers.ori</span><br><span class="line">echo &quot;oldboy  ALL=(ALL) NOPASSWD: ALL &quot; &gt;&gt;/etc/sudoers</span><br><span class="line">#检查</span><br><span class="line">tail -1 /etc/sudoers</span><br><span class="line">visudo -c</span><br></pre></td></tr></table></figure>
+<p>##7. 设置英文字符集</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#英文字符集</span><br><span class="line">cp /etc/sysconfig/i18n /etc/sysconfig/i18n.ori</span><br><span class="line">echo &apos;LANG=&quot;en_US.UTF-8&quot;&apos;  &gt;/etc/sysconfig/i18n </span><br><span class="line">source /etc/sysconfig/i18n</span><br><span class="line">echo $LANG</span><br></pre></td></tr></table></figure>
+<p>##8. 时间同步</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;#time sync by lidao at 2017-03-08&apos; &gt;&gt;/var/spool/cron/root</span><br><span class="line">echo &apos;*/5 * * * * /usr/sbin/ntpdate pool.ntp.org &gt;/dev/null 2&gt;&amp;1&apos; &gt;&gt;/var/spool/cron/root</span><br><span class="line"></span><br><span class="line">#检查</span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+<p>##9. 加大文件描述</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;*               -       nofile          65535 &apos; &gt;&gt;/etc/security/limits.conf</span><br><span class="line"></span><br><span class="line">#检查</span><br><span class="line">tail -1 /etc/security/limits.conf</span><br></pre></td></tr></table></figure>
+<p>##10. 内核优化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt;/etc/sysctl.conf&lt;&lt;EOF</span><br><span class="line">net.ipv4.tcp_fin_timeout = 2</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line">net.ipv4.tcp_keepalive_time = 600</span><br><span class="line">net.ipv4.ip_local_port_range = 4000    65000</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 16384</span><br><span class="line">net.ipv4.tcp_max_tw_buckets = 36000</span><br><span class="line">net.ipv4.route.gc_timeout = 100</span><br><span class="line">net.ipv4.tcp_syn_retries = 1</span><br><span class="line">net.ipv4.tcp_synack_retries = 1</span><br><span class="line">net.core.somaxconn = 16384</span><br><span class="line">net.core.netdev_max_backlog = 16384</span><br><span class="line">net.ipv4.tcp_max_orphans = 16384</span><br><span class="line">#以下参数是对iptables防火墙的优化，防火墙不开会提示，可以忽略不理。</span><br><span class="line">net.nf_conntrack_max = 25000000</span><br><span class="line">net.netfilter.nf_conntrack_max = 25000000</span><br><span class="line">net.netfilter.nf_conntrack_tcp_timeout_established = 180</span><br><span class="line">net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120</span><br><span class="line">net.netfilter.nf_conntrack_tcp_timeout_close_wait = 60</span><br><span class="line">net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 120</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">#重新加载生效</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+<p>##11. 安装其他小软件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install lrzsz nmap tree dos2unix nc telnet sl -y</span><br></pre></td></tr></table></figure>
+<p>##12. ssh连接速度慢优化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#ssh连接速度慢优化          </span><br><span class="line">sed -i.bak &apos;s@#UseDNS yes@UseDNS no@g;s@^GSSAPIAuthentication yes@GSSAPIAuthentication no@g&apos;  /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line">#重新加载生效</span><br><span class="line">/etc/init.d/sshd reload</span><br></pre></td></tr></table></figure>
+<p>##13. 命令行安全（可以不配置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;export TMOUT=300&apos; &gt;&gt;/etc/profile</span><br><span class="line">echo &apos;export HISTSIZE=5&apos; &gt;&gt;/etc/profile</span><br><span class="line">echo &apos;export HISTFILESIZE=5&apos; &gt;&gt;/etc/profile</span><br><span class="line"></span><br><span class="line">#检查</span><br><span class="line">tail -3 /etc/profile</span><br><span class="line">. /etc/profile</span><br></pre></td></tr></table></figure>
+<p>##14. 虚拟主机克隆操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">第一步：调整虚拟主机网络配置信息</span><br><span class="line">一清空 两删除</span><br><span class="line">两删除：删除网卡（eth0 eth1）中，UUID（硬件标识信息）和HWADDR（网络mac地址）进行删除</span><br><span class="line">sed -ri &apos;/UUID|HWADDR/d&apos;  /etc/sysconfig/network-scripts/ifcfg-eth[01]</span><br><span class="line">一清空：清空网络规则配置文件</span><br><span class="line">echo &apos;&gt;/etc/udev/rules.d/70-persistent-net.rules&apos; &gt;&gt;/etc/rc.local </span><br><span class="line">		</span><br><span class="line">第二步：关闭虚拟模板机</span><br><span class="line">shutdown -h now</span><br></pre></td></tr></table></figure>
                 
 
                 <hr>
@@ -331,9 +249,13 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/linux/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础">&larr; Previous Post</a>
+                            <a href="/article/Linux/01.Linux之系统安装/" data-toggle="tooltip" data-placement="top" title="[Linux]Linux基础之（一）虚拟机安装系统">&larr; Previous Post</a>
                         </li>
                     
+                    
+                        <li class="next">
+                            <a href="/article/Linux/linux命令总结/" data-toggle="tooltip" data-placement="top" title="[Linux]Linux命令总结">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -382,7 +304,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#第一章-java概述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x7B2C;&#x4E00;&#x7AE0; Java&#x6982;&#x8FF0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#11-java历史"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.1 Java&#x5386;&#x53F2;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#12-java语言最主要的特点"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">1.2 Java&#x8BED;&#x8A00;&#x6700;&#x4E3B;&#x8981;&#x7684;&#x7279;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#13-java环境搭建"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">1.3 Java&#x73AF;&#x5883;&#x642D;&#x5EFA;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#131-jdk-jre-jvm"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">1.3.1 JDK&#x3001;JRE&#x3001;JVM</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#132-java环境搭建"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">1.3.2  Java&#x73AF;&#x5883;&#x642D;&#x5EFA;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#14-第一个java应用程序"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">1.4 &#x7B2C;&#x4E00;&#x4E2A;Java&#x5E94;&#x7528;&#x7A0B;&#x5E8F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#141-java程序的开发步骤"><span class="toc-nav-number">1.4.1.</span> <span class="toc-nav-text">1.4.1 Java&#x7A0B;&#x5E8F;&#x7684;&#x5F00;&#x53D1;&#x6B65;&#x9AA4;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#142-java程序的结构与格式"><span class="toc-nav-number">1.4.2.</span> <span class="toc-nav-text">1.4.2 Java&#x7A0B;&#x5E8F;&#x7684;&#x7ED3;&#x6784;&#x4E0E;&#x683C;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#143-java程序的入口"><span class="toc-nav-number">1.4.3.</span> <span class="toc-nav-text">1.4.3 Java&#x7A0B;&#x5E8F;&#x7684;&#x5165;&#x53E3;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#144-java注释"><span class="toc-nav-number">1.4.4.</span> <span class="toc-nav-text">1.4.4 Java&#x6CE8;&#x91CA;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#15-编写java程序时应该注意的问题"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">1.5 &#x7F16;&#x5199;Java&#x7A0B;&#x5E8F;&#x65F6;&#x5E94;&#x8BE5;&#x6CE8;&#x610F;&#x7684;&#x95EE;&#x9898;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1系统基础优化"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x7CFB;&#x7EDF;&#x57FA;&#x7840;&#x4F18;&#x5316;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-hosts文件配置"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1. hosts&#x6587;&#x4EF6;&#x914D;&#x7F6E;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-更改yum源"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">2. &#x66F4;&#x6539;yum&#x6E90;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -402,7 +324,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
                     </div>
                 </section>

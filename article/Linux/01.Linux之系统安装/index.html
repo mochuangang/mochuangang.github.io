@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Linux]Linux基础之（一）虚拟机安装系统 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/01.Linux之系统安装/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/linux.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                            
+                        </div>
+                        <h1>[Linux]Linux基础之（一）虚拟机安装系统</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2018-06-09
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="1虚拟机安装linux系统">1.虚拟机安装Linux系统</h1>
+<p><strong>第1步：在虚拟机管理界⾯中单击“开启此虚拟机”按钮后数秒就看到 RHEL 7.4 系统安装界⾯，如图 1-所示。</strong><br>
+<img src="/img/article/linux/15478703987020.jpg" alt="-w588"></p>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Install Red Hat Enterprise Linux 7.4</td>
+<td>安装Redhat Linux7.4系统</td>
+</tr>
+<tr>
+<td>Test this media &amp; install Red Hat Enterprise Linux 7</td>
+<td>校验光盘完整性后再安装</td>
+</tr>
+<tr>
+<td>Troubleshooting</td>
+<td>启动救援模式</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第2步：修改内核参数net.ifnames=0 biosdevname=0，使网卡名统一为eth0或者eth1的方式。</strong><br>
+接下来选择第一项按Tab键，进入到如下的界面<br>
+<img src="/img/article/linux/15478715500299.jpg" alt="-w640"></p>
+<p>在光标后面填上net.ifnames=0 biosdevname=0，如图所示<br>
+<img src="/img/article/linux/15478717717021.jpg" alt="-w640"></p>
+<p>按回车，返回到安装界面<br>
+<img src="/img/article/linux/15478719887183.jpg" alt="-w720"><br>
+再按一次回车键进入安装<br>
+1.选择语言<br>
+<img src="/img/article/linux/15478720821433.jpg" alt="-w784"></p>
+<p>2.选择时间地区上海<br>
+<img src="/img/article/linux/15478722113196.jpg" alt="-w800"></p>
+<p><img src="/img/article/linux/15478722878044.jpg" alt="-w800"></p>
+<p>3.键盘默认<br>
+<img src="/img/article/linux/15478723797172.jpg" alt="-w788"></p>
+<p>4.语言选项<br>
+<img src="/img/article/linux/15478724670074.jpg" alt="-w795"></p>
+<p>5.系统安装的位置，默认是光盘的，以后要是有批量安装的可以更改<br>
+<img src="/img/article/linux/15478728865493.jpg" alt="-w693"><br>
+<img src="/img/article/linux/15478729031244.jpg" alt="-w780"></p>
+<p>6.软件的安装，选择最小化的安装时最安全的，也可以选择带可视化界面的安装，不过一般都用不上可视化的界面，这里选择最小化安装，软件也是最小化安装<br>
+<img src="/img/article/linux/15478730272272.jpg" alt="-w697"><br>
+<img src="/img/article/linux/15478730441573.jpg" alt="-w763"></p>
+<p>7.系统安装的位置选择手动配置，点击完成<br>
+<img src="/img/article/linux/15478731984663.jpg" alt="-w653"><br>
+<img src="/img/article/linux/15478732829393.jpg" alt="-w800"></p>
+<p>选择标准分区<br>
+<img src="/img/article/linux/15478734405324.jpg" alt="-w800"></p>
+<p>选择分区磁盘大小<br>
+添加第一个分区 /boot分区 1G<br>
+<img src="/img/article/linux/15478736264343.jpg" alt="-w789"><br>
+2.添加第二个分区 swap分区 1G<br>
+<img src="/img/article/linux/15478737015735.jpg" alt="-w782"><br>
+3.第三个分区全部给/分区<br>
+<img src="/img/article/linux/15478737979736.jpg" alt="-w802"><br>
+<img src="/img/article/linux/15478738946557.jpg" alt="-w780"></p>
+<p>9.关闭kdump<br>
+<img src="/img/article/linux/15478739458902.jpg" alt="-w677"></p>
+<p><img src="/img/article/linux/15478740107766.jpg" alt="-w796"></p>
+<p>10.网卡及主机名配置，前面要是添加修改了net.ifnames=0 biosdevname=0 ，下面的网卡名会变为eth0、eth1<br>
+<img src="/img/article/linux/15478740392878.jpg" alt="-w682"></p>
+<p><img src="/img/article/linux/15478742792605.jpg" alt="-w789"></p>
+<p>添加ip地址<br>
+<img src="/img/article/linux/15478743727400.jpg" alt="-w758"><br>
+<img src="/img/article/linux/15478744696318.jpg" alt="-w751"></p>
+<p>配置第二块网卡ip<br>
+<img src="/img/article/linux/15478745324591.jpg" alt="-w745"><br>
+<img src="/img/article/linux/15478745904957.jpg" alt="-w749"><br>
+<img src="/img/article/linux/15478747889380.jpg" alt="-w798"><br>
+<img src="/img/article/linux/15478748253161.jpg" alt="-w785"></p>
+<p>11.关掉security policy<br>
+<img src="/img/article/linux/15478751166130.jpg" alt="-w696"></p>
+<p>12.全部改完后，点击开始安按钮进行安装<br>
+<img src="/img/article/linux/15478752697223.jpg" alt="-w787"></p>
+<p><img src="/img/article/linux/15478753827591.jpg" alt="-w792"><br>
+添加密码<br>
+<img src="/img/article/linux/15478754247721.jpg" alt="-w787"></p>
+<p>添加账户<br>
+<img src="/img/article/linux/15478755713816.jpg" alt="-w784"></p>
+<p>13.直到出现如下界面，表示系统已经安装完成，重启即可<br>
+<img src="/img/article/linux/15478759458977.jpg" alt="-w800"></p>
+<h1 id="2linux简单基本优化">2.Linux简单基本优化</h1>
+<p>红帽Redhat7替换Centos7⽹络源</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.卸载红帽yum源 </span><br><span class="line">[root@mcg ~]<span class="comment"># rpm -e $(rpm -qa|grep yum) --nodeps</span></span><br><span class="line"></span><br><span class="line"><span class="number">2</span>.删除所有repo相关⽂件</span><br><span class="line">[root@mcg ~]<span class="comment"># rm -rf /etc/yum.conf </span></span><br><span class="line">[root@mcg ~]<span class="comment"># rm -rf /etc/yum.repos.d/ </span></span><br><span class="line">[root@mcg ~]<span class="comment"># rm -rf /var/cache/yum</span></span><br><span class="line"></span><br><span class="line"><span class="number">3</span>.下载centos相关yum组件</span><br><span class="line">[root@mcg ~]<span class="comment"># wget https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/yum-3.4.3-161.el7.centos.noarch.rpm</span></span><br><span class="line">[root@mcg ~]<span class="comment"># wget https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/yum-metadata-parser-1.1.4-10.el7.x86_64.rpm</span></span><br><span class="line">[root@mcg ~]<span class="comment"># wget https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-50.el7.noarch.rpm</span></span><br><span class="line">[root@mcg ~]<span class="comment"># wget https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/yum-updateonboot-1.1.31-50.el7.noarch.rpm</span></span><br><span class="line">[root@mcg ~]<span class="comment"># wget https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/yum-utils-1.1.31-50.el7.noarch.rpm</span></span><br><span class="line"></span><br><span class="line"><span class="number">3</span>.安装所有相关组件 </span><br><span class="line">[root@mcg ~]<span class="comment"># rpm -ivh yum-*</span></span><br><span class="line"></span><br><span class="line"><span class="number">4</span>.下载base</span><br><span class="line">[root@mcg ~]<span class="comment"># wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span></span><br><span class="line">[root@mcg ~]<span class="comment"># sed -i 's#\$releasever#7#g' /etc/yum.repos.d/CentOS-Base.repo</span></span><br><span class="line"></span><br><span class="line">//安装epel源</span><br><span class="line">[root@mcg ~]<span class="comment"># wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span></span><br><span class="line"></span><br><span class="line">//生成缓存</span><br><span class="line">[root@mcg ~]<span class="comment"># yum makecache</span></span><br></pre></td></tr></table></figure>
+<p><strong>补充安装软件包</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># yum -y install wget vim lrzsz bash-completion telnet nmap</span></span><br><span class="line">//关闭selinux：临时</span><br><span class="line">[root@cobbler-server ~]<span class="comment"># setenforce 0</span></span><br><span class="line">//永久关闭selinux</span><br><span class="line">[root@mcg ~]<span class="comment"># sed -i 's#SELINUX=enforcing#SELINUX=disabled#g'/etc/selinux/config</span></span><br><span class="line">//关闭防火墙：</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl disable firewalld.service</span></span><br><span class="line"></span><br><span class="line">//删除网卡eth0 eth1里的UUDI</span><br><span class="line"></span><br><span class="line">//关闭NetworkManager</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl stop NetworkManager</span></span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl disable NetworkManager</span></span><br><span class="line">Removed symlink /etc/systemd/system/multi-user.target.wants/NetworkManager.service.</span><br><span class="line">Removed symlink /etc/systemd/system/dbus-org.freedesktop.NetworkManager.service.</span><br><span class="line">Removed symlink /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service.</span><br><span class="line"></span><br><span class="line">//查看NetworkManager状态</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl is-active NetworkManager</span></span><br><span class="line">inactive</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl is-enabled NetworkManager</span></span><br><span class="line">disabled</span><br><span class="line">//关机做快照</span><br></pre></td></tr></table></figure>
+<p><strong>区别1：网卡名称eth0和enp5s0/ens33</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">传统上，Linux的网络接口名称为eth0、eth1…，但这些名称并不一定符合实际的硬件插槽等，这可能会导致不同的网络配置错误（例如，由无意的接口改名引起的禁止接口）。基于MAC地址的udev规则在虚拟化的环境中并不有用，这里的MAC地址如端口数量一样无常。</span><br><span class="line"></span><br><span class="line">CentOS6/RHEL6引入了一致和可预测的网络设备命名网络接口的方法。这些特性可以唯一地确定网络接口的名称以使定位和区分设备更容易，并且在这样一种方式下，无论是否重启机器、过了多少时间、或者改变硬件，其名字都是持久不变的。然而，这种命名规则并不是默认在CentOS/RHEL6上开启。</span><br><span class="line"></span><br><span class="line">从CentOS7/RHEL7起，这种可预见的命名规则变成了默认。根据这一规则，接口名称被自动基于固件，拓扑结构和位置信息来确定。现在，即使添加或移除网络设备，接口名称仍然保持固定，而无需重新枚举，和坏掉的硬件可以无缝替换</span><br></pre></td></tr></table></figure>
+<p><strong>区别2：网络配置相关命令</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ip:yum -y install iproute</span><br><span class="line">CentOS7主推使用ip、ss命令。</span><br><span class="line">ifconfig: yum -y install net-tools</span><br><span class="line">setup: yum -y install setuptool   废弃命令</span><br><span class="line">安装好之后，你会发现里面什么都没有，这只是一个图形工具。我们需要用到的网络服务，防火墙，系统服务等需要另外再安装。</span><br><span class="line"></span><br><span class="line">安装好setup tools工具之后，我们需要安装工具组件如ntsysv(系统服务），system-config-networktui（网络服务），iptables(防火墙配置）等。只需要部分的也可以只安装需要的也行。</span><br><span class="line">nmtui：替代setup命令</span><br></pre></td></tr></table></figure>
+<p><strong>区别3：主机名等配置文件</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">修改主机名</span><br><span class="line">hostname CentOS7   <span class="comment">#临时生效</span></span><br><span class="line">编辑/etc/hostname   <span class="comment">#主机名的配置文件变了</span></span><br><span class="line">[root@mcg ~]<span class="comment"># hostnamectl set-hostname CentOS7 #→方法2，本质还是改配置文件。</span></span><br><span class="line">修改字符集</span><br><span class="line">[root@mcg ~]<span class="comment"># localectl set-locale LANG=zh_CN. UTF-8</span></span><br><span class="line">编辑/etc/locale.conf</span><br><span class="line">[root@mcg ~]<span class="comment"># cat /etc/redhat-release  #查看系统版本号</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat /etc/os-release   #所有支持systemd系统的统一发行版名称和版本号文件。</span></span><br></pre></td></tr></table></figure>
+<p><strong>区别4：兼容的 /etc/rc.local</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod +x /etc/rc.d/rc.local</span></span><br><span class="line"><span class="comment"># that this script will be executed during boot.</span></span><br></pre></td></tr></table></figure>
+<p><strong>区别5：运行级别Runlevel</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Runlevel VS System Target</span><br><span class="line">[root@mcg ~]<span class="comment"># cat /etc/inittab</span></span><br><span class="line"><span class="comment"># inittab is no longer used when using systemd.</span></span><br><span class="line"></span><br><span class="line">当前启动级别</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl get-default</span></span><br><span class="line">multi-user.target</span><br><span class="line">//设置启动级别</span><br><span class="line">systemctl set-default multi-user.target</span><br><span class="line"></span><br><span class="line">//ystemd一统天下</span><br><span class="line">//看看从前的runlevel都变成什么样了？</span><br><span class="line">ls -lh /usr/lib/systemd/system/runlevel*.target</span><br><span class="line">所有可用的单元文件存放在/usr/lib/systemd/system/和/etc/systemd/system/目录（后者优先级更高）。</span><br><span class="line">ll -h /etc/systemd/system/default.target</span><br></pre></td></tr></table></figure>
+<p><strong>区别6：管理服务</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chkconfig</span><br><span class="line">service</span><br><span class="line">/etc/init.d/</span><br><span class="line">systemctl:融合service和chkconfig的功能于一体,兼容SysV和LSB的启动脚本，而且够在进程启动过程中更有效地引导加载服务。</span><br><span class="line"></span><br><span class="line">//查看开机自启动的文件</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl list-unit-files |grep "enabled"</span></span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Linux/02.linux之Bash初识/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（二）Bash初识">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Linux/linux基础优化/" data-toggle="tooltip" data-placement="top" title="[Linux]Linux系统基础优化">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1虚拟机安装linux系统"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x865A;&#x62DF;&#x673A;&#x5B89;&#x88C5;Linux&#x7CFB;&#x7EDF;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2linux简单基本优化"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.Linux&#x7B80;&#x5355;&#x57FA;&#x672C;&#x4F18;&#x5316;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
