@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Linux] linux基础之（四）VIM编辑器 - 莫传刚 | Blog
+          [Linux] linux基础之（五）VIM编辑器 - 莫传刚 | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/04.Linux之VIM编辑器/">
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/05.Linux之VIM编辑器/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -91,11 +91,11 @@
                               <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>[Linux] linux基础之（四）VIM编辑器</h1>
+                        <h1>[Linux] linux基础之（五）VIM编辑器</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by 莫传刚 on
-                            2018-06-12
+                            2018-06-13
                         </span>
                     </div>
                 
@@ -149,14 +149,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -218,45 +218,54 @@
 <li>[3.VIM扩展知识]</li>
 <li>[4.VIM练习示例]</li>
 </ul>
-<h2 id="1vim基本概述">1.VIM基本概述</h2>
-<p>*<strong>1.什么是VIM?*</strong><br>
-<em>vi和vim是Linux下的一个文本编辑工具。(可以理解为windows的记事本，或word文档)</em></p>
-<p>*<strong>2.为什么要使用VIM?*</strong><br>
-<em>因为Linux系统一切皆为文件，而我们工作最多的就是修改某个服务的配置(其实就是修改文件内容)。<br>
-也就是说如果没有vi/vim，我们很多工作都无法完成。PS: vim是学习linux最重要的命令之一</em></p>
-<p>*<strong>3.VI与VIM有什么区别?*</strong><br>
-<em>vi和vim都是文本编辑器，只不过vim是vi的增强版，比vi多了语法高亮显示，其他编辑功能几乎无差，所以使用vi还是vim取决个人习惯。(相当于windows系统下的文本编辑软件“记事本”与&quot;notepad++&quot;的区别)<br>
-PS：因为前期最小化安装CentOS系统，所以默认情况下没有vim命令，但可以使用yum install vim -y安装</em></p>
-<p>*<strong>4.如何使用VIM编辑器?*</strong><br>
-<em>在使用VIM之前，我们需要先介绍下VIM的三种模式: 普通模式、编辑模式、命令模式，每种模式分别支持多种不同的快捷键，要想高效率地操作文本，就必须先搞清这三种模式的操作区别以及模式之间的切换方法。</em><br>
-<img src="/img/article/linux/Snipaste_2020-11-11_22-52-48.png" alt="Snipaste_2020-11-11_22-52-48"></p>
-<p>*<strong>5.VIM模式三种模式介绍*</strong><br>
-<em>1.普通模式: 主要是控制光标移动，可对文本进行复制、粘贴、删除等工作。<br>
-使用vim filename 编辑一个文件时，一进入该文件就是普通模式了。<br>
-在这个模式下，可以进行光标移动、复制、删除、粘贴操作。</em></p>
-<p><em>2.编辑模式: 主要进行文本内容编辑和修改<br>
+<h2 id="1vim基本介绍">1.VIM基本介绍</h2>
+<hr>
+<p><code>vi</code>和 <code>vim</code> 命令是linux中强⼤的⽂本编辑器, 由于<code>Linux</code>系统⼀切皆⽂件，⽽配置⼀个服务就是在 修改其配置⽂件的参数。 vim 编辑器是运维⼯程师必须掌握的⼀个⼯具, 没有它很多⼯作都⽆法 完成。<code>vim</code>其实是<code>vi</code> 的升级版 那么<code>vi</code> 与 <code>vim</code> 有什么区别？</p>
+<blockquote>
+<p>vi不显示⾼亮颜⾊语法。<br>
+vim显示⾼亮颜⾊语法。<br>
+其他功能没有什么区别。<br>
+所以在linux系统下，使⽤vi还是vim取决个⼈习惯。</p>
+</blockquote>
+<p>如果在刚装完的 CentOS 操作系统下没有 vim 这个命令，⽤如下⽅式进⾏安装即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim-enhanced</span><br></pre></td></tr></table></figure>
+<h2 id="2vim模式介绍">2.VIM模式介绍</h2>
+<hr>
+<p><code>vim</code>编辑器中设置了三种模式: 命令模式、编辑模式、末⾏模式，每种模式分别⼜⽀持多种不同的 命令快捷键，⼤⼤提⾼了⼯作效率，⽽且⽤户在习惯之后也会觉得相当顺⼿。要想⾼效率地操作 ⽂本，就必须先搞清这三种模式的操作区别以及模式之间的切换⽅法。</p>
+<p><img src="/img/article/linux/Snipaste_2020-11-12_21-32-27.png" alt="Snipaste_2020-11-12_21-32-27"></p>
+<blockquote>
+<p>1.命令模式: 主要是控制光标移动，可对文本进行复制、粘贴、删除等工作。<br>
+使用<code>vim filename</code> 编辑一个文件时，一进入该文件就是普通模式了。<br>
+在这个模式下，可以进行光标移动、复制、删除、粘贴操作。</p>
+<p>2.编辑模式: 主要进行文本内容编辑和修改<br>
 从普通模式进入编辑模式，只需你按一个键即可（i, I, a, A, o, O）<br>
 当进入编辑模式时，会在屏幕的最下一行会出现 &quot;INSERT&quot;标记<br>
-从编辑模式回到普通模式只需要按键盘左上方的 ESC 键即可。</em></p>
+从编辑模式回到普通模式只需要按键盘左上方的 ESC 键即可。</p>
 <p><em>3.末行模式: 主要用于保存或退出文本。<br>
 在普通模式下，输入 “:” 或者 “/” 即可进入命令模式。<br>
 在命令该模式下，可进行的操作有，显示行号、搜索、替换、保存、退出。</em></p>
-<p><em>小结: vim编辑打开文件整体流程如下:<br>
-1.默认打开文件处于普通模式<br>
-2.从普通模式切换至编辑模式需要使用a、i、o<br>
-3.编辑模式修改完毕后需要先使用ECS返回普通模式<br>
-4.在普通模式输入&quot;:“或”/&quot;进入命令模式，可实现文件的保存与退出。<br>
-PS: 在vim中，无法直接从编辑模式切换到命令模式。</em></p>
-<h2 id="2vim模式使用">2.VIM模式使用</h2>
-<p><em>1.普通模式</em></p>
+</blockquote>
+<p><em>小结: <code>vim</code>编辑打开文件整体流程如下:</em></p>
+<blockquote>
+<p>1.默认打开文件处于命令模式<br>
+2.从命令模式切换至编辑模式需要使用a、i、o<br>
+3.编辑模式修改完毕后需要先使用ECS返回命令模式<br>
+4.在命令模式输入&quot;:“或”/&quot;进入末行模式，可实现文件的保存与退出。</p>
+<p>PS: 在vim中，无法直接从编辑模式切换到命令模式。</p>
+</blockquote>
+<h2 id="3vim模式使用">3.VIM模式使用</h2>
+<hr>
+<p><em>1.命令模式：(默认打开⽂件进⼊的是命令⾏模式)</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.命令光标跳转</span></span><br><span class="line">G       <span class="comment">#光标跳转至末端</span></span><br><span class="line">gg      <span class="comment">#光标跳转至顶端</span></span><br><span class="line">Ngg     <span class="comment">#光标跳转至当前文件内的N行</span></span><br><span class="line">$       <span class="comment">#光标跳转至当前光标所在行的尾部</span></span><br><span class="line">^|0     <span class="comment">#光标跳转至当前光标所在行的首部</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#2.文件内容较多</span></span><br><span class="line">ctrl+f  <span class="comment">#往下翻页(行比较多)</span></span><br><span class="line">ctrl+b  <span class="comment">#往上翻页</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#3.复制与粘贴</span></span><br><span class="line">yy      <span class="comment">#复制当前光标所在的行</span></span><br><span class="line">5yy     <span class="comment">#复制当前光标以及光标向下4行</span></span><br><span class="line"> </span><br><span class="line">p(小写)   <span class="comment">#粘贴至当前光标下一行   </span></span><br><span class="line">P(大写)   <span class="comment">#粘贴至当前光标上一行</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#4.删除、剪贴、撤销  </span></span><br><span class="line">dd      <span class="comment">#删除当前光标所在的行   </span></span><br><span class="line">4dd     <span class="comment">#删除当前光标所在的行以及往下的3行</span></span><br><span class="line">dG      <span class="comment">#删除当前光标以后的所有行</span></span><br><span class="line">D       <span class="comment">#删除当前光标及光标以后的内容  </span></span><br><span class="line">x       <span class="comment">#删除当前光标标记往后的字符</span></span><br><span class="line">X       <span class="comment">#删除当前光标标记往前的字符</span></span><br><span class="line">dd &amp; p  <span class="comment">#剪贴、先删除dd(number dd)，后粘贴p</span></span><br><span class="line">u       <span class="comment">#撤销上一次的操作</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#5.替换</span></span><br><span class="line">r       <span class="comment">#替换当前光标标记的单个字符</span></span><br><span class="line">R       <span class="comment">#进入REPLACE模式, 连续替换，ESC结束</span></span><br></pre></td></tr></table></figure>
-<p><em>2.编辑模式(从普通模式进入到编辑模式)</em></p>
+<p><em>2.编辑模式(从命令模式进入到编辑模式)</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">i   <span class="comment">#进入编辑模式，光标不做任何操作</span></span><br><span class="line">a   <span class="comment">#进入编辑模式，将当前光标往后一位</span></span><br><span class="line">o   <span class="comment">#进入编辑模式，并在当前光标下添加一行空白内容</span></span><br><span class="line">-------------------------------------------</span><br><span class="line">I   <span class="comment">#进入编辑模式，并且光标会跳转至本行的头部</span></span><br><span class="line">A   <span class="comment">#进入编辑模式，将光标移动至本行的尾部</span></span><br><span class="line">O   <span class="comment">#进入编辑模式，并在当前光标上添加一行空白内容</span></span><br></pre></td></tr></table></figure>
-<p><em>3.命令模式，主要用于搜索, 保存, 退出文件。</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.文件保存与退出</span></span><br><span class="line">:w      保存当前状态</span><br><span class="line">:w!     强制保存当前状态</span><br><span class="line">:q      退出当前文档(文档必须保存才能退出)</span><br><span class="line">:q!     强制退出文档不会修改当前内容</span><br><span class="line">:wq     先保存，在退出</span><br><span class="line">:wq!    强制保存并退出</span><br><span class="line">:x      先保存，在退出</span><br><span class="line">ZZ      保存退出, shfit+zz</span><br><span class="line">:number 跳转至对应的行号</span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#2.文件内容查找</span></span><br><span class="line">/string <span class="comment">#需要搜索的内容（查找）</span></span><br><span class="line">n       <span class="comment">#按搜索到的内容依次往下进行查找</span></span><br><span class="line">N       <span class="comment">#按搜索到的内容依次往上进行查找</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#3.文件内容替换</span></span><br><span class="line">:1,5s<span class="comment">#sbin#test#g   #替换1-5行中包含sbin的内容为test</span></span><br><span class="line">:%s<span class="comment">#sbin#test#g     #替换整个文本文件中包含sbin的替换为test</span></span><br><span class="line">:%s<span class="comment">#sbin#test#gc    #替换内容时时提示是否需要替换</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#4.文件内容另存</span></span><br><span class="line">:w /root/test.txt  <span class="comment">#将所有内容另存为/root/test.txt文件中</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="comment">#5.文件内容读入</span></span><br><span class="line">:r  /etc/hosts  <span class="comment">#读入/etc/hosts文件至当前光标下面</span></span><br><span class="line">:5r /etc/hosts  <span class="comment">#指定插入/etc/hosts文件至当前文件的第五行下面</span></span><br></pre></td></tr></table></figure>
-<p><em>4.视图模式(从普通模式进入视图模式)，主要进行批量操作</em></p>
+<p><em>3.末行模式，主要用于搜索, 保存, 退出文件。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.文件保存与退出</span></span><br><span class="line">:w      保存当前状态</span><br><span class="line">:w!     强制保存当前状态</span><br><span class="line">:q      退出当前文档(文档必须保存才能退出)</span><br><span class="line">:q!     强制退出文档不会修改当前内容</span><br><span class="line">:wq     先保存，在退出</span><br><span class="line">:wq!    强制保存并退出</span><br><span class="line">:x      先保存，在退出</span><br><span class="line">ZZ      保存退出, shfit+zz</span><br><span class="line">:number 跳转至对应的行号</span><br></pre></td></tr></table></figure>
+<p><em>4.末行模式(查找和替换)</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-------------------------------------------</span><br><span class="line">#2.文件内容查找</span><br><span class="line">    /string #需要搜索的内容（查找）</span><br><span class="line">    n       #按搜索到的内容依次往下进行查找</span><br><span class="line">    N       #按搜索到的内容依次往上进行查找</span><br><span class="line">-------------------------------------------</span><br><span class="line">#3.文件内容替换</span><br><span class="line">    :1,5s#sbin#test#g   #替换1-5行中包含sbin的内容为test</span><br><span class="line">    :%s#sbin#test#g     #替换整个文本文件中包含sbin的替换为test</span><br><span class="line">    :%s#sbin#test#gc    #替换内容时时提示是否需要替换</span><br><span class="line">-------------------------------------------</span><br><span class="line">#4.文件内容另存</span><br><span class="line">	:w /root/test.txt  #将所有内容另存为/root/test.txt文件中</span><br><span class="line">-------------------------------------------</span><br><span class="line">#5.文件内容读入</span><br><span class="line">    :r  /etc/hosts  #读入/etc/hosts文件至当前光标下面</span><br><span class="line">    :5r /etc/hosts  #指定插入/etc/hosts文件至当前文件的第五行下面</span><br></pre></td></tr></table></figure>
+<p><em>5.<code>VIM</code>视图模式(从命令模式进入视图模式)，主要进行批量操作</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ctrl+v  进入可视块模式，选中需要注释的行</span><br><span class="line">    1.插入:按<span class="built_in">shift</span>+i进入编辑模式,输入<span class="comment">#,结束按ESC键</span></span><br><span class="line">    2.删除:选中内容后，按x或者d键删除</span><br><span class="line">    3.替换:选中需要替换的内容, 按下r键,然后输入替换后的内容</span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="built_in">shift</span>+v 进入可视行模式，选中整行内容</span><br><span class="line">    1.复制:选中行内容后按y键及可复制。</span><br><span class="line">    2.删除:选中行内容后按d键删除。</span><br></pre></td></tr></table></figure>
-<h2 id="3vim扩展知识">3.VIM扩展知识</h2>
+<h2 id="4vim扩展知识">4.VIM扩展知识</h2>
 <p><em>1.环境变量临时生效</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:<span class="built_in">set</span> nu             <span class="comment">#显示行号</span></span><br><span class="line">:<span class="built_in">set</span> ic             <span class="comment">#忽略大小写, 在搜索的时候有用</span></span><br><span class="line">:<span class="built_in">set</span> ai             <span class="comment">#自动缩进</span></span><br><span class="line">:<span class="built_in">set</span> list           <span class="comment">#显示制表符(空行、tab键)</span></span><br><span class="line">:<span class="built_in">set</span> no[nu|ic|ai…]  <span class="comment">#取消临时设定的变量</span></span><br></pre></td></tr></table></figure>
 <p><em>2.环境变量永久生效。~/.vimrc 个人环境变量(优先级高) /etc/vimrc 全局环境变量</em></p>
@@ -265,9 +274,9 @@ PS: 在vim中，无法直接从编辑模式切换到命令模式。</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim -o file1 file2  <span class="comment">#水平分割</span></span><br><span class="line">vim -O file1 file2  <span class="comment">#垂直分割</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ctrl+ww 文件间切换</span></span><br></pre></td></tr></table></figure>
 <p><em>4.相同文件之间差异对比，通常用于对比修改前后差异</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># diff      #文件对比   </span></span><br><span class="line"><span class="comment"># vimdiff   #以vim方式打开两个文件对比，高亮显示不同的内容</span></span><br></pre></td></tr></table></figure>
-<p><em>5.如果VIM非正常退出 （ctrl+z）挂起或强制退出终端没关闭VIM后</em></p>
+<p><em>5.如果<code>VIM</code>非正常退出 （ctrl+z）挂起或强制退出终端没关闭VIM后</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#假设打开filename文件被以外关闭，需要删除同文件名的.swp文件即可解决</span></span><br><span class="line"><span class="comment"># rm -f .filename.swp</span></span><br></pre></td></tr></table></figure>
-<h2 id="4vim练习示例">4.VIM练习示例</h2>
+<h2 id="5vim练习示例">5.VIM练习示例</h2>
 <p><em>1.将/etc/passwd 复制到/root/目录下，并重命名为test.txt<br>
 2.用vim打开test.txt并显示行号<br>
 3.分别向下、向右、向左、向右移动5个字符，分别向下、向上翻两页<br>
@@ -285,12 +294,12 @@ PS: 在vim中，无法直接从编辑模式切换到命令模式。</em></p>
 16.在第一行下面插入新的一行，并输入&quot;# Hello!&quot;<br>
 17.保存文档并退出</em></p>
 <p><em>2.练习示例2-文件</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]<span class="comment"># cat proxy.conf</span></span><br><span class="line">server &#123;</span><br><span class="line">    Listen 8080;</span><br><span class="line">    Server_Name vim.OldboyEDU.com;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:8080;</span><br><span class="line">        proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">        proxy_set_header X-Forward-for;</span><br><span class="line">        proxy_intercept_errors on;</span><br><span class="line">        proxy_next_upstream error timeout;</span><br><span class="line">        proxy_next_upstream_timeout 3s;</span><br><span class="line">        proxy_next_upstream_tries 2;</span><br><span class="line">        error_page 500 502 403 404 = /proxy_error.html;</span><br><span class="line">    &#125;</span><br><span class="line">    location = /proxy_error.html &#123;</span><br><span class="line">        root /code/proxy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]<span class="comment"># cat proxy.conf</span></span><br><span class="line">server &#123;</span><br><span class="line">    Listen 8080;</span><br><span class="line">    Server_Name vim.mcg.com;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:8080;</span><br><span class="line">        proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">        proxy_set_header X-Forward-for;</span><br><span class="line">        proxy_intercept_errors on;</span><br><span class="line">        proxy_next_upstream error timeout;</span><br><span class="line">        proxy_next_upstream_timeout 3s;</span><br><span class="line">        proxy_next_upstream_tries 2;</span><br><span class="line">        error_page 500 502 403 404 = /proxy_error.html;</span><br><span class="line">    &#125;</span><br><span class="line">    location = /proxy_error.html &#123;</span><br><span class="line">        root /code/proxy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><em>2.练习示例2-题目</em><br>
-<em>1.使用vim打开proxy.conf文件<br>
+<em>1.使用<code>vim</code>打开proxy.conf文件<br>
 2.修改Listen为listen小写，并将8080修改为80<br>
 3.修改ServerName为server_name小写。<br>
-<a href="http://4.xn--vim-5n0el78g.OldboyEDU.xn--comvim-yy7i.oldboy.com" target="_blank" rel="noopener">4.修改vim.OldboyEDU.com为vim.oldboy.com</a><br>
+4.修改<code>vim.mcg.com</code>为<code>vim.test.com</code><br>
 5.在server_name行下插入一行 root /code;<br>
 5.复制5-14行的内容，然后将其粘贴到14行下面<br>
 6.删除与proxy_set_header相关的两行全部删除<br>
@@ -304,12 +313,12 @@ PS: 在vim中，无法直接从编辑模式切换到命令模式。</em></p>
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/Linux/新建文本文档/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（五）用户管理">&larr; Previous Post</a>
+                            <a href="/article/Linux/06.Linux之用户管理/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（六）用户管理">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/Linux/03.Linux之文件管理/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（三）文件管理">Next Post &rarr;</a>
+                            <a href="/article/Linux/04.Linux之文件属性/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（四）文件属性">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -359,7 +368,7 @@ PS: 在vim中，无法直接从编辑模式切换到命令模式。</em></p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1vim基本概述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.VIM&#x57FA;&#x672C;&#x6982;&#x8FF0;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2vim模式使用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.VIM&#x6A21;&#x5F0F;&#x4F7F;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3vim扩展知识"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.VIM&#x6269;&#x5C55;&#x77E5;&#x8BC6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4vim练习示例"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.VIM&#x7EC3;&#x4E60;&#x793A;&#x4F8B;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1vim基本介绍"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.VIM&#x57FA;&#x672C;&#x4ECB;&#x7ECD;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2vim模式介绍"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.VIM&#x6A21;&#x5F0F;&#x4ECB;&#x7ECD;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3vim模式使用"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.VIM&#x6A21;&#x5F0F;&#x4F7F;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4vim扩展知识"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.VIM&#x6269;&#x5C55;&#x77E5;&#x8BC6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5vim练习示例"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">5.VIM&#x7EC3;&#x4E60;&#x793A;&#x4F8B;</span></a></li></ol>
         
         </div>
       </aside>

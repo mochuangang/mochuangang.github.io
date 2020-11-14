@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Linux] linux基础之（四）文件属性 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/04.Linux之文件属性/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/linux.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                            
+                        </div>
+                        <h1>[Linux] linux基础之（四）文件属性</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2018-06-12
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="1linux系统文件属性">1.Linux系统文件属性</h2>
+<p><img src="/img/article/linux/image-20201112230433114.png" alt="image-20201112230433114"></p>
+<p>上图中<code>ls -il</code> 每列含义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">第⼀列		 Inode</span><br><span class="line">第⼆列		 ⽂件类型及权限</span><br><span class="line">第三列		 硬链接数</span><br><span class="line">第四列		 属主权限</span><br><span class="line">第五列		 属组权限</span><br><span class="line">第六列		 ⽂件或⽬录的⼤⼩</span><br><span class="line">第七⼋九列   最近修改时间</span><br><span class="line">第⼗列		 ⽂件或⽬录名字</span><br></pre></td></tr></table></figure>
+<h2 id="2linux系统文件类型">2.Linux系统⽂件类型</h2>
+<hr>
+<p><em>1.通常我们使用颜色或者后缀名称来区分文件类型，但很多时候不是很准确，所以我们可以通过ls -l以长格式显示一个文件的属性，通过第一列的第一个字符来近一步的判断文件具体的类型。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ls	-l	⽂件名 //看第⼀个字符</span><br><span class="line"><span class="comment">#格式  说明</span></span><br><span class="line">-	 普通⽂件(⽂本⽂件,	⼆进制⽂件,	压缩⽂件,	图⽚⽂件等)	</span><br><span class="line">d	 ⽬录⽂件</span><br><span class="line">b	 设备⽂件(块设备)存储设备硬盘	/dev/sda,	/dev/sda1</span><br><span class="line">c	 设备⽂件(字符设备)打印机，终端	/dev/tty1,	/dev/zero</span><br><span class="line">s	 套接字⽂件,	进程间通信</span><br><span class="line">p	 管道⽂件</span><br><span class="line">l	 链接⽂件</span><br><span class="line">//示例</span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d /etc/hosts /tmp /bin/ls /dev/sda /dev/tty1 /etc/grub2.cfg /dev/log /run/dmeventd-client</span></span><br><span class="line">-rwxr-xr-x.	1 root root 117656 Jun 30 2016  /bin/ls</span><br><span class="line">srw-rw-rw-.	1 root root	     0 Jan 20 10:35	/dev/<span class="built_in">log</span></span><br><span class="line">brw-rw----.	1 root disk	  8, 0 Jan 20 10:36	/dev/sda</span><br><span class="line">crw--w----.	1 root tty    4, 1 Jan 20 10:36	/dev/tty1</span><br><span class="line">lrwxrwxrwx.	1 root root     22 Jan 13 11:31	/etc/grub2.cfg	-&gt;	../boot/grub2/grub.cfg</span><br><span class="line">-rw-r--r--.	1 root root	 199   Jan 20 11:03	/etc/hosts</span><br><span class="line">prw-------.	1 root root      0 Jan 20 10:36	/run/dmeventd-client</span><br><span class="line">drwxrwxrwt.	61 root root  8192 Jan 21 13:01	/tmp</span><br></pre></td></tr></table></figure>
+<p><em>2.但有些情况下，我们无法通过ls -l文件的类型，比如: 一个文件，它可能是普通文件、也可能是压缩文件、或者是命令文件等，那么此时就需要使用file来更加精准的判断这个文件的类型。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># file /etc/hosts</span></span><br><span class="line">/etc/hosts: ASCII text</span><br><span class="line">[root@mcg ~]<span class="comment">#</span></span><br><span class="line">[root@mcg ~]<span class="comment"># file /bin/ls</span></span><br><span class="line">/bin/ls: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), <span class="keyword">for</span> GNU/Linux 2.6.32, BuildID[sha1]=c5ad78cfc1de12b9bb6829207cececb990b3e987, stripped</span><br><span class="line">[root@mcg ~]<span class="comment"># </span></span><br><span class="line">[root@mcg ~]<span class="comment"># file /dev/sda</span></span><br><span class="line">/dev/sda: block special</span><br><span class="line">[root@mcg ~]<span class="comment"># </span></span><br><span class="line">[root@mcg ~]<span class="comment"># file /dev/tty1</span></span><br><span class="line">/dev/tty1: character special</span><br><span class="line">[root@mcg ~]<span class="comment"># </span></span><br><span class="line">[root@mcg ~]<span class="comment"># file /etc/grub2.cfg </span></span><br><span class="line">/etc/grub2.cfg: symbolic link to `../boot/grub2/grub.cfg<span class="string">'</span></span><br><span class="line"><span class="string">[root@mcg ~]# </span></span><br><span class="line"><span class="string">[root@mcg ~]# file /home</span></span><br><span class="line"><span class="string">/home: directory</span></span><br><span class="line"><span class="string">[root@mcg ~]# </span></span><br><span class="line"><span class="string">[root@mcg ~]# file /run/dmeventd-client</span></span><br><span class="line"><span class="string">/run/dmeventd-client:	fifo	(named	pipe)</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>注意：</em></strong></p>
+<blockquote>
+<p>Linux⽂件扩展名不代表任何含义, 仅为了好识别</p>
+</blockquote>
+<h2 id="3linux系统链接文件">3.Linux系统链接⽂件</h2>
+<hr>
+<h3 id="31软链接">3.1软链接</h3>
+<p>软链接相当于Windows的快捷方式，软链接文件会将inode指向源文件的block，当我们访问这个软链接文件时，其实访问的是源文件本身。那么当我们对一个文件创建多个软链接，其实就是多个inode指向同一个block。当我们删除软链接文件时，其实只是删除了一个inode指向，并不会对源文件源文件造成影响，但如果删除的是源文件则会造成所有软链接文件失效。</p>
+<p><img src="/img/article/linux/Snipaste_2020-11-13_10-37-23.png" alt="Snipaste_2020-11-13_10-37-23"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//⽂件软链接示例</span><br><span class="line">[root@mcg ~]<span class="comment"># touch file</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ln -s /root/file /tmp/file_bak</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /tmp/file_bak                  //root下file链接到/tmp下并重命名为file_bak</span></span><br><span class="line">lrwxrwxrwx 1 root root 10 Nov 12 23:30 /tmp/file_bak -&gt; /root/file</span><br><span class="line"></span><br><span class="line">//⽬录软链接示例 </span><br><span class="line">[root@mcg ~]<span class="comment"># mkdir /soft/nginx1.1 -p</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ln -s /soft/nginx1.1/ /soft/nginx</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /soft/nginx                     //查看链接指向</span></span><br><span class="line">lrwxrwxrwx 1 root root 15 Nov 12 23:31 /soft/nginx -&gt; /soft/nginx1.1/</span><br></pre></td></tr></table></figure>
+<p>⽣产软链接作⽤</p>
+<ol>
+<li>软件升级</li>
+<li>企业代码发布</li>
+<li>不⽅便⽬录移动</li>
+</ol>
+<h3 id="32硬链接">3.2硬链接</h3>
+<p><em>若一个inode号对应多个文件名，则称这些文件为硬链接。换言之，硬链接就是同一个文件使用了多个别名，如下图hard link 就是 file 的一个别名，他们有共同的 inode。</em></p>
+<p><img src="/img/article/linux/Snipaste_2020-11-13_11-12-25.png" alt="Snipaste_2020-11-13_11-12-25"></p>
+<p><strong><em>注意：⽬录不能创建硬链接，硬链接⽂件可以⽤rm命令删除</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># ln /root/file /tmp/file_hard</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /tmp/file_hard </span></span><br><span class="line">-rw-r--r-- 2 root root 0 Nov 12 23:29 /tmp/file_hard</span><br></pre></td></tr></table></figure>
+<h3 id="33软硬链接区别">3.3软硬链接区别</h3>
+<p><code>Linux</code>下软链接和硬链接的区别：<br>
+1)<code>ln</code>命令创建硬链接，<code>ln -s</code>命令创建软链接。<br>
+2)⽬录不能创建硬链接，并且硬链接不可以跨越分区系统。<br>
+3)⽬录软链接特别常⽤,并且软链接⽀持跨越分区系统。<br>
+4)硬链接⽂件与源⽂件的inode相同，软链接⽂件与源⽂件inode不同。<br>
+5)删除软链接⽂件，对源⽂件及硬链接⽂件⽆任何影响。<br>
+6)删除⽂件的硬链接⽂件，对源⽂件及链接⽂件⽆任何影响。<br>
+7)删除链接⽂件的源⽂件，对硬链接⽆影响，会导致软链接失效。<br>
+8)删除源⽂件及其硬链接⽂件，整个⽂件会被真正的删除。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Linux/05.Linux之VIM编辑器/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（五）VIM编辑器">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Linux/03.Linux之基础命令/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（三）基础命令">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1linux系统文件属性"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.Linux&#x7CFB;&#x7EDF;&#x6587;&#x4EF6;&#x5C5E;&#x6027;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2linux系统文件类型"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.Linux&#x7CFB;&#x7EDF;&#x2F42;&#x4EF6;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3linux系统链接文件"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.Linux&#x7CFB;&#x7EDF;&#x94FE;&#x63A5;&#x2F42;&#x4EF6;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#31软链接"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">3.1&#x8F6F;&#x94FE;&#x63A5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#32硬链接"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">3.2&#x786C;&#x94FE;&#x63A5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#33软硬链接区别"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">3.3&#x8F6F;&#x786C;&#x94FE;&#x63A5;&#x533A;&#x522B;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

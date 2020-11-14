@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Linux] linux基础之（九）输入输出 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/09.Linux之输入输出/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/linux.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                            
+                        </div>
+                        <h1>[Linux] linux基础之（九）输入输出</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2018-06-17
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <ul>
+<li>[1.重定向概述]</li>
+<li>[2.输出重定向]</li>
+<li>[3.输入重定向]</li>
+<li>[4.进程管道技术]</li>
+</ul>
+<h2 id="1重定向概述">1.重定向概述</h2>
+<p>*<strong>1.什么是重定向*</strong><br>
+<em>将原本要输出到屏幕的数据信息，重新定向到某个指定的文件中。比如：每天凌晨定时备份数据，希望将备份数据的结果保存到某个文件中。这样第二天通过查看文件的内容就知道昨天备份的数据是成功还是失败。</em></p>
+<p>*<strong>2.为何要使用重定向*</strong><br>
+<em>1.当屏幕输出的信息很重要，而且希望保存重要的信息时；<br>
+2.后台执行中的程序，不希望他干扰屏幕正常的输出结果时；<br>
+3.系统的例行命令, 例如定时任务的执行结果，希望可以存下来时；<br>
+4.一些执行命令，我们已经知道他可能出现错误信息, 想将他直接丢弃时;<br>
+5.错误日志与正确日志需要分别输出至不同的文件保存时;</em></p>
+<p>*<strong>3.学习重定向的预备知识，标准输入与输出*</strong><br>
+<em>当运行一个程序时通常会自动打开三个标准文件，分别是标准输入、标准输出、错误输出</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">文件描述符</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">标准输入（STDIN）</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">默认是键盘，也可以是文件或其他命令的输出。</td>
+</tr>
+<tr>
+<td style="text-align:left">标准输出（STDOUT）</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">默认输出到屏幕。</td>
+</tr>
+<tr>
+<td style="text-align:left">错误输出（STDERR）</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">默认输出到屏幕。</td>
+</tr>
+<tr>
+<td style="text-align:left">文件名称（filename）</td>
+<td style="text-align:left">3+</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p><em>进程将从标准输入中得到数据，将正常输出打印至屏幕终端，将错误的输出信息也打印至屏幕终端。<br>
+PS: 进程是使用文件描述符<code>(file descriptors)</code>来管理打开的文件</em></p>
+<p><img src="http://cdn.xuliangwei.com/15173985583921.jpg" alt="img"></p>
+<p><em>以 cat 命令为例, cat 命令的功能是从命令行给出的文件中读取数据，并将这些数据直接送到标准输出。若使用如下命令：</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#会把文件/etc/passwd的内容输出显示到屏幕上</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># cat /etc/passwd</span></span><br></pre></td></tr></table></figure>
+<p><em>但如果 使用 cat 命令没有跟上输入的文件名，那么cat命令则会通过命令行标准输入中读取数据, 并将其送到标准输出。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># cat</span></span><br><span class="line">hello   <span class="comment">#标准输入</span></span><br><span class="line">hello   <span class="comment">#标准输出</span></span><br><span class="line">^C</span><br><span class="line"><span class="comment">#用户输入的每一行都立刻被cat命令输出到屏幕上。</span></span><br></pre></td></tr></table></figure>
+<p><em>下面了解一下标准输入输出过程</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#持续追踪查看文件内容</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># tail -f /etc/passwd</span></span><br><span class="line">ctrl+z 将进程转到后台</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行的进程</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ps</span></span><br><span class="line">PID TTY          TIME CMD</span><br><span class="line">5848 pts/1    00:00:00 bash</span><br><span class="line">6885 pts/1    00:00:00 tail</span><br><span class="line">6888 pts/1    00:00:00 ps</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看tail命令的pid，6885进程下的文件描述符</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ls -l /proc/6885/fd</span></span><br><span class="line">total 0</span><br><span class="line">lrwx------ 1 root root 64 Dec  3 06:57 0 -&gt; /dev/pts/1</span><br><span class="line">lrwx------ 1 root root 64 Dec  3 06:57 1 -&gt; /dev/pts/1</span><br><span class="line">lrwx------ 1 root root 64 Dec  3 06:56 2 -&gt; /dev/pts/1</span><br><span class="line">lr-x------ 1 root root 64 Dec  3 06:57 3 -&gt; /etc/passwd</span><br><span class="line">lr-x------ 1 root root 64 Dec  3 06:57 4 -&gt; inotify</span><br><span class="line"></span><br><span class="line"><span class="comment">#Linux查看标准输入输出设备</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ls -l /dev/std*</span></span><br><span class="line">lrwxrwxrwx 1 root root 15 Dec  2 22:30 /dev/stderr -&gt; /proc/self/fd/2</span><br><span class="line">lrwxrwxrwx 1 root root 15 Dec  2 22:30 /dev/stdin -&gt; /proc/self/fd/0</span><br><span class="line">lrwxrwxrwx 1 root root 15 Dec  2 22:30 /dev/stdout -&gt; /proc/self/fd/1</span><br></pre></td></tr></table></figure>
+<h2 id="2输出重定向">2.输出重定向</h2>
+<p>*<strong>输出重定向，改变输出内容的位置。输出重定向有如下几种方式，如表格所示*</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">操作符</th>
+<th style="text-align:left">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">标准覆盖输出重定向</td>
+<td style="text-align:left">&gt;</td>
+<td style="text-align:left">将程序输出的正确结果输出到指定的文件中,会覆盖文件原有的内容</td>
+</tr>
+<tr>
+<td style="text-align:left">标准追加输出重定向</td>
+<td style="text-align:left">&gt;&gt;</td>
+<td style="text-align:left">将程序输出的正确结果以追加的方式输出到指定文件，不会覆盖原有文件</td>
+</tr>
+<tr>
+<td style="text-align:left">错误覆盖输出重定向</td>
+<td style="text-align:left">2&gt;</td>
+<td style="text-align:left">将程序的错误结果输出到执行的文件中，会覆盖文件原有的内容</td>
+</tr>
+<tr>
+<td style="text-align:left">错误追加输出重定向</td>
+<td style="text-align:left">2&gt;&gt;</td>
+<td style="text-align:left">将程序输出的错误结果以追加的方式输出到指定文件，不会覆盖原有文件</td>
+</tr>
+<tr>
+<td style="text-align:left">标准输入重定向</td>
+<td style="text-align:left">&lt;&lt;</td>
+<td style="text-align:left">将命令中接收输入的途径由默认的键盘更改为指定的文件或命令</td>
+</tr>
+</tbody>
+</table>
+<p><em>案例1: 标准输出重定向(每次都会覆盖文件)</em></p>
+<p><img src="http://cdn.xuliangwei.com/15173988453453.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#标准输出重定向, 先清空,后写入, 如果文件不存在则创建</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ifconfig eth0 &gt; abc</span></span><br></pre></td></tr></table></figure>
+<p><em>案例2: 标准输出重定向(会往文件的尾部在添加内容)</em></p>
+<p><img src="http://cdn.xuliangwei.com/15173991406812.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#标准追加输出重定向, 向配置文件末尾追加内容</span></span><br><span class="line">[xuliangwei@xuliangwei ~]$ <span class="built_in">echo</span> <span class="string">"This is network conf"</span> &gt;&gt; <span class="keyword">if</span></span><br></pre></td></tr></table></figure>
+<p><em>案例3: 错误输出重定向</em></p>
+<p><img src="http://cdn.xuliangwei.com/15173993760216.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#正确输出以及错误输出重定向至一个文件</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># useradd xuliangwei</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># su - xuliangwei</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#将标准输出和标准错误输出重定向到不同文件</span></span><br><span class="line">[xuliangwei@xuliangwei ~]$ find /etc -name <span class="string">"*.conf"</span> 1&gt;a 2&gt;b</span><br></pre></td></tr></table></figure>
+<p><em>案例4: 正确和错误都输入到相同位置</em><br>
+<img src="http://cdn.xuliangwei.com/15173994710423.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将标准输出和标准错误输出重定向到同一个文件, 混合输出</span></span><br><span class="line">[xuliangwei@xuliangwei ~]$ find /etc -name <span class="string">"*.conf"</span> &amp;&gt;ab</span><br><span class="line"></span><br><span class="line"><span class="comment">#合并两个文件内容至一个文件</span></span><br><span class="line">[xuliangwei@xuliangwei ~]$ cat a b &gt; c</span><br></pre></td></tr></table></figure>
+<p><em>案例5: 正确和错误都输入到相同位置</em><br>
+<img src="http://cdn.xuliangwei.com/15174001192637.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#重定向到相同的位置</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ls /root /error &gt;ab  2&gt;&amp;1</span></span><br></pre></td></tr></table></figure>
+<p><em>案例6: 重定向到空设备/dev/null</em></p>
+<p><img src="http://cdn.xuliangwei.com/15174001695586.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将产生的任何数据放入黑洞设备，则视为丢弃。</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ls /root /error &gt;ab 2&gt;/dev/null</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ls /root /error &gt;ab &amp;&gt;/dev/null</span></span><br></pre></td></tr></table></figure>
+<p><em>案例7: 脚本中使用重定向 (了解即可)</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># vim ping.sh </span></span><br><span class="line">ping -c1 10.0.0.1</span><br><span class="line"><span class="keyword">if</span> [ $? -eq 0 ];<span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"10.0.0.1 is up."</span> </span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"10.0.0.1 is down."</span> </span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># chmod +x ping.sh </span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ./ping.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改进后版</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># vim ping.sh</span></span><br><span class="line">ping -c1 10.0.0.1 &amp;&gt;/dev/null</span><br><span class="line"><span class="keyword">if</span> [ $? -eq 0 ];<span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"10.0.0.1 is up."</span> </span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"10.0.0.1 is down."</span> </span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p><em>案例8: 脚本中使用重定向 (了解即可)</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]# vim ping2.sh </span><br><span class="line">ping -c1 10.0.0.1 &amp;&gt;/dev/null </span><br><span class="line">if [ $? -eq 0 ];then</span><br><span class="line">    echo &quot;10.0.0.1 is up.&quot; &gt;&gt;up.txt </span><br><span class="line">else</span><br><span class="line">    echo &quot;10.0.0.1 is down.&quot; &gt;&gt;down.txt </span><br><span class="line">fi</span><br><span class="line">[root@xuliangwei ~]# chmod +x ping2.sh </span><br><span class="line">[root@xuliangwei ~]# ./ping2.sh</span><br></pre></td></tr></table></figure>
+<h2 id="3输入重定向">3.输入重定向</h2>
+<p><em>输入重定向，即原本从键盘等上获得的输入信息，重定向由命令的输出作为输入。&lt; 等价 0&lt;</em></p>
+<p><em>案例1: 从文件中读入输入的操作</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#没有改变输入的方向，默认键盘</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># mail alice </span></span><br><span class="line">Subject: hello</span><br><span class="line">1111 </span><br><span class="line">2222</span><br><span class="line">3333</span><br><span class="line">.   <span class="comment">#结束</span></span><br><span class="line">EOT</span><br><span class="line"></span><br><span class="line"><span class="comment">#检查是否收到邮件</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># su - alice</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># mail</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#输入重定向，来自于文件</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># mail -s "test01" alice &lt; /etc/hosts</span></span><br></pre></td></tr></table></figure>
+<p><em>案例2: 无法形容案例，请看实际操作</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#没有改变输入的方向，默认键盘，此时等待输入</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># grep 'root' </span></span><br><span class="line">xxx</span><br><span class="line">xxx</span><br><span class="line"></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># grep 'root' &lt; /etc/passwd</span></span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br></pre></td></tr></table></figure>
+<p><em>案例3: 无法形容案例，请看实际操作</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># dd if=/dev/zero of=/file1.txt bs=1M count=20</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># dd &lt;/dev/zero &gt;/file2.txt bs=1M count=20</span></span><br></pre></td></tr></table></figure>
+<p><em>案例4: mysql如何恢复备份，了解即可，不用关注。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># mysql -uroot -p123 &lt; bbs.sql</span></span><br></pre></td></tr></table></figure>
+<p><em>案例5: 利用重定向建立多行数据的文件</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#手动执行 shell 命令</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># echo "111" &gt; file1.txt </span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># cat file1.txt</span></span><br><span class="line">111</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># cat &gt;file2.txt</span></span><br><span class="line">111</span><br><span class="line">222</span><br><span class="line">333</span><br><span class="line">^D</span><br><span class="line"></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># cat &gt;&gt;file3.txt</span></span><br><span class="line">aaa</span><br><span class="line">bbb</span><br><span class="line">ccc</span><br><span class="line">^D</span><br></pre></td></tr></table></figure>
+<p><em>案例6: 脚本中打印菜单的一种使用方法。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># vim vm.sh</span></span><br><span class="line">cat &lt;&lt;-EOF</span><br><span class="line">+------------------- --- ---- --- ---- --- --- ---- --- --+ ||</span><br><span class="line">| ====================== | </span><br><span class="line">| 虚拟机基本管理 v5.0 |</span><br><span class="line">| by xuliangwei |</span><br><span class="line">| ====================== | </span><br><span class="line">| 1. 安装 KVM |</span><br><span class="line">| 2. 安装或重置 CentOS-6.9 | </span><br><span class="line">| 3. 安装或重置 CentOS-7.4 | </span><br><span class="line">| 5. 安装或重置 Windows-7  | </span><br><span class="line">| 6. 删除所有虚拟机 |</span><br><span class="line">| q. 退出管理程序 |</span><br><span class="line">+------------------- --- ---- --- ---- --- --- ---- --- --+ </span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p><em>案例7: 两条命令同时重定向</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># ls; date &amp;&gt;/dev/null</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ls &amp;&gt;/dev/null; date &amp;&gt;/dev/null</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># (ls; date) &amp;&gt;/dev/null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#后台执行</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># (while :; do date; sleep 2; done) &amp;</span></span><br><span class="line">[1] 6378</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># (while :; do date; sleep 2; done) &amp;&gt;date.txt &amp;</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># jobs</span></span><br><span class="line">[1]+ 运行中 ( <span class="keyword">while</span> :; <span class="keyword">do</span> date; sleep 2;</span><br><span class="line"><span class="keyword">done</span> ) &amp;&gt;/date.txt &amp;</span><br></pre></td></tr></table></figure>
+<p><em>扩展点: subshell 了解即可</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># cd /boot; ls</span></span><br><span class="line"></span><br><span class="line">//subshell 中执行</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># (cd /boot; ls)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#如果不希望某些命令的执行对当前 shell 环境产生影响，请在subshell中执行</span></span><br></pre></td></tr></table></figure>
+<h2 id="4进程管道技术">4.进程管道技术</h2>
+<p>*<strong>1.什么是管道*</strong><br>
+<em>管道操作符号 “|” ，主要用来连接左右两个命令, 将左侧的命令的标准输出, 交给右侧命令的标准输入<br>
+PS: 无法传递标准错误输出至后者命令</em></p>
+<p>*<strong>2.管道流程示意图*</strong></p>
+<p><img src="http://cdn.xuliangwei.com/15174014256009.jpg" alt="img"><br>
+<em>格式: <code>cmd1 | cmd2 [...|cmdn]</code></em></p>
+<p>*<strong>3.管道使用案例*</strong><br>
+<em>案例1: 将/etc/passwd 中的用户按 UID 大小排序</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># sort -t":" -k3 -n /etc/passwd</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># sort -t":" -k3 -n /etc/passwd -r</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># sort -t":" -k3 -n /etc/passwd |head</span></span><br></pre></td></tr></table></figure>
+<p><em>案例2: 统计当前/etc/passwd 中用户使用的 shell 类型</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#思路:取出第七列(shell) | 排序(把相同归类)| 去重</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># awk -F: '&#123;print $7&#125;' /etc/passwd</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># awk -F: '&#123;print $7&#125;' /etc/passwd |sort</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># awk -F: '&#123;print $7&#125;' /etc/passwd |sort |uniq</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># awk -F: '&#123;print $7&#125;' /etc/passwd |sort |uniq -c</span></span><br></pre></td></tr></table></figure>
+<p><em>案例4: 统计网站的访问情况 top 20</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#思路: 打印所有访问的连接 | 过滤访问网站的连接 | 打印用户的 IP | 排序 | 去重</span></span><br><span class="line"></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># yum -y install httpd</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># systemctl start httpd</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># systemctl stop firewalld</span></span><br><span class="line"></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ss -an |grep :80 |awk -F":" '&#123;print $8&#125;' |sort |uniq -c</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ss -an |grep :80 |awk -F":" '&#123;print $8&#125;' |sort |uniq -c |sort -k1 -rn |head -n 20</span></span><br></pre></td></tr></table></figure>
+<p><em>案例5: 打印当前所有 IP</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># ip addr |grep 'inet ' |awk '&#123;print $2&#125;' |awk -F"/" '&#123;print $1&#125;'</span></span><br><span class="line">127.0.0.1</span><br><span class="line">192.168.69.112</span><br></pre></td></tr></table></figure>
+<p><em>案例6: 打印根分区已用空间的百分比(仅打印数字)</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># df |grep '/$' |awk '&#123;print $5&#125;' |awk -F"%" '&#123;print $1&#125;'</span></span><br></pre></td></tr></table></figure>
+<p><em>PS: 管道命令符能让大家能进一步掌握命令之间的搭配使用方法，进一步提高命令输出值的处理效率。</em></p>
+<p>*<strong>4.管道中的tee技术*</strong></p>
+<p><img src="http://cdn.xuliangwei.com/15174019042001.jpg" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#选项: -a追加</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ip addr |grep 'inet ' |tee ip.txt |awk -F"/" '&#123;print $1&#125;' |awk '&#123;print $2&#125;'</span></span><br><span class="line">127.0.0.1</span><br><span class="line">10.0.0.100</span><br><span class="line"></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># cat ip.txt</span></span><br><span class="line">inet 127.0.0.1/8 scope host lo</span><br><span class="line">inet 10.0.0.100/24 brd 192.168.69.255 scope global ens32</span><br></pre></td></tr></table></figure>
+<p><em>重定向与 tee 有他们在使用过程中有什么区别</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># date &gt; date.txt    #直接将内容写入date.txt文件中</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># date |tee date.txt #命令执行会输出至屏幕，但会同时保存一份至date.txt文件中</span></span><br></pre></td></tr></table></figure>
+<p>*<strong>5.xargs参数传递，主要让一些不支持管道的命令可以使用管道技术*</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># which cat|xargs ls- l</span></span><br><span class="line"><span class="comment"># ls |xargs rm -fv</span></span><br><span class="line"><span class="comment"># ls |xargs cp -rvt /tmp/ -或-&gt; ls | xargs -I &#123;&#125; cp -rv &#123;&#125; /tmp/</span></span><br><span class="line"><span class="comment"># ls |xargs mv -t /tmp/   -或-&gt; ls | xargs -I &#123;&#125;  mv &#123;&#125; /tmp</span></span><br></pre></td></tr></table></figure>
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Linux/10.Linux之文件查找/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（十）文件查找">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Linux/08.Linux之ACL控制/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（八）ACL控制">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1重定向概述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x91CD;&#x5B9A;&#x5411;&#x6982;&#x8FF0;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2输出重定向"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x8F93;&#x51FA;&#x91CD;&#x5B9A;&#x5411;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3输入重定向"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x8F93;&#x5165;&#x91CD;&#x5B9A;&#x5411;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4进程管道技术"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x8FDB;&#x7A0B;&#x7BA1;&#x9053;&#x6280;&#x672F;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

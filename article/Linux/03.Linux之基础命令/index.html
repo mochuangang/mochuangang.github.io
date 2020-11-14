@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Linux] linux基础之（三）基础命令 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/03.Linux之基础命令/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/linux.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                            
+                        </div>
+                        <h1>[Linux] linux基础之（三）基础命令</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2018-06-11
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="1系统目录结构">1.系统目录结构</h2>
+<p>几乎所有的计算机操作系统都是使用目录结构组织文件。具体来说就是在一个目录中存放子目录和文件, 而在子目录中又会进一步存放子目录和文件，以此类推形成一个树状的文件结构，由于其结构很像一棵树的分支, 所以该结构又被称为“目录树”。<br>
+<code>Linux</code>系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;根⽬录&quot;下, ⽬录名为<code>&quot;/&quot;</code>。FHS（⽂件 系统层次标准）定义了在根⽬录下的主要⽬录以及每个⽬录应该存放什么⽂件。</p>
+<p><em>如下图为Centos7的目录结构</em></p>
+<p><em>1.存放命令相关的目录结构</em></p>
+<p><img src="/img/article/linux/Snipaste_2020-11-10_23-14-47.png" alt="Snipaste_2020-11-10_23-14-47"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">1.存放命令相关的目录</span><br><span class="line">/bin， 普通用户使用的命令 /bin/ls, /bin/date</span><br><span class="line">/sbin，管理员使用的命令 /sbin/service</span><br><span class="line"></span><br><span class="line">2.存放用户相关数据的家目录，比如:windows不同的用户登陆系统显示的桌面背景不一样</span><br><span class="line">/home，普通用户的家目录, 默认为/home/username</span><br><span class="line">/root，超级管理员root的家目录, 普通用户无权操作</span><br><span class="line"></span><br><span class="line">3.系统文件目录</span><br><span class="line">/usr，相当于C:\Windows</span><br><span class="line">/usr/<span class="built_in">local</span>，软件安装的目录，相当于C:\Program</span><br><span class="line">/usr/bin/，普通用户使用的应用程序(重要)</span><br><span class="line">/usr/sbin，管理员使用的应用程序(重要)</span><br><span class="line">/usr/lib，库文件Glibc 32bit</span><br><span class="line">/usr/lib64，库文件Glibc 64bit</span><br><span class="line"></span><br><span class="line">4.启动目录</span><br><span class="line">/boot 存放的系统启动相关的文件，例如:kernel，grub(引导装载程序)</span><br><span class="line"></span><br><span class="line">5.配置文件目录</span><br><span class="line">/etc，极其重要，后续所有服务的配置都在这个目录中</span><br><span class="line">/etc/sysconfig/network-script/ifcfg-，网络配置文件</span><br><span class="line">/etc/hostname，系统主机名配置文件</span><br><span class="line">/etc/resolv.conf，dns客户端配置文件</span><br><span class="line">/etc/hosts，本地域名解析配置文件</span><br><span class="line"></span><br><span class="line">6.可变的目录与临时目录</span><br><span class="line">/var，存放一些变化文件，比如/var/<span class="built_in">log</span>/下的日志文件</span><br><span class="line">/var/tmp，进程产生的临时文件</span><br><span class="line">/tmp，系统临时目录(类似于公共厕所)</span><br><span class="line"></span><br><span class="line">7.设备目录文件</span><br><span class="line">/dev，存放设备文件，比如硬盘，硬盘分区，光驱，等等</span><br><span class="line">/dev/null，黑洞设备，只进不出。类似于垃圾回收站</span><br><span class="line">/dev/random，生成随机数的设备</span><br><span class="line">/dev/zero，能远远不断的产生数据，类似于取款机，随时随地取钱</span><br><span class="line"></span><br><span class="line">8.虚拟的文件系统(如对应的进程停止则/proc下对应目录则会被删除)</span><br><span class="line">/proc，反映系统当前进程的实时状态</span><br><span class="line">PS：类似于小汽车的仪表板，能够看到汽车是否有故障，或者是否缺油了。</span><br><span class="line"></span><br><span class="line">9.PS: 在Linux7系统中, /bin, /sbin, /lib, /lib64都以软链接的形式链接到/usr/目录下</span><br><span class="line">/bin --&gt; /usr/bin</span><br><span class="line">/sbin --&gt; /usr/sbin</span><br><span class="line">lib -&gt; usr/lib</span><br><span class="line">lib64 -&gt; usr/lib64</span><br></pre></td></tr></table></figure>
+<h2 id="2文件路径定位">2.文件路径定位</h2>
+<ul>
+<li>
+<p>在我们开始操作文件前，首先需要对文件进行定位，比如:<br>
+你要在哪创建什么文件?</p>
+</li>
+<li>
+<p>你要将文件复制到什么地方?</p>
+</li>
+<li>
+<p>你要删除的文件在什么地方?</p>
+</li>
+<li>
+<p>那什么是定位: 比如/etc/hostname，整个文件中包含文件名称以及文件所在的位置，我们将这个叫做路径，那么路径就是对文件进行定位的一种方式。例:如下图的message所在的路径是?*</p>
+<p><img src="/img/article/linux/Snipaste_2020-11-12_16-07-23.png" alt="Snipaste_2020-11-12_16-07-23"></p>
+</li>
+</ul>
+<p><strong><em>1.特殊目录：(.)和(…)</em></strong></p>
+<ul>
+<li>
+<p>在每个⽬录下, 都会固定存在两个特殊⽬录, 分别是⼀个点(.)和两个(…)的⽬录。</p>
+</li>
+<li>
+<p>一个点代表当的是当前目录, 两个点代表的是当前目录的上层目录。</p>
+</li>
+<li>
+<p>注意: 在Linux下所有以点开始的⽂件都是&quot;隐藏 ⽂件&quot;, 对于这类⽂件, 只使⽤命令 ls	-l 是看不到的, 必须要使⽤ <code>ls -la</code>才可以看到,如下所示:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># cd /opt/</span></span><br><span class="line">[root@mcg opt]<span class="comment"># ls</span></span><br><span class="line">[root@mcg opt]<span class="comment"># ls -a</span></span><br><span class="line">.  ..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设当前目录在`/usr/`下, 那么它的上层(/)目录用`../`表示, 而`/usr/`的下层(local)目录则用`./local`表示。</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong><em>2.绝对路径</em></strong></p>
+<p><em>Linux系统采⽤了⽬录树的⽂件组织结构, 在Linux下每个⽬录或⽂件都可以从根⽬录处开始寻找, ⽐如:<code>/usr/bin</code> ⽬录。这种从根⽬录开始的全路径被称为&quot;绝对路径&quot;, 绝对路径⼀定是以 <code>“/”</code> 开头 的。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#绝对路径</span></span><br><span class="line">[root@mcg /]<span class="comment"># useradd alice</span></span><br><span class="line">[root@mcg /]<span class="comment"># touch /home/alice/file1</span></span><br><span class="line">[root@mcg /]<span class="comment"># touch ~/file2</span></span><br><span class="line">[root@mcg /]<span class="comment"># touch ~alice/file3</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>3.绝对路径</em></strong></p>
+<p><em>相对路径, 关键点在于当前在什么路径下。假设当前⽬录在 /usr/local 下, 那么它的上层⽬录 (/usr⽬录)可以⽤ …/ 表示, ⽽` /usr/local 的下层⽬录(src)则可以⽤ ./src 表示。所谓的(.)和(…)⽬ 录实际上也是属于相对路径</em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">相对路径</span></span><br><span class="line">//进⼊/opt⽬录</span><br><span class="line">[root@mcg ~]#	cd	/opt/</span><br><span class="line">[root@mcg opt]#	ls	-la</span><br><span class="line">total	76</span><br><span class="line">drwxr-xr-x.	2	root root 69632 Dec	4 11:00	.	#代表当前⽬录</span><br><span class="line">dr-xr-xr-x.	33	root root 4096  Dec	4 10:40	..	#代表上层⽬录</span><br><span class="line">//进⼊当前⽬录</span><br><span class="line">[root@mcg opt]# cd .</span><br><span class="line">//显示当前⽬录</span><br><span class="line">[root@mcg opt]# pwd</span><br><span class="line">/opt</span><br><span class="line"></span><br><span class="line">//进⼊当前⽬录的上层⽬录</span><br><span class="line">[root@mcg opt]#	cd	..</span><br><span class="line">//进⼊上层⽬录,也就是/⽬录</span><br><span class="line">[root@mcg /]# pwd</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+<p><em>cd改变目录，常见的使用方法</em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> 绝对路径 <span class="built_in">cd</span> /etc/hostname</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> 相对路径 <span class="built_in">cd</span> <span class="built_in">test</span>/abc <span class="built_in">cd</span> . <span class="built_in">cd</span> ..</span></span><br><span class="line">-------------------------------------</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span>      <span class="comment">#切换目录，例: cd /etc</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> -    <span class="comment">#切换回上一次所在的目录</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> ~    <span class="comment">#切换回当前用户的家目录,注意:root和普通用户是否有所不同吗？</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> .    <span class="comment">#代表当前目录，一般在拷贝、移动等情况下使用 cp /etc/hostname ./</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> ..   <span class="comment">#切换回当前目录的上级目录</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="3目录管理命令">3.目录管理命令</h2>
+<p><em>1.目录创建命令mkdir</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 选项：-v 显示详细信息  -p 递归创建目录</span></span><br><span class="line"><span class="comment"># mkdir dir1</span></span><br><span class="line"><span class="comment"># mkdir /home/od/dir1 /home/od/dir2</span></span><br><span class="line"><span class="comment"># mkdir -v /home/od/&#123;dir3,dir4&#125; </span></span><br><span class="line"><span class="comment"># mkdir -pv /home/od/dir5/dir6</span></span><br><span class="line"><span class="comment"># mkdir -pv /home/&#123;od/&#123;diu,but&#125;,boy&#125;</span></span><br></pre></td></tr></table></figure>
+<p><em>2.以树状显示目录结构命令tree</em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 选项: -L: 显示目录树的层级</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> tree /home/mcg/    <span class="comment">#显示当前目录下的结构</span></span></span><br><span class="line">/home/mcg/</span><br><span class="line">├── but</span><br><span class="line">├── dir1</span><br><span class="line">├── dir2</span><br><span class="line">├── dir3</span><br><span class="line">│   └── dir4</span><br><span class="line">└── diu</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示⼀级⽬录</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> tree -L 1 /</span></span><br></pre></td></tr></table></figure>
+<h2 id="4目录管理命令">4.目录管理命令</h2>
+<p><code>Linux</code> ⼀切皆为⽂件, 在对 Linux 进⾏配置时, 很⼤程度上就是处理⽂件的过程, 所以掌握⽂件的 相关操作是⾮常有必要的。下⾯我们介绍如何对⽂件进⾏, 创建、删除、移动、重命名, 以及查看 ⽂件内容, ⾄于如何编辑⽂件, 在后⾯具体介绍编辑器的时候在做详细阐述。</p>
+<p><em>1.文件创建命令<code>touch</code></em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> touch file                    <span class="comment">#无则创建,有则修改时间</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> touch file2 file3</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> touch /home/od/file4 file5</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> touch file&#123;a,b,c&#125;             <span class="comment">#&#123;&#125;集合，等价 touch a b c</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> touch file&#123;1..10&#125;             <span class="comment">#创建file1、file2...file10 </span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> touch file&#123;a..z&#125;</span></span><br></pre></td></tr></table></figure>
+<p><em>2.文件创建命令<code>stat</code></em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># stat test.txt</span></span><br><span class="line">  File: ‘test.txt’</span><br><span class="line">  Size: 0         	Blocks: 0          IO Block: 4096   regular empty file</span><br><span class="line">Device: 802h/2050d	Inode: 67200975    Links: 1</span><br><span class="line">Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)</span><br><span class="line">Access: 2020-11-12 16:50:03.867016887 +0800</span><br><span class="line">Modify: 2020-11-12 16:50:03.867016887 +0800</span><br><span class="line">Change: 2020-11-12 16:50:03.867016887 +0800</span><br><span class="line"> Birth: -</span><br><span class="line"></span><br><span class="line">访问时间:atime，查看内容</span><br><span class="line">修改时间:mtime，修改内容</span><br><span class="line">改变时间:ctime，⽂件属性，⽐如权限</span><br><span class="line">删除时间:dtime，⽂件被删除的时间</span><br></pre></td></tr></table></figure>
+<p><em>3.⽂件⽬录复制命令 <code>cp</code>【高危命令1】</em></p>
+<hr>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">选项： -v:详细显示命令执行的操作 -r: 递归处理目录与子目录 -p: 保留源文件或目录的属性</span></span><br><span class="line">cp	[OPTION]...	[-T]	SOURCE	DEST</span><br><span class="line">cp	[OPTION]...	SOURCE...	DIRECTORY</span><br><span class="line">cp	[OPTION]...	-t	DIRECTORY	SOURCE...</span><br><span class="line"></span><br><span class="line">//将name⽂件复制⾄/tmp⽬录中</span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	name	/tmp/name_copy</span></span><br><span class="line"></span><br><span class="line">//如果复制过想保持原⽂件名,不修改名称</span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	name	/tmp/name</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> cp file /tmp/</span></span><br><span class="line"></span><br><span class="line">//如果复制过想保持原来的属性,	-p保持原⽂件或⽬录的属性</span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-p	name	/tmp/name_p</span></span><br><span class="line"></span><br><span class="line">//复制⽬录只需要使⽤-r参数,	递归复制</span><br><span class="line"><span class="meta">#</span><span class="bash">	mkdir	name_name</span></span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-r		name_name/	/tmp/name_tmp</span></span><br><span class="line"></span><br><span class="line">//将多个⽂件拷⻉同⼀个⽬录</span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-rv	/etc/hosts	/etc/hostname	/tmp</span></span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-rv	/etc/hosts	/etc/hostname	./</span></span><br><span class="line"></span><br><span class="line">//</span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-rv	/etc/hosts	/etc/hosts.bak</span></span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-rv	/etc/&#123;hosts,hosts.bak&#125;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">	cp	-rv	/etc/hosts&#123;,-org&#125;</span></span><br></pre></td></tr></table></figure>
+<p><em>4.⽂件⽬录复制命令 <code>mv</code></em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mv	[OPTION]...	[-T]	SOURCE	DEST</span><br><span class="line">mv	[OPTION]...	SOURCE...	DIRECTORY</span><br><span class="line">mv	[OPTION]...	-t	DIRECTORY	SOURCE...</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> mv file file1             <span class="comment">#原地移动算改名</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mv file1 /tmp/            <span class="comment">#移动文件至tmp目录</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mv /tmp/file1 ./          <span class="comment">#移动tmp目录的文件至当前目录</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mv dir/ /tmp/             <span class="comment">#移动目录至/tmp目录下</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> touch file&#123;1..3&#125;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mv file1 file2 file3 /opt/    <span class="comment">#移动多个文件或至同一个目录</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> mkdir dir&#123;1..3&#125;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mv dir1/ dir2/ dir3/ /opt     <span class="comment">#移动多个目录至同一个目录</span></span></span><br></pre></td></tr></table></figure>
+<p><em>5.⽂件⽬录删除命令<code>rm</code>【高危命令2】</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">rm	[OPTION]...	FILE...</span><br><span class="line">-r	递归</span><br><span class="line">-f	强制删除</span><br><span class="line">-v	详细过程</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># rm  file.txt      //删除文件, 默认rm存在alias别名，rm -i所以会提醒是否删除文件    </span></span><br><span class="line"><span class="comment"># rm -f file.txt    #删除文件, 不提醒</span></span><br><span class="line">--------------------------------</span><br><span class="line"><span class="comment"># rm -r dir/        #递归删除目录，会提示</span></span><br><span class="line"><span class="comment"># rm -rf dir/       #强制删除目录,不提醒(慎用)</span></span><br><span class="line">--------------------------------</span><br><span class="line"><span class="comment">#1.rm删除示例</span></span><br><span class="line"><span class="comment"># mkdir /home/dir10</span></span><br><span class="line"><span class="comment"># touch /home/dir10/&#123;file2,file3,.file4&#125;</span></span><br><span class="line"><span class="comment"># rm -f /home/dir10/*  //不包括隐藏文件 </span></span><br><span class="line"><span class="comment"># ls /home/dir10/ -a</span></span><br><span class="line">. .. .file4</span><br><span class="line">--------------------------------</span><br><span class="line"><span class="comment">#2.rm删除示例2</span></span><br><span class="line"><span class="comment"># touch file&#123;1..10&#125;</span></span><br><span class="line"><span class="comment"># touch &#123;1..10&#125;.pdf</span></span><br><span class="line"><span class="comment"># rm -rf file* </span></span><br><span class="line"><span class="comment"># rm -rf *.pdf</span></span><br><span class="line"></span><br><span class="line">脚本场景：</span><br><span class="line">业务逻辑判断 赋值的 LOG_PATH=/xxx/yyy</span><br><span class="line">    漏了一种没有赋值</span><br><span class="line">rm -rf <span class="variable">$&#123;LOG_PATH&#125;</span>/*  ==&gt; rm -rf /* </span><br><span class="line"></span><br><span class="line">如何避免：</span><br><span class="line">每次删除之前，都判断<span class="variable">$&#123;LOG_PATH&#125;</span>目录是否存在</span><br><span class="line"><span class="built_in">set</span> -u参数  在脚本的 第一行<span class="comment">#!/bin/bash ,在第二行写</span></span><br></pre></td></tr></table></figure>
+<h2 id="5文件查看命令">5.文件查看命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">cat 文件内容一下子全部显示  ctrl+z中断 </span><br><span class="line"><span class="comment">#          适合内容少的，内容多 不适合</span></span><br><span class="line"><span class="comment"># cp /etc/passwd ./pass</span></span><br><span class="line"><span class="comment"># cat pass      #正常查看文件方式</span></span><br><span class="line"><span class="comment"># cat -n pass   #-n显示文件有多少行</span></span><br><span class="line"><span class="comment"># cat -A pass   #查看文件的特殊符号,比如文件中存在tab键</span></span><br><span class="line"><span class="comment"># tac pass      #倒序查看文件</span></span><br><span class="line"><span class="comment">#  cat /dev/null &gt; 3.log   清空文件内容 为空文件【推荐】</span></span><br><span class="line"><span class="comment"># 或者 &gt; 3.log 清空文件内容</span></span><br><span class="line"><span class="comment"># echo "" &gt; 4.log   【慎用】 此清空文件内容后会有一行空的换行符</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件内容特别多 如何快速定位到ERROR、关键词信息</span></span><br><span class="line"><span class="comment"># cat CloudAgent.log | grep ERROR</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat CloudAgent.log | grep -A 10 ERROR 后10行</span></span><br><span class="line"><span class="comment"># cat CloudAgent.log | grep -B 10 ERROR 前10行</span></span><br><span class="line"><span class="comment"># cat CloudAgent.log | grep -C 10 ERROR 前后各10行 20行 【推荐】</span></span><br><span class="line"><span class="comment"># 比如 ERROR 很多 成千上万     【推荐】</span></span><br><span class="line"><span class="comment"># cat CloudAgent.log | grep -C 20 ERROR &gt; 20201107error.log</span></span><br><span class="line"><span class="comment"># more 20201107error.log</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 向这个文件中放入多行</span></span><br><span class="line">cat &gt;&gt;/data/test.txt&lt;&lt;EOF</span><br><span class="line">I</span><br><span class="line">am </span><br><span class="line">studying </span><br><span class="line">linux </span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">less、more 适合内容多的</span><br><span class="line"><span class="comment"># less /etc/services    #使用光标上下翻动，按行为单位，ctrl+b回退  q退出</span></span><br><span class="line"><span class="comment"># more /etc/services    #使用回车上下翻动，文件内容一页页 往下翻，按空格往下翻，ctrl+b回退  q退出</span></span><br><span class="line"></span><br><span class="line">head  	//查看⽂件头部内容，默认前⼗⾏</span><br><span class="line"><span class="comment"># head pass     #查看头部内容，默认前十行</span></span><br><span class="line"><span class="comment"># head -n5 pass #查看头部5行，使用-n指定</span></span><br><span class="line"></span><br><span class="line">tail 	//查看⽂件尾部内容，默认最后⼗⾏</span><br><span class="line"><span class="comment"># -f   假如文件被移除 然后重命名 就无法再监控到文件</span></span><br><span class="line"><span class="comment"># -F   假如文件被移除 然后重命名 会不断的retry尝试 去监控文件，直到监控到位</span></span><br><span class="line"><span class="comment">#  -f, --follow[=&#123;name|descriptor&#125;]</span></span><br><span class="line"><span class="comment">#                           output appended data as the file grows;</span></span><br><span class="line"><span class="comment">#                             an absent option argument means 'descriptor'</span></span><br><span class="line"><span class="comment">#  -F                       same as --follow=name --retry</span></span><br><span class="line"><span class="comment"># tail pass</span></span><br><span class="line"><span class="comment"># tail -20 /var/log/secure</span></span><br><span class="line"><span class="comment"># tail -f /var/log/messages #-f查看文件尾部的变化</span></span><br><span class="line"><span class="comment"># tailf /var/log/messages   #查看文件尾部的变化</span></span><br><span class="line"></span><br><span class="line">grep过滤文件内容</span><br><span class="line"><span class="comment"># grep "^root" pass     #匹配以root开头的行</span></span><br><span class="line"><span class="comment"># grep "bash$" pass     #匹配以bash结尾的行</span></span><br><span class="line"><span class="comment"># grep -i "ftp" pass    #忽略大小写匹配</span></span><br><span class="line"><span class="comment"># grep  -Ei "sync$|ftp" pass    #匹配文件中包含sync结尾或ftp字符串</span></span><br><span class="line"><span class="comment"># grep -n -A 2 "Failed" /var/log/secure #匹配/var/log/secure文件中Failed字符串,并打印它的下2行</span></span><br><span class="line"><span class="comment"># grep -n -B 2 "Failed" /var/log/secure #匹配/var/log/secure文件中Failed字符串,并打印它的上2行</span></span><br><span class="line"><span class="comment"># grep -n -C 2 "Failed" /var/log/secure #匹配/var/log/secure文件中Failed字符串,并打印它的上下2行</span></span><br></pre></td></tr></table></figure>
+<h2 id="6文件下载命令">6.文件下载命令</h2>
+<p><em>1.<code>wget、curl</code>联网下载文件</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">wget		 //⽂件下载</span><br><span class="line">-O			//指定下载地址,更改名称		</span><br><span class="line">-T			//超时时间</span><br><span class="line">-q			//安静下载(关闭wget输出)</span><br><span class="line">--spider	//⽹络爬⾍	</span><br><span class="line"></span><br><span class="line">示例：wget	http://www.baidu.com</span><br><span class="line"></span><br><span class="line">curl				//⽂件下载</span><br><span class="line">示例：curl	-o	http://www.baidu.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#选项: -O: 指定下载地址</span></span><br><span class="line"><span class="comment"># wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#选项: -o: 指定下载地址</span></span><br><span class="line"><span class="comment"># curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span></span><br></pre></td></tr></table></figure>
+<p><em>2.<code>rz\sz</code>上传下载文件</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install lrzsz -y  <span class="comment">#不安装软件则无法执行该命令</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rz            #只能上传文件文件上传</span></span><br><span class="line"><span class="comment"># sz /path/file #只能下载文件</span></span><br></pre></td></tr></table></figure>
+<h2 id="7查找命令">7.查找命令</h2>
+<p><em>1.<code>locate</code> 查找⽂件或者⽬录</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># locate /etc/sh       #搜索etc目录下所有以sh开头的文件</span></span><br><span class="line"><span class="comment"># locate -i /etc/sh    #搜索etc目录下，所有以sh开头的文件，忽略大小写</span></span><br></pre></td></tr></table></figure>
+<p><em>2.<code>which</code> 查找系统PATH变量⽬录下的命令(绝对路径)</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># which ls  #查找ls命令的绝对路径</span></span><br><span class="line">[root@mcg ~]<span class="comment"># which ls</span></span><br><span class="line"><span class="built_in">alias</span> ls=<span class="string">'ls --color=auto'</span></span><br><span class="line">	/usr/bin/ls</span><br><span class="line"></span><br><span class="line"><span class="comment"># whereis ls       //查找命令的路径、帮助手册、等</span></span><br><span class="line">[root@mcg ~]<span class="comment"># whereis ls</span></span><br><span class="line">ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># whereis -b ls    //仅显示命令所在的路径</span></span><br><span class="line">[root@mcg ~]<span class="comment"># whereis -b ls</span></span><br><span class="line">ls: /usr/bin/ls</span><br><span class="line"></span><br><span class="line"><span class="comment"># type -a ls        #查看命令的绝对路径(包括别名)</span></span><br><span class="line">[root@mcg ~]<span class="comment"># type -a ls</span></span><br><span class="line">ls is aliased to `ls --color=auto<span class="string">'</span></span><br><span class="line"><span class="string">ls is /usr/bin/ls</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>9.字符处理命令</em></strong></p>
+<p><em>1.使用<code>sort</code>排序</em></p>
+<p><em>在有些情况下，需要对应一个无序的文本文件进行数据的排序，这时就需要使用sort进行排序了。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">sort [OPTION]... [FILE]...</span><br><span class="line">-r：倒序 </span><br><span class="line">-n：按数字排序 </span><br><span class="line">-t：指定分隔符(默认空格) </span><br><span class="line">-k：指定第几列, 指定几列几字符（指定1,1  3.1,3.3）</span><br><span class="line"></span><br><span class="line"><span class="comment">#1.首先创建一个文件，写入一写无序的内容</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat &gt;&gt; sort.txt &lt;&lt;EOF</span></span><br><span class="line">b:3</span><br><span class="line">c:2</span><br><span class="line">a:4</span><br><span class="line">e:5</span><br><span class="line">d:1</span><br><span class="line">f:11</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.使用sort下面对输出的内容进行排序</span></span><br><span class="line">[root@mcg ~]<span class="comment"># sort sort.txt</span></span><br><span class="line">a:4</span><br><span class="line">b:3</span><br><span class="line">c:2</span><br><span class="line">d:1</span><br><span class="line">e:5</span><br><span class="line">f:11</span><br><span class="line"></span><br><span class="line">//可观察到,	sort⽂件具有⼀个特点,第⼀个字符是字⺟,第三个字符是数字,	中间是⽤冒号隔开。</span><br><span class="line">//这样我们可以使⽤-t指定分隔符,使⽤-k指定⽤于排序的列了。</span><br><span class="line">[root@mcg ~]<span class="comment"># sort -t ":" -k2 sort.txt</span></span><br><span class="line">d:1</span><br><span class="line">f:11 <span class="comment">#第二行为什么是11？不应该按照顺序排列？</span></span><br><span class="line">c:2</span><br><span class="line">b:3</span><br><span class="line">a:4</span><br><span class="line">e:5</span><br><span class="line"></span><br><span class="line"><span class="comment">#按照排序的方式, 只会看到第一个字符,11的第一个字符是1, 按照字符来排序确实比2小。 </span></span><br><span class="line"><span class="comment">#如果想要按照数字的方式进行排序, 需要使用 -n参数。</span></span><br><span class="line">[root@mcg ~]<span class="comment"># sort -t ":" -n -k2 p.txt</span></span><br><span class="line">d:1</span><br><span class="line">c:2</span><br><span class="line">b:3</span><br><span class="line">a:4</span><br><span class="line">e:5</span><br><span class="line">f:11</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#测试案例，ip.txt对该文件进行排序</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat ip.txt </span></span><br><span class="line">192.168.3.1 00:0F:AF:81:19:1F</span><br><span class="line">192.168.3.2 00:0F:AF:85:6C:25</span><br><span class="line">192.168.3.3 00:0F:AF:85:70:42</span><br><span class="line">192.168.2.20 00:0F:AF:85:55:DE</span><br><span class="line">192.168.2.21 00:0F:AF:85:6C:09</span><br><span class="line">192.168.2.22 00:0F:AF:85:5C:41</span><br><span class="line">192.168.0.151 00:0F:AF:85:6C:F6</span><br><span class="line">192.168.0.152 00:0F:AF:83:1F:65</span><br><span class="line">192.168.0.153 00:0F:AF:85:70:03</span><br><span class="line">192.168.1.10 00:30:15:A2:3B:B6</span><br><span class="line">192.168.1.11 00:30:15:A3:23:B7</span><br><span class="line">192.168.1.12 00:30:15:A2:3A:A1</span><br><span class="line">192.168.1.1 00:0F:AF:81:19:1F</span><br><span class="line">192.168.2.2 00:0F:AF:85:6C:25</span><br><span class="line">192.168.3.3 00:0F:AF:85:70:42</span><br><span class="line">192.168.2.20 00:0F:AF:85:55:DE</span><br><span class="line">192.168.1.21 00:0F:AF:85:6C:09</span><br><span class="line">192.168.2.22 00:0F:AF:85:5C:41</span><br><span class="line">192.168.0.151 00:0F:AF:85:6C:F6</span><br><span class="line">192.168.1.152 00:0F:AF:83:1F:65</span><br><span class="line">192.168.0.153 00:0F:AF:85:70:03</span><br><span class="line">192.168.3.10 00:30:15:A2:3B:B6</span><br><span class="line">192.168.1.11 00:30:15:A3:23:B7</span><br><span class="line">192.168.3.12 00:30:15:A2:3A:A1</span><br><span class="line"></span><br><span class="line">//针对第三列的第⼀个字符,第四列的第⼀个字符到第三个字符排序才是正确</span><br><span class="line">[root@mcg ~]<span class="comment"># sort -t "." -k3.1,3.1nr -k4.1,4.3nr ip.txt </span></span><br><span class="line">192.168.3.12 00:30:15:A2:3A:A1</span><br><span class="line">192.168.3.10 00:30:15:A2:3B:B6</span><br><span class="line">192.168.3.3 00:0F:AF:85:70:42</span><br><span class="line">192.168.3.3 00:0F:AF:85:70:42</span><br><span class="line">192.168.3.2 00:0F:AF:85:6C:25</span><br><span class="line">192.168.3.1 00:0F:AF:81:19:1F</span><br><span class="line">192.168.2.22 00:0F:AF:85:5C:41</span><br><span class="line">192.168.2.22 00:0F:AF:85:5C:41</span><br><span class="line">192.168.2.21 00:0F:AF:85:6C:09</span><br><span class="line">192.168.2.20 00:0F:AF:85:55:DE</span><br><span class="line">192.168.2.20 00:0F:AF:85:55:DE</span><br><span class="line">192.168.2.2 00:0F:AF:85:6C:25</span><br><span class="line">192.168.1.152 00:0F:AF:83:1F:65</span><br><span class="line">192.168.1.21 00:0F:AF:85:6C:09</span><br><span class="line">192.168.1.12 00:30:15:A2:3A:A1</span><br><span class="line">192.168.1.11 00:30:15:A3:23:B7</span><br><span class="line">192.168.1.11 00:30:15:A3:23:B7</span><br><span class="line">192.168.1.10 00:30:15:A2:3B:B6</span><br><span class="line">192.168.1.1 00:0F:AF:81:19:1F</span><br><span class="line">192.168.0.153 00:0F:AF:85:70:03</span><br><span class="line">192.168.0.153 00:0F:AF:85:70:03</span><br><span class="line">192.168.0.152 00:0F:AF:83:1F:65</span><br><span class="line">192.168.0.151 00:0F:AF:85:6C:F6</span><br><span class="line">192.168.0.151 00:0F:AF:85:6C:F6</span><br></pre></td></tr></table></figure>
+<p><em>2.使用uniq删除重复内容</em><br>
+<em>如果文件中有多行完全相同的内容，当前是希望能删除重复的行，同时还可以统计出完全相同的行出现的总次数, 那么就可以使用<code>uniq</code>命令解决这个问题(但是必须配合<code>sort</code>使用)。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">uniq [OPTION]... [INPUT [OUTPUT]]</span><br><span class="line"><span class="comment">#选项：-c  计算重复的行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#1.创建一个file.txt文件:</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat uniq.txt</span></span><br><span class="line">abc</span><br><span class="line">123</span><br><span class="line">abc</span><br><span class="line">123</span><br><span class="line"><span class="comment">#2.uniq需要和sort一起使用, 先使用sort排序, 让重复内容连续在一起</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat uniq.txt |sort</span></span><br><span class="line">123</span><br><span class="line">123</span><br><span class="line">abc</span><br><span class="line">abc</span><br><span class="line"><span class="comment">#3.使用uniq去除相邻重复的行</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat uniq.txt |sort|uniq</span></span><br><span class="line">123</span><br><span class="line">abc</span><br><span class="line"><span class="comment">#4.-c参数能统计出文件中每行内容重复的次数</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat file.txt |sort|uniq -c</span></span><br><span class="line">      2 123</span><br><span class="line">      2 abc</span><br></pre></td></tr></table></figure>
+<p><em>3.使用<code>cut</code>命令截取某一个字段</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">cut OPTION... [FILE]...</span><br><span class="line"><span class="comment">#选项：</span></span><br><span class="line">-d 指定分隔符 </span><br><span class="line">-f 数字,取第几列 –f3,6三列和6列 </span><br><span class="line">-c 按字符取(空格也算)</span><br><span class="line"></span><br><span class="line"><span class="comment">#过滤出文件里 mcg以及275064128</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Im mcg, is QQ 275064128"</span> &gt;file.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#实现上述题目几种思路</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cut -d " " -f2,5 file.txt </span></span><br><span class="line">mcg, 275064128</span><br><span class="line"></span><br><span class="line">[root@mcg ~]<span class="comment"># cut -d " " -f2,5 file.txt |sed 's#,##g'</span></span><br><span class="line">mcg 275064128</span><br><span class="line"></span><br><span class="line">[root@mcg ~]<span class="comment"># sed 's#,# #g' file.txt | awk -F " " '&#123;print $2 " " $5&#125;'</span></span><br><span class="line">mcg 275064128</span><br><span class="line"></span><br><span class="line">[root@mcg ~]<span class="comment"># awk  '&#123;print $2,$5&#125;' file.txt |awk -F ',' '&#123;print $1,$2&#125;'</span></span><br><span class="line">mcg  275064128</span><br><span class="line">[root@mcg ~]<span class="comment"># awk -F  "[, ]" '&#123;print $2,$6&#125;' file.txt</span></span><br><span class="line">mcg 275064128</span><br><span class="line"></span><br><span class="line">[root@mcg ~]<span class="comment"># awk -F '[, ]+' '&#123;print $2,$5&#125;' file.txt</span></span><br><span class="line">mcg 275064128</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此类问题是运维⼯作中最常⻅的问题。可以演变成分析⽇志，查看TCP各个状态连接数，查看单IP连接数排名等</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat web.log </span></span><br><span class="line">http://www.baidu.com/index.html</span><br><span class="line">http://www.baidu.com/1.html</span><br><span class="line">http://post.baidu.com/index.html</span><br><span class="line">http://mp3.baidu.com/index.html</span><br><span class="line">http://www.baidu.com/3.html</span><br><span class="line"></span><br><span class="line">[root@mcg ~]<span class="comment"># awk -F '/' '&#123;print $3&#125;' web.log |sort -rn |uniq -c</span></span><br><span class="line">      3 www.baidu.com</span><br><span class="line">      2 post.baidu.com</span><br><span class="line">      1 mp3.baidu.com</span><br><span class="line">[root@mcg ~]<span class="comment"># cut -d / -f3 web.log |sort -nr|uniq -c</span></span><br><span class="line">      3 www.baidu.com</span><br><span class="line">      2 post.baidu.com</span><br><span class="line">      1 mp3.baidu.com</span><br></pre></td></tr></table></figure>
+<p><em>4.使用<code>wc</code>统计</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">wc [OPTION]... [FILE]...</span><br><span class="line"><span class="comment">#选项：</span></span><br><span class="line">-l：显示文件行数 </span><br><span class="line">-c：显示文件字节 </span><br><span class="line">-w：显示文件单词</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计/etc/fstab文件有多少行</span></span><br><span class="line">[root@mcg ~]<span class="comment"># wc -l /etc/fstab </span></span><br><span class="line">11 /etc/fstab</span><br><span class="line"></span><br><span class="line"><span class="comment">#统计/etc/services 文件行号</span></span><br><span class="line">[root@mcg ~]<span class="comment"># wc -l /etc/services </span></span><br><span class="line">11176 /etc/services</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="comment">#扩展方法</span></span><br><span class="line">[root@mcg ~]<span class="comment"># grep -n "." /etc/services |tail -1</span></span><br><span class="line">11176:matahari        49000/tcp               <span class="comment"># Matahari Broker</span></span><br><span class="line">[root@mcg ~]<span class="comment"># awk '&#123;print NR $0&#125;' /etc/services | tail -1</span></span><br><span class="line">11176matahari        49000/tcp               <span class="comment"># Matahari Broker</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cat -n /etc/services | tail -1</span></span><br><span class="line"> 11176	matahari        49000/tcp               <span class="comment"># Matahari Broker</span></span><br><span class="line">[root@mcg ~]<span class="comment"># sed "=" /etc/services | tail -2</span></span><br><span class="line">11176</span><br><span class="line">matahari        49000/tcp               <span class="comment"># Matahari Broker</span></span><br></pre></td></tr></table></figure>
+<h2 id="练习如下命令">练习如下命令</h2>
+<hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">⽤普通⽤户身份登陆虚拟机上完成练习 </span><br><span class="line">在⽤户家⽬录下创建6个⽂件 song1.mp3 ~ song6.mp3 </span><br><span class="line">把上出创建的songX.mp3⽂件移动到Music⽬录下（不存在则创建） </span><br><span class="line">在⽤户家⽬录下创建三个⽬录,分别为 friends,family,work </span><br><span class="line">切换到friends⽬录下,把Music⽬录下的song1.mp3 ~ song3.mp3 拷⻉到当前⽬录 </span><br><span class="line">切换到family⽬录下,把Music⽬录下的song4.mp3 ~ song6.mp3 移动到当前⽬录 </span><br><span class="line">切换到⽤户主⽬录 删除family⽬录 </span><br><span class="line">切换到friends⽬录,把⽬录下的所有⽂件删除 </span><br><span class="line">切换到主⽬录,把friends⽬录删除.</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Linux/04.Linux之文件属性/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（四）文件属性">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Linux/02.linux之Bash初识/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（二）Bash初识">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1系统目录结构"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x7CFB;&#x7EDF;&#x76EE;&#x5F55;&#x7ED3;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2文件路径定位"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x5B9A;&#x4F4D;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3目录管理命令"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x76EE;&#x5F55;&#x7BA1;&#x7406;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4目录管理命令"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x76EE;&#x5F55;&#x7BA1;&#x7406;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5文件查看命令"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">5.&#x6587;&#x4EF6;&#x67E5;&#x770B;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6文件下载命令"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">6.&#x6587;&#x4EF6;&#x4E0B;&#x8F7D;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7查找命令"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">7.&#x67E5;&#x627E;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#练习如下命令"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">&#x7EC3;&#x4E60;&#x5982;&#x4E0B;&#x547D;&#x4EE4;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
