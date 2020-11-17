@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/page/4/">
+    <link rel="canonical" href="http://www.mochuangang.com/archives/3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -211,32 +211,111 @@
 
 <div class="post-preview">
 
-    <a href="/article/Linux/09.Linux之ACL控制/">
+    <a href="/article/Java/02Java的基础语法/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（九）ACL控制
+            [Java] Java（二）基础语法
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            第二章 Java的基础语法
+2.1 标识符
+简单的说，凡是程序员自己命名的部分都可以称为标识符。
+即给类、变量、方法、包等命名的字符序列，称为标识符。
+1、标识符的命名规则
+（1）Java的标识符只能使用26个英文字母大小写，0-9的数字，下划线_，美元符号$
+（2）不能使用Java的关键字（包含保留字）和特殊值
+（3）数字不能开头
+（4）不能包含空格
+（5）严格区分大小写
+2、标识符的命名......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-02
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Java/01Java概述/">
+        <h2 class="post-title">
+                                 
+            [Java] Java（一）概述
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            第一章 Java概述
+1.1 Java历史
+Java诞生于SUN（Stanford University Network），09年SUN被Oracle（甲骨文）收购。
+Java之父是詹姆斯.高斯林(James Gosling)。
+1996年发布JDK1.0版。
+目前最新的版本是Java12。我们学习的Java8。
+1.2 Java语言最主要的特点
+
+特点一：面向对象
+
+两个基本概念：类、对象......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-01
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Linux/17.Linux之任务计划/">
+        <h2 class="post-title">
+                                 
+            [Linux] linux基础之（十七）任务计划
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
             
-[1.ACL访问控制概述]
-[2.ACL高级特性MASK]
-[3.ACL高级特性Default]
-[4.ACL访问控制实践案例]
+[1.计划任务基本概述]
+[2.计划任务时间管理]
+[3.计划任务编写实践]
+[4.计划任务如何调试]
 
-1.ACL访问控制概述
-上一章节我们学习了基础权限UGO、特殊权限，但所有的权限是针对某一类用户设置的, 如果希望对文件进行自定义权限控制，就需要用到文件的访问控制列表ACL
-
-UGO设置基本权限: 只能一个用户，一个组和其他人
-ACL设置基本权限： r、w、......
+1.计划任务基本概述
+*1.什么是crond*
+crond就是计划任务，类似于我们平时生活中的闹钟。定点执行。
+*2.为什么要使用crond*
+crond主要是做一些周期性的任务，比如: 凌晨3点定时备份数据。比如：11点开启网站抢购接口，12点关闭网站抢购接口。
+*3.计划任务主要分......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-16
+            2018-06-24
         </p>
         <div class="tags">
             
@@ -250,26 +329,37 @@ ACL设置基本权限： r、w、......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/07.Linux之特殊权限/">
+    <a href="/article/Linux/16.Linux之系统服务/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（七）特殊权限
+            [Linux] linux基础之（十六）系统服务
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.Linux系统特殊权限
+            
+[1.Linux启动流程]
+[2.Linux运行级别]
+[3.Linux systemd]
+[4.Linux单用户模式]
+[5.Linux下救援模式]
 
-对可执⾏⽂件的setuid(或setgid)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:
-12[root@mcg ~]# ll /usr/bin/passwd-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd
-⽬录粘滞位可以为⽂件删除设......
+1.Linux启动流程
+*CentOS6启动级别*
+*CentOS6 VS Centos7开机启动流程图解*
+2.Linux运行级别
+1.什么是运行级别，运行级别就是操作系统当前正在运行的功能级别
+
+
+
+System V init运行级别......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-15
+            2018-06-23
         </p>
         <div class="tags">
             
@@ -283,26 +373,33 @@ ACL设置基本权限： r、w、......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/08.Linux之特殊权限/">
+    <a href="/article/Linux/15.Linux之进程管理/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（八）特殊权限
+            [Linux] linux基础之（十五）进程管理
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.Linux系统特殊权限
+            
+[2.监控进程状态]
+[3.管理进程状态]
+[4.管理后台进程]
+[5.进程的优先级[进阶]]
+[6.系统平均负载[进阶]]
 
-对可执⾏⽂件的setuid(或setgid)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:
-12[root@mcg ~]# ll /usr/bin/passwd-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd
-⽬录粘滞位可以为⽂件删除设......
+*1.什么是进程*
+比如: 开发写的代码我们称为程序，那么将开发的代码运行起来。我们称为进程。
+总结一句话就是: 当我们运行一个程序，那么我们将运行的程序叫进程。
+PS1: 当程序运行为进程后，系统会为该进程分配内存，以及进程运行的身份和权限。
+PS2: 在进程运......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-15
+            2018-06-22
         </p>
         <div class="tags">
             
@@ -316,29 +413,35 @@ ACL设置基本权限： r、w、......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/07.Linux之基本权限/">
+    <a href="/article/Linux/14.Linux之磁盘管理/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（七）基本权限
+            [Linux] linux基础之（十四）磁盘管理
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
             
-[1.权限基本概述]
-[2.权限设置示例]
-[3.权限设置案例]
-[4.属主属组设置]
+[1.磁盘的基本概念]
+[2.磁盘的基本结构]
+[3.磁盘的预备知识]
+[4.磁盘基本分区Fdisk]
+[5.磁盘的基本分区Gdisk]
+[6.磁盘挂载方式Mount]
+[7.虚拟磁盘介绍SWAP]
 
-1.权限基本概述
-Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每个⽂件或⽬录都有⼀组共9个基础权限位，每三个字符被分为⼀组，他们分别是属主权限位(占三个字符)、属组权限位(占三个 字符)、其他⽤户权限位(占三个字符)。 ⽐如rwxr-xr-x linux中正是这9个权限位来控制⽂......
+1.磁盘的基本概念
+1.什么是磁盘*
+绝大多数人对硬盘都不陌生，
+一块小小的硬盘里，就可以存储海量的照片音乐和电影，尤其是我们喜爱的各类动作片。
+但如此小的空间，是如何储存那么多信息的呢？*......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-14
+            2018-06-21
         </p>
         <div class="tags">
             
@@ -352,28 +455,34 @@ Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每
 
 <div class="post-preview">
 
-    <a href="/article/Linux/06.Linux之用户管理/">
+    <a href="/article/Linux/13.Linux之软件管理/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（六）用户管理
+            [Linux] linux基础之（十三）软件管理
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            Linux⽤户属于多⽤户操作系统,在windows中，可以创建多个⽤户，但不允许同⼀时间多个⽤户 进⾏系统登陆，但是Linux可以同时⽀持多个⽤户同时登陆操作系统，登陆后互相之间并不影 响。
+            
+[1.RPM基本概述]
+[2.RPM使用示例]
+[3.YUM基本介绍]
+[4.YUM实践案例]
+[5.搭建本地仓库]
+[6.源码包管理实践]
 
-用户和组存在的意义
-
-1.系统上的每一个进程(运行的程序)，都需要一个特定的用户运行
-2.通常在公司是使用普通用户管理服务器，因为root权限过大，容易造成故障。
-3.访问一个文件或目录受到用户的限制......
+1.RPM基本概述
+*1.什么是rpm?*
+RPM全称 RPM Package Manager 缩写，由红帽开发用于软件包的安装升级卸载与查询
+*2.rpm包名组成部分?*
+RPM包命名以-将软件分成了若干部分bash-4.2.46-28.el7.......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-14
+            2018-06-20
         </p>
         <div class="tags">
             
@@ -387,32 +496,33 @@ Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每
 
 <div class="post-preview">
 
-    <a href="/article/Linux/05.Linux之VIM编辑器/">
+    <a href="/article/Linux/12.Linux之压缩打包/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（五）VIM编辑器
+            [Linux] linux基础之（十二）压缩打包
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
             
-[1.VIM基本概述]
-[2.VIM模式使用]
-[3.VIM扩展知识]
-[4.VIM练习示例]
+[1.文件打包与压缩]
+[1.gzip打包与压缩]
+[1.zip打包与压缩]
+[2.tar打包与压缩]
 
-1.VIM基本介绍
-
-vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆⽂件，⽽配置⼀个服务就是在 修改其配置⽂件的参数。 vim 编辑器是运维⼯程师必须掌握的⼀个⼯具, 没有它很多⼯作都⽆法 完成。vim其实是vi 的升级版 那么vi 与 vim 有什么区别？
-
-......
+1.文件打包与压缩
+*1.什么是文件压缩?*
+将多个文件或目录合并成为一个特殊的文件。比如: 搬家…脑补画面 img.
+*2.为什么要对文件进行压缩？*
+当我们在传输大量的文件时，通常都会选择将该文件进行压缩，然后在进行传输。
+首先：压缩后的文件会比压缩前的文件小。一个28G的文件夹压......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-13
+            2018-06-19
         </p>
         <div class="tags">
             
@@ -426,28 +536,36 @@ vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆�
 
 <div class="post-preview">
 
-    <a href="/article/Linux/04.Linux之文件属性/">
+    <a href="/article/Linux/11.Linux之文件查找/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（四）文件属性
+            [Linux] linux基础之（十一）文件查找
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.Linux系统文件属性
+            
+[1.find查找概述]
+[2.find查找示例]
 
-上图中ls -il 每列含义如下：
-12345678第⼀列		 Inode第⼆列		 ⽂件类型及权限第三列		 硬链接数第四列		 属主权限第五列		 属组权限第六列		 ⽂件或⽬录的⼤⼩第七⼋九列   最近修改时间第⼗列		 ⽂件或⽬录名字
-2.Linux系统⽂件类型
+1.find查找概述
+为什么要有文件查找，因为很多时候我们可能会忘了某个文件所在的位置，此时就需要通过find来查找。
+find命令可以根据不同的条件来进行查找文件，例如：文件名称、文件大小、文件修改时间、属主属组、权限、等等方式。同时find命令是Linux下必须掌握的。
+*find 命令的基本语法如下*
 
-1.通常我们使用颜色或者后缀名称来区分文件类型，但很多时候不是很准确，所以我们可以通过ls......
+
+
+命令
+路径
+选项
+表达......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-12
+            2018-06-18
         </p>
         <div class="tags">
             
@@ -461,103 +579,32 @@ vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆�
 
 <div class="post-preview">
 
-    <a href="/article/Linux/03.Linux之基础命令/">
+    <a href="/article/Linux/10.Linux之输入输出/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（三）基础命令
+            [Linux] linux基础之（十）输入输出
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.系统目录结构
-几乎所有的计算机操作系统都是使用目录结构组织文件。具体来说就是在一个目录中存放子目录和文件, 而在子目录中又会进一步存放子目录和文件，以此类推形成一个树状的文件结构，由于其结构很像一棵树的分支, 所以该结构又被称为“目录树”。
-Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;根⽬录&quot;下, ⽬录名为&quot;/&quot;。FHS（⽂件 系......
+            
+[1.重定向概述]
+[2.输出重定向]
+[3.输入重定向]
+[4.进程管道技术]
+
+1.重定向概述
+*1.什么是重定向*
+将原本要输出到屏幕的数据信息，重新定向到某个指定的文件中。比如：每天凌晨定时备份数据，希望将备份数据的结果保存到某个文件中。这样第二天通过查看文件的内容就知道昨天备份的数据是成功还是失败。
+*2.为何要使用重定向*
+1.当屏幕输出的信息很重要，而且希望保存重要的信息时；......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-11
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/Linux/02.linux之Bash初识/">
-        <h2 class="post-title">
-                                 
-            [Linux] linux基础之（二）Bash初识
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            02.Linux系统Bash初识
-1.Linux系统终端概述
-服务器终端切换:Ctrl+Alt+F1…F6
-虚拟机终端切换:Ctrl+Shift+Alt+F1…F6
-虚拟终端由mingetty程序生成
-1234567// 物理理机执⾏行行为本地终端[root@mcg ~]# tty/dev/tty1//通过⽹网络使⽤用模拟终端远程连接Linux, ⽇日常运维中就是这种⽅方式。[root@mc......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2018-06-10
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/Linux/01.Linux之系统安装/">
-        <h2 class="post-title">
-                                 
-            [Linux]Linux基础之（一）虚拟机安装系统
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1.虚拟机安装Linux系统
-第1步：在虚拟机管理界⾯中单击“开启此虚拟机”按钮后数秒就看到 RHEL 7.4 系统安装界⾯，如图 1-所示。
-
-
-
-
-描述
-含义
-
-
-
-
-Install Red Hat Enterprise Linux 7.4
-安装Redhat Linux7.4系统
-
-
-Test this media &amp; install Red Hat Enterprise Lin......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2018-06-09
+            2018-06-17
         </p>
         <div class="tags">
             
@@ -576,12 +623,12 @@ Test this media &amp; install Red Hat Enterprise Lin......
 <ul class="pager">
     
         <li class="previous">
-            <a href="/page/3/">&larr; Newer Posts</a>
+            <a href="/archives/2/">&larr; Newer Posts</a>
         </li>
     
     
         <li class="next">
-            <a href="/page/5/">Older Posts &rarr;</a>
+            <a href="/archives/4/">Older Posts &rarr;</a>
         </li>
     
 </ul>
