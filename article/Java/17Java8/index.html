@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Java] Java8（十七） - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Java/17Java8/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                        </div>
+                        <h1>[Java] Java8（十七）</h1>
+                        <h2 class="subheading">Java基础.</h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-03-17
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="第十七章-java8">第十七章 Java8</h1>
+<h2 id="171-lambda表达式与函数式接口">17.1 Lambda表达式与函数式接口</h2>
+<p>Lambda写的好可以极大的减少代码冗余，同时可读性也好过冗长的匿名内部类。</p>
+<h3 id="1711-函数式接口">17.1.1 函数式接口</h3>
+<p>lambda表达式其实就是实现SAM接口的语法糖，所谓SAM接口就是Single Abstract Method，即该接口中只有一个抽象方法需要实现，当然该接口可以包含其他非抽象方法。</p>
+<p>其实只要满足“SAM”特征的接口都可以称为函数式接口，但是如果要更明确一点，最好在声明接口时，加上@FunctionalInterface。</p>
+<p>之前学过的接口中，是函数式接口的有：Runnable，Comparator，FileFilter</p>
+<h4 id="1-消费型接口"><strong>1、消费型接口</strong></h4>
+<p>这类接口的抽象方法特点：有形参，但是返回值类型是void</p>
+<table>
+<thead>
+<tr>
+<th>接口名</th>
+<th>抽象方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consumer<t></t></td>
+<td>void accept(T t)</td>
+<td>接收一个对象用于完成功能</td>
+</tr>
+<tr>
+<td>BiConsumer&lt;T,U&gt;</td>
+<td>void accept(T t, U u)</td>
+<td>接收两个对象用于完成功能</td>
+</tr>
+<tr>
+<td>DoubleConsumer</td>
+<td>void accept(double value)</td>
+<td>接收一个double值</td>
+</tr>
+<tr>
+<td>IntConsumer</td>
+<td>void accept(int value)</td>
+<td>接收一个int值</td>
+</tr>
+<tr>
+<td>LongConsumer</td>
+<td>void accept(long value)</td>
+<td>接收一个long值</td>
+</tr>
+<tr>
+<td>ObjDoubleConsumer<t></t></td>
+<td>void accept(T t, double value)</td>
+<td>接收一个对象和一个double值</td>
+</tr>
+<tr>
+<td>ObjIntConsumer<t></t></td>
+<td>void accept(T t, int value)</td>
+<td>接收一个对象和一个int值</td>
+</tr>
+<tr>
+<td>ObjLongConsumer<t></t></td>
+<td>void accept(T t, long value)</td>
+<td>接收一个对象和一个long值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-供给型接口"><strong>2、供给型接口</strong></h4>
+<p>这类接口的抽象方法特点：无参，但是无返回值</p>
+<table>
+<thead>
+<tr>
+<th>接口名</th>
+<th>抽象方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supplier<t></t></td>
+<td>T get()</td>
+<td>返回一个对象</td>
+</tr>
+<tr>
+<td>BooleanSupplier</td>
+<td>boolean getAsBoolean()</td>
+<td>返回一个boolean值</td>
+</tr>
+<tr>
+<td>DoubleSupplier</td>
+<td>double getAsDouble()</td>
+<td>返回一个double值</td>
+</tr>
+<tr>
+<td>IntSupplier</td>
+<td>int getAsInt()</td>
+<td>返回一个int值</td>
+</tr>
+<tr>
+<td>LongSupplier</td>
+<td>long getAsLong()</td>
+<td>返回一个long值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-判断型接口"><strong>3、判断型接口</strong></h4>
+<p>这里接口的抽象方法特点：有参，但是返回值类型是boolean结果。</p>
+<table>
+<thead>
+<tr>
+<th>接口名</th>
+<th>抽象方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Predicate<t></t></td>
+<td>boolean test(T t)</td>
+<td>接收一个对象</td>
+</tr>
+<tr>
+<td>BiPredicate&lt;T,U&gt;</td>
+<td>boolean test(T t, U u)</td>
+<td>接收两个对象</td>
+</tr>
+<tr>
+<td>DoublePredicate</td>
+<td>boolean test(double value)</td>
+<td>接收一个double值</td>
+</tr>
+<tr>
+<td>IntPredicate</td>
+<td>boolean test(int value)</td>
+<td>接收一个int值</td>
+</tr>
+<tr>
+<td>LongPredicate</td>
+<td>boolean test(long value)</td>
+<td>接收一个long值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-功能型接口"><strong>4、功能型接口</strong></h4>
+<p>这类接口的抽象方法特点：既有参数又有返回值</p>
+<table>
+<thead>
+<tr>
+<th>接口名</th>
+<th>抽象方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Function&lt;T,R&gt;</td>
+<td>R apply(T t)</td>
+<td>接收一个T类型对象，返回一个R类型对象结果</td>
+</tr>
+<tr>
+<td>UnaryOperator<t></t></td>
+<td>T apply(T t)</td>
+<td>接收一个T类型对象，返回一个T类型对象结果</td>
+</tr>
+<tr>
+<td>DoubleFunction<r></r></td>
+<td>R apply(double value)</td>
+<td>接收一个double值，返回一个R类型对象</td>
+</tr>
+<tr>
+<td>IntFunction<r></r></td>
+<td>R apply(int value)</td>
+<td>接收一个int值，返回一个R类型对象</td>
+</tr>
+<tr>
+<td>LongFunction<r></r></td>
+<td>R apply(long value)</td>
+<td>接收一个long值，返回一个R类型对象</td>
+</tr>
+<tr>
+<td>ToDoubleFunction<t></t></td>
+<td>double applyAsDouble(T value)</td>
+<td>接收一个T类型对象，返回一个double</td>
+</tr>
+<tr>
+<td>ToIntFunction<t></t></td>
+<td>int applyAsInt(T value)</td>
+<td>接收一个T类型对象，返回一个int</td>
+</tr>
+<tr>
+<td>ToLongFunction<t></t></td>
+<td>long applyAsLong(T value)</td>
+<td>接收一个T类型对象，返回一个long</td>
+</tr>
+<tr>
+<td>DoubleToIntFunction</td>
+<td>int applyAsInt(double value)</td>
+<td>接收一个double值，返回一个int结果</td>
+</tr>
+<tr>
+<td>DoubleToLongFunction</td>
+<td>long applyAsLong(double value)</td>
+<td>接收一个double值，返回一个long结果</td>
+</tr>
+<tr>
+<td>IntToDoubleFunction</td>
+<td>double applyAsDouble(int value)</td>
+<td>接收一个int值，返回一个double结果</td>
+</tr>
+<tr>
+<td>IntToLongFunction</td>
+<td>long applyAsLong(int value)</td>
+<td>接收一个int值，返回一个long结果</td>
+</tr>
+<tr>
+<td>LongToDoubleFunction</td>
+<td>double applyAsDouble(long value)</td>
+<td>接收一个long值，返回一个double结果</td>
+</tr>
+<tr>
+<td>LongToIntFunction</td>
+<td>int applyAsInt(long value)</td>
+<td>接收一个long值，返回一个int结果</td>
+</tr>
+<tr>
+<td>DoubleUnaryOperator</td>
+<td>double applyAsDouble(double operand)</td>
+<td>接收一个double值，返回一个double</td>
+</tr>
+<tr>
+<td>IntUnaryOperator</td>
+<td>int applyAsInt(int operand)</td>
+<td>接收一个int值，返回一个int结果</td>
+</tr>
+<tr>
+<td>LongUnaryOperator</td>
+<td>long applyAsLong(long operand)</td>
+<td>接收一个long值，返回一个long结果</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>BiFunction&lt;T,U,R&gt;</td>
+<td>R apply(T t, U u)</td>
+<td>接收一个T类型和一个U类型对象，返回一个R类型对象结果</td>
+</tr>
+<tr>
+<td>BinaryOperator<t></t></td>
+<td>T apply(T t, T u)</td>
+<td>接收两个T类型对象，返回一个T类型对象结果</td>
+</tr>
+<tr>
+<td>ToDoubleBiFunction&lt;T,U&gt;</td>
+<td>double applyAsDouble(T t, U u)</td>
+<td>接收一个T类型和一个U类型对象，返回一个double</td>
+</tr>
+<tr>
+<td>ToIntBiFunction&lt;T,U&gt;</td>
+<td>int applyAsInt(T t, U u)</td>
+<td>接收一个T类型和一个U类型对象，返回一个int</td>
+</tr>
+<tr>
+<td>ToLongBiFunction&lt;T,U&gt;</td>
+<td>long applyAsLong(T t, U u)</td>
+<td>接收一个T类型和一个U类型对象，返回一个long</td>
+</tr>
+<tr>
+<td>DoubleBinaryOperator</td>
+<td>double applyAsDouble(double left, double right)</td>
+<td>接收两个double值，返回一个double结果</td>
+</tr>
+<tr>
+<td>IntBinaryOperator</td>
+<td>int applyAsInt(int left, int right)</td>
+<td>接收两个int值，返回一个int结果</td>
+</tr>
+<tr>
+<td>LongBinaryOperator</td>
+<td>long applyAsLong(long left, long right)</td>
+<td>接收两个long值，返回一个long结果</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1712-lambda表达式语法">17.1.2 Lambda表达式语法</h3>
+<p>Lambda表达式是用来给【函数式接口】的变量或形参赋值用的。</p>
+<p>其实本质上，Lambda表达式是用于实现【函数式接口】的“抽象方法”</p>
+<p>Lambda表达式语法格式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(形参列表) -&gt; &#123;Lambda体&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li>(形参列表)它就是你要赋值的函数式接口的抽象方法的(形参列表)，照抄</li>
+<li>{Lambda体}就是实现这个抽象方法的方法体</li>
+<li>-&gt;称为Lambda操作符（减号和大于号中间不能有空格，而且必须是英文状态下半角输入方式）</li>
+</ul>
+<p>优化：Lambda表达式可以精简</p>
+<ul>
+<li>当{Lambda体}中只有一句语句时，可以省略{}和{;}</li>
+<li>当{Lambda体}中只有一句语句时，并且这个语句还是一个return语句，那么return也可以省略，但是如果{;}没有省略的话，return是不能省略的</li>
+<li>当(形参列表)的类型是已知的，那么形参的类型可以省略</li>
+<li>当(形参列表)的类型是已知的，并且形参个数只有一个，那么可以把数据类型和()一起省略，但是形参名不能省略</li>
+<li>当(形参列表)是空参时，()不能省略</li>
+</ul>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestLambdaGrammer</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="comment">//用Lambda表达式给Runnable接口的形参或变量赋值</span></span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		 * 确定两件事，才能写好lambda表达式</span></span><br><span class="line"><span class="comment">		 * （1）这个接口的抽象方法长什么样：</span></span><br><span class="line"><span class="comment">		 * 		public void run()</span></span><br><span class="line"><span class="comment">		 * （2）这个抽象方法的实现要干什么事</span></span><br><span class="line"><span class="comment">		 * 		例如：我要打印“hello lambda"</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		Runnable r = () -&gt; &#123;System.out.println(<span class="string">"hello lambda"</span>);&#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="comment">//lambda体省略了&#123;;&#125;</span></span><br><span class="line">		Runnable r = () -&gt; System.out.println(<span class="string">"hello lambda"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">		String[] arr = &#123;<span class="string">"hello"</span>,<span class="string">"Hello"</span>,<span class="string">"java"</span>,<span class="string">"chai"</span>&#125;;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//为arr数组排序，但是，想要不区分大小写</span></span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		 * public static &lt;T&gt; void sort(T[] a,Comparator&lt;? super T&gt; c)</span></span><br><span class="line"><span class="comment">		 * 这里要用Lambda表达式为Comparator类型的形参赋值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 * 两件事：</span></span><br><span class="line"><span class="comment">		 * （1）这个接口的抽象方法：  int compare(T o1, T o2)</span></span><br><span class="line"><span class="comment">		 * （2）这个抽象方法要做什么事？</span></span><br><span class="line"><span class="comment">		 * 		例如：这里要对String类型的元素，不区分大小写的比较大小</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line"><span class="comment">//		Arrays.sort(arr, (String o1, String o2) -&gt; &#123;return o1.compareToIgnoreCase(o2);&#125;);</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//省略了&#123;return ;&#125;</span></span><br><span class="line"><span class="comment">//		Arrays.sort(arr, (String o1, String o2) -&gt;  o1.compareToIgnoreCase(o2));</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//省略了两个String</span></span><br><span class="line">		Arrays.sort(arr, (o1, o2) -&gt;  o1.compareToIgnoreCase(o2));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (String string : arr) &#123;</span><br><span class="line">			System.out.println(string);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">		ArrayList&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		list.add(<span class="string">"hello"</span>);</span><br><span class="line">		list.add(<span class="string">"java"</span>);</span><br><span class="line">		list.add(<span class="string">"world"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		 * JDK1.8给Collection系列的集合，准确的讲是在Iterable接口中，增加了一个默认方法</span></span><br><span class="line"><span class="comment">		 * 		default void forEach(Consumer&lt;? super T&gt; action) </span></span><br><span class="line"><span class="comment">		 * 这个方法是用来遍历集合等的。代替原来的foreach循环的。</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 * 这个方法的形参是Consumer接口类型，它是函数式接口中消费型接口的代表</span></span><br><span class="line"><span class="comment">		 * 我现在调用这个方法，想要用Lambda表达式为Consumer接口类型形参赋值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 * 两件事：</span></span><br><span class="line"><span class="comment">		 * （1）它的抽象方法：  void  accept(T t)</span></span><br><span class="line"><span class="comment">		 * （2）抽象方法的实现要完成的事是什么</span></span><br><span class="line"><span class="comment">		 * 		例如：这里要打印这个t</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line"><span class="comment">//		list.forEach((String t) -&gt; &#123;System.out.println(t);&#125;);</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//省略&#123;;&#125;</span></span><br><span class="line"><span class="comment">//		list.forEach((String t) -&gt; System.out.println(t));</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//省略String</span></span><br><span class="line"><span class="comment">//		list.forEach((t) -&gt; System.out.println(t));</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//可以省略形参()</span></span><br><span class="line">		list.forEach(t -&gt; System.out.println(t));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1713-方法引用与构造器引用">17.1.3 方法引用与构造器引用</h3>
+<p>Lambda表达式是可以简化函数式接口的变量与形参赋值的语法。而方法引用和构造器引用是为了简化Lambda表达式的。</p>
+<p>1、当Lambda表达式满足一些特殊的情况时，还可以再简化：</p>
+<p>（1）Lambda体只有一句语句，并且是通过调用一个对象的/类现有的方法来完成的</p>
+<p>例如：System.out对象，调用println()方法来完成Lambda体</p>
+<p>​          Math类，调用random()静态方法来完成Lambda体</p>
+<p>（2）并且Lambda表达式的形参正好是给该方法的实参</p>
+<p>例如：t-&gt;System.out.println(t)</p>
+<p>​        () -&gt; Math.random() 都是无参</p>
+<p>2、方法引用的语法格式：</p>
+<p>（1）实例对象名::实例方法</p>
+<p>（2）类名::静态方法</p>
+<p>（3）类名::实例方法</p>
+<p>说明：</p>
+<ul>
+<li>
+<p>::称为方法引用操作符（两个:中间不能有空格，而且必须英文状态下半角输入）</p>
+</li>
+<li>
+<p>Lambda表达式的形参列表，全部在Lambda体中使用上了，要么是作为调用方法的对象，要么是作为方法的实参。</p>
+</li>
+<li>
+<p>在整个Lambda体中没有额外的数据。</p>
+</li>
+</ul>
+<p>3、构造器引用</p>
+<p>（1）当Lambda表达式是创建一个对象，并且满足Lambda表达式形参，正好是给创建这个对象的构造器的实参列表。</p>
+<p>（2）  当Lambda表达式是创建一个数组对象，并且满足Lambda表达式形参，正好是给创建这个数组对象的长度</p>
+<p>4、构造器引用的语法格式：</p>
+<ul>
+<li>
+<p>类名::new</p>
+</li>
+<li>
+<p>数组类型名::new</p>
+</li>
+</ul>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMethodReference</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//这个方法是模仿HashMap中，把你指定的数组的长度纠正为2的n次方的代码</span></span><br><span class="line">	<span class="comment">//createArray()的作用是，创建一个长度为2的n次方的数组</span></span><br><span class="line">	<span class="keyword">public</span> &lt;R&gt; R[] createArray(Function&lt;Integer,R[]&gt; fun,<span class="keyword">int</span> length)&#123;</span><br><span class="line">		<span class="keyword">int</span> n = length - <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">        n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">        length = n &lt; <span class="number">0</span> ? <span class="number">1</span> : n + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> fun.apply(length);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test6</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		 * Function是一个函数式接口，可以用Lambda表达式赋值</span></span><br><span class="line"><span class="comment">		 * Function&lt;T,R&gt;的抽象方法   R apply(T t)</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 * createArray这个方法中用的是Function&lt;Integer,R[]&gt; fun。说明T类型已经指定为Integer</span></span><br><span class="line"><span class="comment">		 * 说明</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line"><span class="comment">//		Function&lt;Integer,String[]&gt; f = (Integer len) -&gt; new String[len];</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//因为Lambda体是在创建一个数组对象完成的，而且Lambda表达式的形参正好是创建数组用的长度</span></span><br><span class="line">		<span class="comment">//通过构造器引用省略</span></span><br><span class="line">		Function&lt;Integer,String[]&gt; f = String[]::<span class="keyword">new</span>;</span><br><span class="line">		String[] array = createArray(f, <span class="number">10</span>);</span><br><span class="line">		</span><br><span class="line">		System.out.println(array.length);<span class="comment">//16</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test5</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//		Supplier&lt;String&gt; s = () -&gt; new String();//通过供给型接口，提供一个空字符串对象</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//构造器引用</span></span><br><span class="line">		Supplier&lt;String&gt; s = String::<span class="keyword">new</span>;<span class="comment">//通过供给型接口，提供一个空字符串对象</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//		Runnable r = () -&gt; System.out.println("hello lambda");</span></span><br><span class="line">		Runnable r = System.out::println;<span class="comment">//打印空行</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//不能简化方法引用，因为"hello lambda"这个无法省略</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">		String[] arr = &#123;<span class="string">"Hello"</span>,<span class="string">"java"</span>,<span class="string">"chai"</span>&#125;;</span><br><span class="line"><span class="comment">//		Arrays.sort(arr, (s1,s2) -&gt; s1.compareToIgnoreCase(s2));</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//用方法引用简化</span></span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		 * Lambda表达式的形参，第一个（例如：s1），正好是调用方法的对象，剩下的形参(例如:s2)正好是给这个方法的实参</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		Arrays.sort(arr, String::compareToIgnoreCase);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//		Stream&lt;Double&gt; stream = Stream.generate(() -&gt; Math.random());</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//用方法引用简化</span></span><br><span class="line">		Stream&lt;Double&gt; stream = Stream.generate(Math::random);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">		List&lt;Integer&gt; list = Arrays.asList(<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">8</span>,<span class="number">9</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//list.forEach(t -&gt; System.out.println(t));</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//用方法再简化</span></span><br><span class="line">		list.forEach(System.out::println);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="172-streamapi">17.2 StreamAPI</h2>
+<p>Java8中有两大最为重要的改变。第一个是 Lambda 表达式；另外一个则是 Stream API。</p>
+<p>Stream API ( java.util.stream) 把真正的函数式编程风格引入到Java中。这是目前为止对Java类库最好的补充，因为Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。</p>
+<p>Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。 使用Stream API 对集合数据进行操作，就类似于使用 SQL 执行的数据库查询。也可以使用 Stream API 来并行执行操作。简言之，Stream API 提供了一种高效且易于使用的处理数据的方式。</p>
+<p>Stream是数据渠道，用于操作数据源（集合、数组等）所生成的元素序列。“集合讲的是数据，负责存储数据，Stream流讲的是计算，负责处理数据！”</p>
+<p>注意：</p>
+<p>①Stream 自己不会存储元素。</p>
+<p>②Stream 不会改变源对象。每次处理都会返回一个持有结果的新Stream。</p>
+<p>③Stream 操作是延迟执行的。这意味着他们会等到需要结果的时候才执行。</p>
+<p>Stream 的操作三个步骤：</p>
+<p>1- 创建 Stream：通过一个数据源（如：集合、数组），获取一个流</p>
+<p>2- 中间操作：中间操作是个操作链，对数据源的数据进行n次处理，但是在终结操作前，并不会真正执行。</p>
+<p>3- 终止操作：一旦执行终止操作，就执行中间操作链，最终产生结果并结束Stream。</p>
+<p><img src="/img/article/java/1560769396655.png" alt="1560769396655"></p>
+<h3 id="1721-创建stream">17.2.1 创建Stream</h3>
+<p><strong>1、创建 Stream方式一：通过集合</strong></p>
+<p>Java8 中的 Collection 接口被扩展，提供了两个获取流的方法：</p>
+<ul>
+<li>public default Stream<e> stream() : 返回一个顺序流</e></li>
+</ul>
+<ul>
+<li>public default Stream<e> parallelStream() : 返回一个并行流</e></li>
+</ul>
+<p><strong>2、创建 Stream方式二：通过数组</strong></p>
+<p>Java8 中的 Arrays 的静态方法 stream() 可以获取数组流：</p>
+<ul>
+<li>public static <t> Stream<t> stream(T[] array): 返回一个流</t></t></li>
+</ul>
+<p>重载形式，能够处理对应基本类型的数组：</p>
+<ul>
+<li>
+<p>public static IntStream stream(int[] array)：返回一个整型数据流</p>
+</li>
+<li>
+<p>public static LongStream stream(long[] array)：返回一个长整型数据流</p>
+</li>
+<li>
+<p>public static DoubleStream stream(double[] array)：返回一个浮点型数据流</p>
+</li>
+</ul>
+<p><strong>3、创建 Stream方式三：通过Stream的of()</strong></p>
+<p>可以调用Stream类静态方法 of(), 通过显示值创建一个流。它可以接收任意数量的参数。</p>
+<ul>
+<li>public static<t> Stream<t> of(T… values) : 返回一个顺序流</t></t></li>
+</ul>
+<p><strong>4、创建 Stream方式四：创建无限流</strong></p>
+<p>可以使用静态方法 Stream.iterate() 和 Stream.generate(), 创建无限流。</p>
+<ul>
+<li>
+<p>public static<t> Stream<t> iterate(final T seed, final UnaryOperator<t> f):返回一个无限流</t></t></t></p>
+</li>
+<li>
+<p>public static<t> Stream<t> generate(Supplier<t> s) ：返回一个无限流</t></t></t></p>
+</li>
+</ul>
+<h3 id="1722-中间操作">17.2.2  中间操作</h3>
+<p>多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理！而在终止操作时一次性全部处理，称为“惰性求值”。</p>
+<table>
+<thead>
+<tr>
+<th><strong>方  法</strong></th>
+<th><strong>描  述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>filter(Predicate p)</strong></td>
+<td>接收 Lambda ， 从流中排除某些元素</td>
+</tr>
+<tr>
+<td><strong>distinct()</strong></td>
+<td>筛选，通过流所生成元素的equals() 去除重复元素</td>
+</tr>
+<tr>
+<td><strong>limit(long maxSize)</strong></td>
+<td>截断流，使其元素不超过给定数量</td>
+</tr>
+<tr>
+<td><strong>skip(long n)</strong></td>
+<td>跳过元素，返回一个扔掉了前 n 个元素的流。若流中元素不足 n 个，则返回一个空流。与 limit(n) 互补</td>
+</tr>
+<tr>
+<td><strong>peek(Consumer</strong> <strong>action)</strong></td>
+<td>接收Lambda，对流中的每个数据执行Lambda体操作</td>
+</tr>
+<tr>
+<td><strong>sorted()</strong></td>
+<td>产生一个新流，其中按自然顺序排序</td>
+</tr>
+<tr>
+<td><strong>sorted(Comparator com)</strong></td>
+<td>产生一个新流，其中按比较器顺序排序</td>
+</tr>
+<tr>
+<td><strong>map(Function f)</strong></td>
+<td>接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素。</td>
+</tr>
+<tr>
+<td><strong>mapToDouble(ToDoubleFunction f)</strong></td>
+<td>接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 DoubleStream。</td>
+</tr>
+<tr>
+<td><strong>mapToInt(ToIntFunction f)</strong></td>
+<td>接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 IntStream。</td>
+</tr>
+<tr>
+<td><strong>mapToLong(ToLongFunction f)</strong></td>
+<td>接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 LongStream。</td>
+</tr>
+<tr>
+<td><strong>flatMap(Function f)</strong></td>
+<td>接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1723-终结操作">17.2.3  终结操作</h3>
+<p>终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是 void。流进行了终止操作后，不能再次使用。</p>
+<table>
+<thead>
+<tr>
+<th><strong>方法</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>boolean</strong> <strong>allMatch(Predicate p)</strong></td>
+<td>检查是否匹配所有元素</td>
+</tr>
+<tr>
+<td><strong>boolean</strong> <strong>anyMatch</strong>(<strong>Predicate p</strong>)</td>
+<td>检查是否至少匹配一个元素</td>
+</tr>
+<tr>
+<td><strong>boolean</strong> <strong>noneMatch(Predicate  p)</strong></td>
+<td>检查是否没有匹配所有元素</td>
+</tr>
+<tr>
+<td><strong>Optional<t></t></strong> <strong>findFirst()</strong></td>
+<td>返回第一个元素</td>
+</tr>
+<tr>
+<td><strong>Optional<t></t></strong> <strong>findAny()</strong></td>
+<td>返回当前流中的任意元素</td>
+</tr>
+<tr>
+<td><strong>long</strong> <strong>count()</strong></td>
+<td>返回流中元素总数</td>
+</tr>
+<tr>
+<td><strong>Optional<t></t></strong> <strong>max(Comparator c)</strong></td>
+<td>返回流中最大值</td>
+</tr>
+<tr>
+<td><strong>Optional<t></t></strong> <strong>min(Comparator c)</strong></td>
+<td>返回流中最小值</td>
+</tr>
+<tr>
+<td><strong>void</strong> <strong>forEach(Consumer c)</strong></td>
+<td>迭代</td>
+</tr>
+<tr>
+<td><strong>T</strong> <strong>reduce(T iden, BinaryOperator b)</strong></td>
+<td>可以将流中元素反复结合起来，得到一个值。返回 T</td>
+</tr>
+<tr>
+<td><strong>U</strong> <strong>reduce(BinaryOperator b)</strong></td>
+<td>可以将流中元素反复结合起来，得到一个值。返回 Optional<t></t></td>
+</tr>
+<tr>
+<td><strong>R</strong> <strong>collect(Collector c)</strong></td>
+<td>将流转换为其他形式。接收一个 Collector接口的实现，用于给Stream中元素做汇总的方法</td>
+</tr>
+</tbody>
+</table>
+<p>Collector 接口中方法的实现决定了如何对流执行收集的操作(如收集到 List、Set、Map)。另外， Collectors 实用类提供了很多静态方法，可以方便地创建常见收集器实例。</p>
+<h2 id="173-optional类">17.3 Optional类</h2>
+<p>到目前为止，臭名昭著的空指针异常是导致Java应用程序失败的最常见原因。以前，为了解决空指针异常，Google公司著名的Guava项目引入了Optional类，Guava通过使用检查空值的方式来防止代码污染，它鼓励程序员写更干净的代码。受到Google Guava的启发，Optional类已经成为Java 8类库的一部分。</p>
+<p>Optional实际上是个容器：它可以保存类型T的值，或者仅仅保存null。Optional提供很多有用的方法，这样我们就不用显式进行空值检测。</p>
+<p>它的API：</p>
+<p>1、如何创建Optional对象？或者说如何用Optional来装值对象或null值</p>
+<p>（1）static <t> Optional<t> empty() ：用来创建一个空的Optional</t></t></p>
+<p>（2）static <t> Optional<t> of(T value) ：用来创建一个非空的Optional</t></t></p>
+<p>（3）static <t> Optional<t> ofNullable(T value) ：用来创建一个可能是空，也可能非空的Optional</t></t></p>
+<p>2、如何从Optional容器中取出所包装的对象呢？</p>
+<p>（1）T get()  ：要求Optional容器必须非空</p>
+<p>T get()与of(T value)使用是安全的</p>
+<p>（2）T orElse(T other)  ：</p>
+<p>orElse(T other) 与ofNullable(T value)配合使用，</p>
+<p>如果Optional容器中非空，就返回所包装值，如果为空，就用orElse(T other)other指定的默认值（备胎）代替</p>
+<p>（3）T orElseGet(Supplier&lt;? extends T&gt; other)  ：</p>
+<p>如果Optional容器中非空，就返回所包装值，如果为空，就用Supplier接口的Lambda表达式提供的值代替</p>
+<p>（4）<x extends="" throwable=""> T orElseThrow(Supplier&lt;? extends X&gt; exceptionSupplier)</x></p>
+<p>如果Optional容器中非空，就返回所包装值，如果为空，就抛出你指定的异常类型代替原来的NoSuchElementException</p>
+<p>3、其他方法</p>
+<p>（1）boolean isPresent()  ：判断Optional容器中的值是否存在</p>
+<p>（2）void ifPresent(Consumer&lt;? super T&gt; consumer) ：</p>
+<p>判断Optional容器中的值是否存在，如果存在，就对它进行Consumer指定的操作，如果不存在就不做</p>
+<p>（3）<u> Optional<u> map(Function&lt;? super T,? extends U&gt; mapper)</u></u></p>
+<p>判断Optional容器中的值是否存在，如果存在，就对它进行Function接口指定的操作，如果不存在就不做</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Java/18设计模式/" data-toggle="tooltip" data-placement="top" title="[Java] Java（十八）设计模式">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Java/16反射/" data-toggle="tooltip" data-placement="top" title="[Java] Java（十六）反射">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#第十七章-java8"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x7B2C;&#x5341;&#x4E03;&#x7AE0; Java8</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#171-lambda表达式与函数式接口"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">17.1 Lambda&#x8868;&#x8FBE;&#x5F0F;&#x4E0E;&#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1711-函数式接口"><span class="toc-nav-number">1.1.1.</span> <span class="toc-nav-text">17.1.1 &#x51FD;&#x6570;&#x5F0F;&#x63A5;&#x53E3;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1-消费型接口"><span class="toc-nav-number">1.1.1.1.</span> <span class="toc-nav-text"><strong>1&#x3001;&#x6D88;&#x8D39;&#x578B;&#x63A5;&#x53E3;</strong></span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-供给型接口"><span class="toc-nav-number">1.1.1.2.</span> <span class="toc-nav-text"><strong>2&#x3001;&#x4F9B;&#x7ED9;&#x578B;&#x63A5;&#x53E3;</strong></span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-判断型接口"><span class="toc-nav-number">1.1.1.3.</span> <span class="toc-nav-text"><strong>3&#x3001;&#x5224;&#x65AD;&#x578B;&#x63A5;&#x53E3;</strong></span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#4-功能型接口"><span class="toc-nav-number">1.1.1.4.</span> <span class="toc-nav-text"><strong>4&#x3001;&#x529F;&#x80FD;&#x578B;&#x63A5;&#x53E3;</strong></span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1712-lambda表达式语法"><span class="toc-nav-number">1.1.2.</span> <span class="toc-nav-text">17.1.2 Lambda&#x8868;&#x8FBE;&#x5F0F;&#x8BED;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1713-方法引用与构造器引用"><span class="toc-nav-number">1.1.3.</span> <span class="toc-nav-text">17.1.3 &#x65B9;&#x6CD5;&#x5F15;&#x7528;&#x4E0E;&#x6784;&#x9020;&#x5668;&#x5F15;&#x7528;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#172-streamapi"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">17.2 StreamAPI</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1721-创建stream"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">17.2.1 &#x521B;&#x5EFA;Stream</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1722-中间操作"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">17.2.2  &#x4E2D;&#x95F4;&#x64CD;&#x4F5C;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1723-终结操作"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text">17.2.3  &#x7EC8;&#x7ED3;&#x64CD;&#x4F5C;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#173-optional类"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">17.3 Optional&#x7C7B;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

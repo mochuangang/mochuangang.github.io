@@ -149,14 +149,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -212,47 +212,111 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <ul>
-<li>[1.特殊权限概述]</li>
-<li>[2.特殊权限SUID]</li>
-<li>[3.特殊权限SGID]</li>
-<li>[4.特殊权限SBIT]</li>
-<li>[2.权限属性chattr]</li>
-<li>[3.进程掩码umask]</li>
-</ul>
-<h2 id="1特殊权限概述">1.特殊权限概述</h2>
-<p><em>前面我们已经学习过 r（读）、w（写）、 x（执行）这三种普通权限，但是我们在査询系统文件权限时会发现出现了一些其他权限字母，比如：</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bgx ~]<span class="comment"># ll /usr/bin/passwd</span></span><br><span class="line">-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd</span><br></pre></td></tr></table></figure>
-<p><em>在属主本来应该是 x（执行）权限的位置出现了一个小写s，这是什么权限？我们把这种权限称作 SetUID 权限，也叫作 SUID 的特殊权限。这种权限有什么作用呢？或者说能干啥？别急，先往下看…</em></p>
-<h2 id="2特殊权限suid">2.特殊权限SUID</h2>
-<p>*<strong>1.问题抛出*</strong><br>
-<em>在 Linux 系统中，每个普通用户都可以更改自己的密码，这是合理的设置。问题是，普通用户的信息保存在 /etc/passwd 文件中，用户的密码在 /etc/shadow 文件中，也就是说，普通用户在更改自己的密码时修改了 /etc/shadow 文件中的加密密码，但是文件权限显示，普通用户对这两个文件其实都是没有写权限的，那为什么普通用户可以修改自己的权限呢？…(难道学了个假的权限)</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@bgx ~]<span class="comment"># ll /etc/passwd</span></span><br><span class="line">-rw-r--r-- 1 root root 6209 Apr 13 03:26 /etc/passwd</span><br><span class="line">[root@bgx ~]<span class="comment"># ll /etc/shadow</span></span><br><span class="line">---------- 1 root root 11409 Apr 13 03:26 /etc/shadow</span><br></pre></td></tr></table></figure>
-<p>*<strong>2.解决方案*</strong><br>
-<em>其实，普通用户可以修改自己的密码在于 passwd 命令。该命令拥有特殊权限 SetUID，也就是在属主的权限位的执行权限上是 s。可以这样来理解它：当一个具有执行权限的文件设置 SetUID 权限后，用户在执行这个文件时将以文件所有者的身份来执行。</em></p>
-<p><em>PS: 当普通用户使用 passwd 命令更改自己的密码时，实际上是在用 passwd 命令所有者 root 的身份在执行 passwd 命令，root 当然可以将密码写入 /etc/shadow 文件，所以普通用户也可以修改 /etc/shadow 文件，命令执行完成后，该身份也随之消失。</em></p>
-<p>*<strong>3.示例演示*</strong><br>
-<em>举个例子，有一个用户 lamp，她可以修改自己的权限，因为 passwd 命令拥有 SetUID 权限；但是她不能査看 /etc/shadow 文件的内容，因为査看文件的命令（如 cat）没有 SetUID 权限。命令如下：</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自己可以修改自己的密码，从而改变/etc/shadow中的数据</span></span><br><span class="line">[lamp@bgx ~]$ passwd</span><br><span class="line"></span><br><span class="line"><span class="comment">#但无法使用cat命令查看/etc/shadow</span></span><br><span class="line">[lamp@bgx ~]$ cat /etc/shadow</span><br><span class="line">cat: /etc/shadow: Permission denied</span><br></pre></td></tr></table></figure>
+                <h2 id="1linux系统特殊权限">1.Linux系统特殊权限</h2>
+<hr>
+<p><em>对可执⾏⽂件的<code>setuid</code>(或<code>setgid</code>)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># ll /usr/bin/passwd</span></span><br><span class="line">-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd</span><br></pre></td></tr></table></figure>
+<p><em>⽬录粘滞位可以为⽂件删除设置特殊限制, 仅⽂件所有者(和root⽤户)可以删除⽬录中的⽂件。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># ll -d /tmp /var/tmp/</span></span><br><span class="line">drwxrwxrwt. 8 root root 184 Nov 14 19:46 /tmp</span><br><span class="line">drwxrwxrwt. 3 root root  18 Nov  7 20:35 /var/tmp/</span><br></pre></td></tr></table></figure>
+<p><em>最后, 对某⽬录的 <code>setgid</code>权限表示在该⽬录中创建的⽂件将继承该⽬录的组所属关系, ⽽不是继 承⾃创建⽤户, 这通常⽤于组协作⽬录, 将⽂件从默认的专有组⾃动更改为共享组。</em></p>
+<p><strong><em>特殊权限对文件和目录得影响</em></strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特殊权限</th>
+<th style="text-align:left">对⽂件的影响</th>
+<th style="text-align:center">对⽬录的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">u+s suid</td>
+<td style="text-align:left">以拥有⽂件的⽤户身份, ⽽ 不是运⾏⽂件的⽤户身份 执⾏⽂件</td>
+<td style="text-align:center">⽆影响</td>
+</tr>
+<tr>
+<td style="text-align:center">g+s sgid</td>
+<td style="text-align:left">以拥有⽂件的组身份执⾏ ⽂件</td>
+<td style="text-align:center">在⽬录中最新创建的⽂件将其组所有者设置为与 ⽬录的组所有者相匹配</td>
+</tr>
+<tr>
+<td style="text-align:center">o+t sticky</td>
+<td style="text-align:left">⽆影响</td>
+<td style="text-align:center">对⽬录具有写⼊权限的⽤户仅可以删除其所拥有 的⽂件, ⽽⽆法删除或强制保存到其他⽤户所拥 有的⽂件</td>
+</tr>
+</tbody>
+</table>
+<p>如何设置特殊权限<br>
+⽤符号表示: <code>setuid=u+s; setgid=g+s; sticky=o+t</code><br>
+⽤数值表示: <code>setuid=4; setgid=2; sticky=1</code></p>
+<h3 id="11set_uid">1.1set_uid</h3>
+<p><em>⽂件的执⾏有效身份为⽂件的拥有者,⽽不是执⾏者的身份。</em></p>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Clinux%5CSnipaste_2020-11-14_23-13-30.png" alt="Snipaste_2020-11-14_23-13-30"></p>
+<p><strong><em>演示</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//检查passwd⽂件权限,匿名⽤户没有权限查看</span><br><span class="line">[root@mcg ~]<span class="comment"># chmod	640	/etc/passwd</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /etc/passwd</span></span><br><span class="line">-rw-r-----	1	root root 1548 Dec	9 18:45	/etc/passwd</span><br><span class="line"></span><br><span class="line">//使⽤普通⽤户⽆法查看</span><br><span class="line">[mcg@mcg root]$	cat	/etc/passwd</span><br><span class="line">cat: /etc/passwd: Permission denied</span><br><span class="line"></span><br><span class="line">//给cat命令赋予suid</span><br><span class="line">1.1set_uid</span><br><span class="line">[root@mcg ~]<span class="comment"># chmod	4755 /bin/cat</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /bin/cat</span></span><br><span class="line">-rwsr-xr-x.	1 root root	48568 Mar 23 2017 /bin/cat</span><br></pre></td></tr></table></figure>
+<p><strong><em>suid授权⽅法</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">suid 4000 权限字符s(S),⽤户位置上的x位上设置。</span><br><span class="line">授权⽅法：chmod 4755 passwd</span><br><span class="line">		chmod u+s  passwd</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em><code>suid</code>作⽤</em><br>
+<em>让普通⽤户临时拥有可执⾏的⼆进制⽂件的所属主权限，⼆进制⽂件需要有执⾏权限。</em><br>
+<em>当⼆进制⽂件没有执⾏权限,<code>suid</code>的权限显示就是⼤S。<code>suid</code>仅对⼆进制可执⾏程序有效。</em><br>
+<em>如果普通需要操作没有权限的⽂件，为对应的命令赋予<code>Suid</code>权限，可以实现操作。</em><br>
+<em>注意：<code>suid</code>双刃剑,是⼀个⽐较危险的功能,对系统安全有⼀定的威胁。</em></p>
+</blockquote>
+<h3 id="12set_gid">1.2set_gid</h3>
+<p><em>1.⽂件的有效执⾏组身份为⽂件的拥有组,⽽不是执⾏者的组身份</em><br>
+<em>2.⽬录⾥新建的⽂件的拥有组会⾃动继承⽬录的拥有组身份</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg /]<span class="comment"># chmod 777 /opt/</span></span><br><span class="line">[root@mcg /]<span class="comment"># chmod g+s /opt/</span></span><br><span class="line">[root@mcg /]<span class="comment"># su - mcg</span></span><br><span class="line">[mcg@mcg ~]$ mkdir /opt/sgid_test</span><br><span class="line">[mcg@mcg ~]$ ll /opt/sgid_test -d</span><br><span class="line">drwxrwsr-x.	2	mcg	root	4096	Nov	14 00:27	/opt/sgid_test</span><br></pre></td></tr></table></figure>
+<p><strong><em>sgid授权⽅法</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">suid	2000 权限字符s(S),⽤户位置上的x位上设置。</span><br><span class="line">授权⽅法：chmod 2755 directory</span><br><span class="line">		chmod g+s  directory</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em><code>sgid</code>作⽤</em><br>
+<em>针对⽤户组权限位修改，⽤户创建的⽬录或⽂件所属组和该⽬录的所属组⼀致。</em><br>
+<em>默认所有⽤户创建⽂件，⽤户和组都是⾃身，<code>Sgid</code>可以让其他⽤户再此⽬录下创建的⽂件和 ⽬录，具有和此⽬录相同的⽤户组设置。</em><br>
+<em>当为某个⽬录设置了<code>sgid</code>位以后，在该⽬录中新创建的⽂件具有该⽬录的所有组权限，⽽不<br>
+是创建该⽂件的⽤户的默认所有者。这样,使得在多个⽤户之间共享⼀个⽬录中的⽂件变得.简单</em></p>
+</blockquote>
+<h3 id="13sticky粘滞位">1.3sticky粘滞位</h3>
+<p><code>sticky</code>对⽬录有写权限的⽤户仅仅可以删除⽬录⾥属于⾃⼰的⽂件,不能删除其他⽤户的⽂件 <code>/tmp</code> ⽬录是经典的粘滞位⽬录，谁都有写权限，因此安全成问题，常常是⽊⻢第⼀⼿跳板。</p>
+<p><strong><em><code>sticky</code>授权⽅法</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">粘滞位		1000 权限字符t(T),其他⽤户位的x位上设置。</span><br><span class="line">授权⽅法：chmod 1755 /tmp</span><br><span class="line">		chmod o+t  /tmp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em><code>sticky</code>作⽤</em><br>
+<em>让多个⽤户都具有写权限的⽬录，每个⽤户只能删⾃⼰的⽂件，表现在others的x位，⽤⼩t 表示，</em><br>
+如果没有执⾏权限是T，那么⼀个⽬录即使它的权限为 “777” 如果是设置了粘滞位， 除了⽬录的属主和 ”root“ ⽤户有权限删除，除此之外其他⽤户不能删除这个⽬录。*</p>
+</blockquote>
+<h2 id="2权限属性chattr">2.权限属性chattr</h2>
+<hr>
+<p><strong><em>1.问题抛出</em></strong><br>
+<em>在 Linux 系统中，每个普通用户都可以更改自己的密码，这是合理的设置。问题是，普通用户的信息保存在 <code>/etc/passwd</code>文件中，用户的密码在 <code>/etc/shadow</code>文件中，也就是说，普通用户在更改自己的密码时修改了 <code>/etc/shadow</code> 文件中的加密密码，但是文件权限显示，普通用户对这两个文件其实都是没有写权限的，那为什么普通用户可以修改自己的权限呢？…(难道学了个假的权限)</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># ll /etc/passwd</span></span><br><span class="line">-rw-r--r-- 1 root root 6209 Apr 13 03:26 /etc/passwd</span><br><span class="line">[root@mcg ~]<span class="comment"># ll /etc/shadow</span></span><br><span class="line">---------- 1 root root 11409 Apr 13 03:26 /etc/shadow</span><br></pre></td></tr></table></figure>
+<p><strong><em>2.解决方案</em></strong><br>
+<em>其实，普通用户可以修改自己的密码在于 <code>passwd</code>命令。该命令拥有特殊权限 <code>SetUID</code>，也就是在属主的权限位的执行权限上是 s。可以这样来理解它：当一个具有执行权限的文件设置 SetUID 权限后，用户在执行这个文件时将以文件所有者的身份来执行。</em></p>
+<p><em>PS: 当普通用户使用<code>passwd</code>命令更改自己的密码时，实际上是在用 <code>passwd</code>命令所有者 <code>root</code> 的身份在执行 <code>passwd</code> 命令，<code>root</code> 当然可以将密码写入<code>/etc/shadow</code> 文件，所以普通用户也可以修改 <code>/etc/shadow</code> 文件，命令执行完成后，该身份也随之消失。</em></p>
+<p><strong><em>3.示例演示</em></strong><br>
+<em>举个例子，有一个用户 lamp，她可以修改自己的权限，因为 <code>passwd</code> 命令拥有 <code>SetUID</code> 权限；但是她不能査看 <code>/etc/shadow</code> 文件的内容，因为査看文件的命令（如 cat）没有 SetUID 权限。命令如下：</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自己可以修改自己的密码，从而改变/etc/shadow中的数据</span></span><br><span class="line">[lamp@mcg ~]$ passwd</span><br><span class="line"></span><br><span class="line"><span class="comment">#但无法使用cat命令查看/etc/shadow</span></span><br><span class="line">[lamp@mcg ~]$ cat /etc/shadow</span><br><span class="line">cat: /etc/shadow: Permission denied</span><br></pre></td></tr></table></figure>
 <p><em>我们画一张示意图来理解上述过程</em><br>
-<img src="http://cdn.xuliangwei.com/15551458641982.jpg?imageView2/0/q/75%7Cwatermark/2/text/d3d3Lnh1bGlhbmd3ZWkuY29t/font/5qW35L2T/fontsize/400/fill/I0Y4MEEwQQ==/dissolve/100/gravity/SouthEast/dx/25/dy/25%7Cimageslim" alt="img"></p>
-<p>*<strong>4.例子解释*</strong><br>
-<em>passwd 是系统命令，可以执行，所以可以赋予 SetUID 权限。<br>
-lamp 用户对 passwd 命令拥有 x（执行）权限。<br>
-lamp 用户在执行 passwd 命令的过程中，会暂时切换为 root 身份，所以可以修改 /etc/shadow 文件。<br>
+<img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Clinux%5CSnipaste_2020-11-14_22-21-13.png" alt="Snipaste_2020-11-14_22-21-13"></p>
+<p><strong><em>4.例子解释</em></strong><br>
+<em><code>passwd</code> 是系统命令，可以执行，所以可以赋予 <code>SetUID</code> 权限。<br>
+lamp 用户对 <code>passwd</code>命令拥有 x（执行）权限。<br>
+lamp 用户在执行 <code>passwd</code> 命令的过程中，会暂时切换为 <code>root</code>身份，所以可以修改 <code>/etc/shadow</code> 文件。<br>
 命令结束，lamp 用户切换回自己的身份。<br>
-PS: cat命令没有 SetUID权限，所以使用 lamp 用户身份去访问 /etc/shadow 文件，当然没有相应权限了。<br>
-F: 但如果将passwd命令的suid去掉会发生什么？？？</em></p>
+PS: cat命令没有 <code>SetUID</code>权限，所以使用 lamp 用户身份去访问 <code>/etc/shadow</code> 文件，当然没有相应权限了。<br>
+F: 但如果将<code>passwd</code>命令的suid去掉会发生什么？？？</em></p>
 <p><em>2.suid授权方法4000 权限字符s(S),用户位置上的x位上设置</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chmod 4755 passwd</span></span><br><span class="line"><span class="comment"># chmod  u+s  passwd</span></span><br></pre></td></tr></table></figure>
-<p><em>3.suid的作用</em><br>
-<em>1.让普通用户对可执行的二进制文件，临时拥有二进制文件的所属主权限。<br>
+<p><em>3.suid的作用</em></p>
+<blockquote>
+<p><em>1.让普通用户对可执行的二进制文件，临时拥有二进制文件的所属主权限。<br>
 2.如果设置的二进制文件没有执行权限,那么suid的权限显示就是大S。<br>
 3.特殊权限suid仅对二进制可执行程序有效，其他文件或目录则无效。<br>
 注意: suid极度危险，不信可以尝试对vim或rm进行设定SetUID。</em></p>
+</blockquote>
 <h2 id="3特殊权限sgid">3.特殊权限SGID</h2>
-<p><em>将目录设置为sgid后，如果在该目录下创建文件，都将与该目录的所属组保持一致，演示如下</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.建立测试目录</span></span><br><span class="line">[root@bgx ~]<span class="comment"># cd /tmp/ &amp;&amp; mkdir dtest</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2.给测试目录赋予SetGID权限，检查SetGID是否生效</span></span><br><span class="line">[root@bgx tmp]<span class="comment"># chmod g+s dtest/ &amp;&amp; ll -d dtest/</span></span><br><span class="line">drwxr-sr-x 2 root root 6 Apr 13 05:21 dtest/</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.给测试目录赋予777权限，让普通用户可以写</span></span><br><span class="line">[root@bgx tmp]<span class="comment"># chmod 777 dtest/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#4.切换成普通用户lamp，并进入该目录</span></span><br><span class="line">[root@bgx tmp]<span class="comment"># su - lamp</span></span><br><span class="line">[lamp@bgx ~]$ <span class="built_in">cd</span> /tmp/dtest/</span><br><span class="line"></span><br><span class="line"><span class="comment">#5.普通用户创建测试文件，检查文件的信息</span></span><br><span class="line">[lamp@bgx dtest]$ touch lamp_test</span><br><span class="line">[lamp@bgx dtest]$ ll</span><br><span class="line">-rw-rw-r-- 1 lamp root 0 Apr 13 05:21 lamp_test</span><br></pre></td></tr></table></figure>
+<p><em>将目录设置为<code>sgid</code>后，如果在该目录下创建文件，都将与该目录的所属组保持一致，演示如下</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.建立测试目录</span></span><br><span class="line">[root@mcg ~]<span class="comment"># cd /tmp/ &amp;&amp; mkdir dtest</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2.给测试目录赋予SetGID权限，检查SetGID是否生效</span></span><br><span class="line">[root@mcg tmp]<span class="comment"># chmod g+s dtest/ &amp;&amp; ll -d dtest/</span></span><br><span class="line">drwxr-sr-x 2 root root 6 Apr 13 05:21 dtest/</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.给测试目录赋予777权限，让普通用户可以写</span></span><br><span class="line">[root@mcg tmp]<span class="comment"># chmod 777 dtest/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#4.切换成普通用户lamp，并进入该目录</span></span><br><span class="line">[root@mcg tmp]<span class="comment"># su - lamp</span></span><br><span class="line">[lamp@mcg ~]$ <span class="built_in">cd</span> /tmp/dtest/</span><br><span class="line"></span><br><span class="line"><span class="comment">#5.普通用户创建测试文件，检查文件的信息</span></span><br><span class="line">[lamp@mcg dtest]$ touch lamp_test</span><br><span class="line">[lamp@mcg dtest]$ ll</span><br><span class="line">-rw-rw-r-- 1 lamp root 0 Apr 13 05:21 lamp_test</span><br></pre></td></tr></table></figure>
 <p><em>2.sgid授权方法: 2000权限字符s(S)，取决于属组位置上的x</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chmod 2755  directory </span></span><br><span class="line"><span class="comment"># chmod  g+s  directory</span></span><br></pre></td></tr></table></figure>
 <p><em>3.sgid作用<br>
@@ -262,7 +326,7 @@ F: 但如果将passwd命令的suid去掉会发生什么？？？</em></p>
 <h2 id="4特殊权限sbit">4.特殊权限SBIT</h2>
 <p><em>Sticky(SI TI KI)粘滞位目前只对目录有效，作用如下：<br>
 普通用户对该目录拥有 w 和 x 权限，即普通用户可以在此目录中拥有写入权限。如果没有粘滞位，那么普通用户拥有 w 权限，就可以删除此目录下的所有文件，包括其他用户建立的文件。但是一旦被赋予了粘滞位，除了 root 可以删除所有文件，普通用户就算拥有 w 权限，也只能删除自己建立的文件，而不能删除其他用户建立的文件。</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bgx tmp]<span class="comment"># ll -d /tmp/</span></span><br><span class="line">drwxrwxrwt. 12 root root 4096 Apr 13 05:32 /tmp/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg tmp]<span class="comment"># ll -d /tmp/</span></span><br><span class="line">drwxrwxrwt. 12 root root 4096 Apr 13 05:32 /tmp/</span><br></pre></td></tr></table></figure>
 <p><em>2.sticky授权方法，1000 权限字符t(T),其他用户位的x位上设置。</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chmod 1755  /tmp</span></span><br><span class="line"><span class="comment"># chmod o+t /tmp</span></span><br></pre></td></tr></table></figure>
 <p><em>3.sticky作用</em><br>
@@ -271,26 +335,26 @@ F: 但如果将passwd命令的suid去掉会发生什么？？？</em></p>
 3.一个目录即使它的权限为&quot;777&quot;如果是设置了粘滞位，除了目录的属主和&quot;root&quot;用户有权限删除，除此之外其他用户都不允许删除该目录。</em></p>
 <h2 id="2权限属性chattr">2.权限属性chattr</h2>
 <p><em>chatrr 只有 root 用户可以使用，用来修改文件系统的权限属性，建立凌驾于 rwx 基础权限之上的授权。<br>
-chatrr 命令格式：[root@bgx ~]# chattr [±=] [选项] 文件或目录名</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#选项: + 增加权限 -减少权限 =等于某个权限</span></span><br><span class="line"><span class="comment"># a：让文件或目录仅可追加内容</span></span><br><span class="line"><span class="comment"># i：不得任意更动文件或目录</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#1.创建文件并设置属性</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># touch file_a file_i</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># lsattr file_a file_i</span></span><br><span class="line">---------------- file_a</span><br><span class="line">---------------- file_i</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.使用chattr设置属性，lsattr查看权限限制</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># chattr +a file_a</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># chattr +i file_i</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># lsattr file_a file_i</span></span><br><span class="line">-----a---------- file_a</span><br><span class="line">----i----------- file_i</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.a权限，无法写入和删除文件，但可以追加数据，适合/etc/passwd这样的文件</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># echo "aa" &gt; file_a</span></span><br><span class="line">bash: file_a: Operation not permitted</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># rm -f file_a</span></span><br><span class="line">rm: cannot remove ‘file_a’: Operation not permitted</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># echo "aa" &gt;&gt; file_a</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#5.i权限, 无法写入，无法删除，适合不需要更改的重要文件加锁</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># echo "i" &gt; file_i</span></span><br><span class="line">bash: file_i: Permission denied</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># echo "i" &gt;&gt; file_i</span></span><br><span class="line">bash: file_i: Permission denied</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># rm -f  file_i</span></span><br><span class="line">rm: cannot remove ‘file_i’: Operation not permitted</span><br><span class="line"></span><br><span class="line"><span class="comment">#6.解除限制</span></span><br><span class="line">[root@tianyun ~]<span class="comment"># chattr -a file100 </span></span><br><span class="line">[root@tianyun ~]<span class="comment"># chattr -i file200</span></span><br></pre></td></tr></table></figure>
+chatrr 命令格式：[root@mcg ~]# chattr [±=] [选项] 文件或目录名</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#选项: + 增加权限 -减少权限 =等于某个权限</span></span><br><span class="line"><span class="comment"># a：让文件或目录仅可追加内容</span></span><br><span class="line"><span class="comment"># i：不得任意更动文件或目录</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#1.创建文件并设置属性</span></span><br><span class="line">[root@mcg ~]<span class="comment"># touch file_a file_i</span></span><br><span class="line">[root@mcg ~]<span class="comment"># lsattr file_a file_i</span></span><br><span class="line">---------------- file_a</span><br><span class="line">---------------- file_i</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.使用chattr设置属性，lsattr查看权限限制</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chattr +a file_a</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chattr +i file_i</span></span><br><span class="line">[root@mcg ~]<span class="comment"># lsattr file_a file_i</span></span><br><span class="line">-----a---------- file_a</span><br><span class="line">----i----------- file_i</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.a权限，无法写入和删除文件，但可以追加数据，适合/etc/passwd这样的文件</span></span><br><span class="line">[root@mcg ~]<span class="comment"># echo "aa" &gt; file_a</span></span><br><span class="line">bash: file_a: Operation not permitted</span><br><span class="line">[root@mcg ~]<span class="comment"># rm -f file_a</span></span><br><span class="line">rm: cannot remove ‘file_a’: Operation not permitted</span><br><span class="line">[root@mcg ~]<span class="comment"># echo "aa" &gt;&gt; file_a</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#5.i权限, 无法写入，无法删除，适合不需要更改的重要文件加锁</span></span><br><span class="line">[root@mcg ~]<span class="comment"># echo "i" &gt; file_i</span></span><br><span class="line">bash: file_i: Permission denied</span><br><span class="line">[root@mcg ~]<span class="comment"># echo "i" &gt;&gt; file_i</span></span><br><span class="line">bash: file_i: Permission denied</span><br><span class="line">[root@mcg ~]<span class="comment"># rm -f  file_i</span></span><br><span class="line">rm: cannot remove ‘file_i’: Operation not permitted</span><br><span class="line"></span><br><span class="line"><span class="comment">#6.解除限制</span></span><br><span class="line">[root@tianyun ~]<span class="comment"># chattr -a file100 </span></span><br><span class="line">[root@tianyun ~]<span class="comment"># chattr -i file200</span></span><br></pre></td></tr></table></figure>
 <h2 id="3进程掩码umask">3.进程掩码umask</h2>
-<p>*<strong>1.umask是什么?*</strong><br>
+<p><strong><em>1.umask是什么?</em></strong><br>
 <em>当我们登录系统之后创建一个文件总是有一个默认权限的，比如: 目录755、文件644、那么这个权限是怎么来的呢？这就是umask干的事情。umask设置了用户创建文件的默认权限。</em></p>
-<p>*<strong>2.umask是如何改变创建新文件的权限*</strong><br>
+<p><strong><em>2.umask是如何改变创建新文件的权限</em></strong><br>
 <em>系统默认umask为022，那么当我们创建一个目录时，正常情况下目录的权限应该是777，但umask表示要减去的值，所以新目录文件的权限应该是777 - 022 =755。至于文件的权限也依次类推666 - 022 =644。</em></p>
-<p>*<strong>3.umask涉及哪些配置文件*</strong><br>
+<p><strong><em>3.umask涉及哪些配置文件</em></strong><br>
 <em>umask涉及到的相关文件/etc/bashrc /etc/profile ~/.bashrc ~/.bash_profile<br>
 shell (vim,touch) --umask–&gt; 会影响创建的新文件或目录权限<br>
 vsftpd服务如果修改–umask–&gt; 会影响ftp服务中新创建文件或创建目录权限<br>
 useradd如果修改umask–&gt; 会影响用户HOME家目录权限</em></p>
-<p>*<strong>4.umask演示示例*</strong></p>
+<p><strong><em>4.umask演示示例</em></strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.假设umask值为：022（所有位为偶数）</span></span><br><span class="line"><span class="comment">#文件的起始权限值</span></span><br><span class="line">6 6 6  -  0 2 2  = 6 4 4 </span><br><span class="line"></span><br><span class="line"><span class="comment">#2.假设umask值为：045（其他用户组位为奇数）</span></span><br><span class="line"><span class="comment">#计算出来的权限。由于umask的最后一位数字是5，所以，在其他用户组位再加1。</span></span><br><span class="line">6 6 6  -   0 4 5 = 6 2 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.默认目录权限计算方法</span></span><br><span class="line">7 7 7  -  0 2 2 = 7 5 5</span><br><span class="line"> </span><br><span class="line"><span class="comment">#umask所有位全为偶数时</span></span><br><span class="line"><span class="comment"># umask 044</span></span><br><span class="line"><span class="comment"># mkdir d044   目录权限为733</span></span><br><span class="line"><span class="comment"># touch f044   文件权限为622</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#umask部分位为奇数时</span></span><br><span class="line"><span class="comment"># umask 023</span></span><br><span class="line"><span class="comment"># mkdir d023   目录权限为754</span></span><br><span class="line"><span class="comment"># touch f023   文件权限为644</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#umask值的所有位为奇数时</span></span><br><span class="line"><span class="comment"># umask 035</span></span><br><span class="line"><span class="comment"># mkdir d035   目录权限为742</span></span><br><span class="line"><span class="comment"># touch f035   文件权限为642</span></span><br></pre></td></tr></table></figure>
 <p><em>示例1: 在 shell 进程中创建文件</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看当前用户的umask权限</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># umask</span></span><br><span class="line">0022</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># touch file0022</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># mkdir dir0022</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ll -d file0022  dir0022/</span></span><br><span class="line">drwxr-xr-x 2 root root 6 Jan 24 09:02 dir0022/</span><br><span class="line">-rw-r--r-- 1 root root 0 Jan 24 09:02 file0022</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看当前用户的umask权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># umask</span></span><br><span class="line">0022</span><br><span class="line">[root@mcg ~]<span class="comment"># touch file0022</span></span><br><span class="line">[root@mcg ~]<span class="comment"># mkdir dir0022</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d file0022  dir0022/</span></span><br><span class="line">drwxr-xr-x 2 root root 6 Jan 24 09:02 dir0022/</span><br><span class="line">-rw-r--r-- 1 root root 0 Jan 24 09:02 file0022</span><br></pre></td></tr></table></figure>
 <p><em>示例2: 修改 shell umask 值(临时生效)</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># umask 000</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># mkdir dir000</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># touch file000</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ll -d dir000 file000</span></span><br><span class="line">drwxrwxrwx 2 root root 6 Jan 24 09:04 dir000</span><br><span class="line">-rw-rw-rw- 1 root root 0 Jan 24 09:04 file000</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># umask 000</span></span><br><span class="line">[root@mcg ~]<span class="comment"># mkdir dir000</span></span><br><span class="line">[root@mcg ~]<span class="comment"># touch file000</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d dir000 file000</span></span><br><span class="line">drwxrwxrwx 2 root root 6 Jan 24 09:04 dir000</span><br><span class="line">-rw-rw-rw- 1 root root 0 Jan 24 09:04 file000</span><br></pre></td></tr></table></figure>
 <p><em>示例3: 通过 umask 决定新建用户 HOME 目录的权限</em></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@xuliangwei ~]<span class="comment"># vim /etc/login.defs</span></span><br><span class="line">UMASK 077</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># useradd dba</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ll -d /home/dba/</span></span><br><span class="line">drwx------. 4 dba dba 4096 3 月 11 19:50 /home/dba/</span><br><span class="line"></span><br><span class="line">[root@tianyun ~]<span class="comment"># vim /etc/login.defs</span></span><br><span class="line">UMASK 000</span><br><span class="line">[root@xuliangwei ~]<span class="comment"># useradd sa</span></span><br><span class="line">[root@xuliangwei ~]<span class="comment"># ll -d /home/sa/</span></span><br><span class="line">drwxrwxrwx. 4 sa sa 4096 3 月 11 19:53 /home/sa/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># vim /etc/login.defs</span></span><br><span class="line">UMASK 077</span><br><span class="line">[root@mcg ~]<span class="comment"># useradd dba</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d /home/dba/</span></span><br><span class="line">drwx------. 4 dba dba 4096 3 月 11 19:50 /home/dba/</span><br><span class="line"></span><br><span class="line">[root@tianyun ~]<span class="comment"># vim /etc/login.defs</span></span><br><span class="line">UMASK 000</span><br><span class="line">[root@mcg ~]<span class="comment"># useradd sa</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d /home/sa/</span></span><br><span class="line">drwxrwxrwx. 4 sa sa 4096 3 月 11 19:53 /home/sa/</span><br></pre></td></tr></table></figure>
                 
 
                 <hr>
@@ -298,12 +362,12 @@ useradd如果修改umask–&gt; 会影响用户HOME家目录权限</em></p>
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/Linux/08.Linux之ACL控制/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（八）ACL控制">&larr; Previous Post</a>
+                            <a href="/article/Linux/09.Linux之ACL控制/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（九）ACL控制">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/Linux/07.Linux之基本权限/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（七）基本权限">Next Post &rarr;</a>
+                            <a href="/article/Linux/08.Linux之特殊权限/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（八）特殊权限">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -311,6 +375,14 @@ useradd如果修改umask–&gt; 会影响用户HOME家目录权限</em></p>
                 <br>
 
                 <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
                 
                 <!--打赏-->
 
@@ -353,7 +425,7 @@ useradd如果修改umask–&gt; 会影响用户HOME家目录权限</em></p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1特殊权限概述"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x7279;&#x6B8A;&#x6743;&#x9650;&#x6982;&#x8FF0;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2特殊权限suid"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x7279;&#x6B8A;&#x6743;&#x9650;SUID</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3特殊权限sgid"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x7279;&#x6B8A;&#x6743;&#x9650;SGID</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4特殊权限sbit"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x7279;&#x6B8A;&#x6743;&#x9650;SBIT</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2权限属性chattr"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">2.&#x6743;&#x9650;&#x5C5E;&#x6027;chattr</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3进程掩码umask"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">3.&#x8FDB;&#x7A0B;&#x63A9;&#x7801;umask</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1linux系统特殊权限"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.Linux&#x7CFB;&#x7EDF;&#x7279;&#x6B8A;&#x6743;&#x9650;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#11set_uid"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.1set_uid</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#12set_gid"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">1.2set_gid</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#13sticky粘滞位"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">1.3sticky&#x7C98;&#x6EDE;&#x4F4D;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2权限属性chattr"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x6743;&#x9650;&#x5C5E;&#x6027;chattr</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3特殊权限sgid"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x7279;&#x6B8A;&#x6743;&#x9650;SGID</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4特殊权限sbit"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x7279;&#x6B8A;&#x6743;&#x9650;SBIT</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2权限属性chattr"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">2.&#x6743;&#x9650;&#x5C5E;&#x6027;chattr</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3进程掩码umask"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">3.&#x8FDB;&#x7A0B;&#x63A9;&#x7801;umask</span></a></li></ol>
         
         </div>
       </aside>

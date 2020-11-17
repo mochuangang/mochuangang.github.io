@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Mysql]Mysql（二）常用命令 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Mysql/02Mysql常用命令/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Mysql" title="Mysql">Mysql</a>
+                            
+                        </div>
+                        <h1>[Mysql]Mysql（二）常用命令</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-11-16
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="mysql常用命令">MySQL常用命令</h2>
+<p><em>修改用户密码</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; alter user root@localhost identified by &apos;123456&apos;;</span><br></pre></td></tr></table></figure>
+<p><em>赋予数据库所有表的授权给root用户</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY &apos;ruozedata&apos; ;</span><br><span class="line"># %代表了 任意的客户端的IP地址 都被允许使用jepson用户来远程访问</span><br><span class="line"></span><br><span class="line">mysql&gt;grant all privileges on ruozedata.* to jepson@&apos;16.2.3.%&apos; identified by &apos;ruozedata&apos;;</span><br><span class="line">&apos;16.2.3.%&apos;表示16.2.3这个网段的所有ip都允许有权限去访问</span><br><span class="line">比如 16.2.3.1-16.2.3.255这个网段的ip都可以访问</span><br></pre></td></tr></table></figure>
+<p><strong><em>【注意】：对于mysql的用户操作，比如权限相关的，最后一步必须执行刷新权限。</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;flush privileges;</span><br></pre></td></tr></table></figure>
+<p><em>登录数据库</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">ruozedata01:mysqladmin:/usr/local/mysql/:&gt;mysql -uroot -p123456 -h192.168.9.101</span><br><span class="line"># 这么登录不安全</span><br><span class="line"># 推荐不明文输入密码</span><br><span class="line">ruozedata01:mysqladmin:/usr/local/mysql/:&gt;mysql -uroot -p -h192.168.9.101</span><br><span class="line"></span><br><span class="line"># 列出当前用户可查看的所有数据库</span><br><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br><span class="line">4 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line"># 切换到mysql库中</span><br><span class="line">mysql&gt; use mysql;</span><br><span class="line">Database changed</span><br><span class="line"></span><br><span class="line">#查看mysql库中的所有表</span><br><span class="line">mysql&gt; show tables;</span><br><span class="line"></span><br><span class="line">#查看表结构</span><br><span class="line">mysql&gt; desc db;</span><br><span class="line">+-----------------------+---------------+------+-----+---------+-------+</span><br><span class="line">| Field                 | Type          | Null | Key | Default | Extra |</span><br><span class="line">+-----------------------+---------------+------+-----+---------+-------+</span><br><span class="line">| Host                  | char(60)      | NO   | PRI |         |       |</span><br><span class="line">| Db                    | char(64)      | NO   | PRI |         |       |</span><br><span class="line">| User                  | char(32)      | NO   | PRI |         |       |</span><br><span class="line">| Select_priv           | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Insert_priv           | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Update_priv           | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Delete_priv           | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Create_priv           | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Drop_priv             | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Grant_priv            | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| References_priv       | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Index_priv            | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Alter_priv            | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Create_tmp_table_priv | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Lock_tables_priv      | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Create_view_priv      | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Show_view_priv        | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Create_routine_priv   | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Alter_routine_priv    | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Execute_priv          | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Event_priv            | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">| Trigger_priv          | enum(&apos;N&apos;,&apos;Y&apos;) | NO   |     | N       |       |</span><br><span class="line">+-----------------------+---------------+------+-----+---------+-------+</span><br><span class="line">22 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">#查看创建表的语句</span><br><span class="line">mysql&gt; show create table DB \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">       Table: DB</span><br><span class="line">Create Table: CREATE TABLE `db` (</span><br><span class="line">  `Host` char(60) COLLATE utf8_bin NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `Db` char(64) COLLATE utf8_bin NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `User` char(32) COLLATE utf8_bin NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `Select_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Insert_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Update_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Delete_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Create_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Drop_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Grant_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `References_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Index_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Alter_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Create_tmp_table_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Lock_tables_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Create_view_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Show_view_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Create_routine_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Alter_routine_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Execute_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Event_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  `Trigger_priv` enum(&apos;N&apos;,&apos;Y&apos;) CHARACTER SET utf8 NOT NULL DEFAULT &apos;N&apos;,</span><br><span class="line">  PRIMARY KEY (`Host`,`Db`,`User`),</span><br><span class="line">  KEY `User` (`User`)</span><br><span class="line">) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT=&apos;Database privileges&apos;</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"># 查询db表中的数据</span><br><span class="line">mysql&gt; select User,Host,db,Select_priv,Delete_priv from db;</span><br><span class="line">+---------------+-----------+--------------------+-------------+-------------+</span><br><span class="line">| User          | Host      | db                 | Select_priv | Delete_priv |</span><br><span class="line">+---------------+-----------+--------------------+-------------+-------------+</span><br><span class="line">| mysql.session | localhost | performance_schema | Y           | N           |</span><br><span class="line">| mysql.sys     | localhost | sys                | N           | N           |</span><br><span class="line">+---------------+-----------+--------------------+-------------+-------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p><em>杀会话</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 显示会话</span><br><span class="line">mysql&gt; show processlist;</span><br><span class="line">+----+------+-------------------+-------+---------+-------+----------+------------------+</span><br><span class="line">| Id | User | Host              | db    | Command | Time  | State    | Info             |</span><br><span class="line">+----+------+-------------------+-------+---------+-------+----------+------------------+</span><br><span class="line">|  3 | root | 192.168.9.1:3950  | NULL  | Sleep   | 80425 |          | NULL             |</span><br><span class="line">|  4 | root | 192.168.9.1:3951  | NULL  | Sleep   | 80432 |          | NULL             |</span><br><span class="line">|  5 | root | localhost         | NULL  | Sleep   | 79754 |          | NULL             |</span><br><span class="line">|  7 | root | localhost         | NULL  | Sleep   | 79769 |          | NULL             |</span><br><span class="line">|  8 | root | ruozedata01:53302 | mysql | Query   |     0 | starting | show processlist |</span><br><span class="line">+----+------+-------------------+-------+---------+-------+----------+------------------+</span><br><span class="line"></span><br><span class="line"># kill 会话</span><br><span class="line">mysql&gt; kill 7 # 7为查出来的id</span><br></pre></td></tr></table></figure>
+<h2 id="mysql数据类型"><em>MySQL数据类型</em></h2>
+<p><em>1.字段类型</em></p>
+<p>整型系列：int</p>
+<blockquote>
+<p>int(M)，必须和unsigned zerofill一起使用才有意义</p>
+</blockquote>
+<p>长整型：long</p>
+<p><img src="/img/article/mysql/1560933629123.png" alt="1560933629123"></p>
+<p>浮点型系列：float,double</p>
+<blockquote>
+<p>double(M,D)：表示最长为M位，其中小数点后D位</p>
+<p>例如：double(5,2)表示的数据范围[-999.99,999.99]，如果超过这个范围会报错。</p>
+</blockquote>
+<p>定点型系列：decimal</p>
+<blockquote>
+<p>decimal(M,D)：表示最长为M位，其中小数点后D位</p>
+</blockquote>
+<p>字符串类型：char,varchar(M),text</p>
+<blockquote>
+<p>char如果没有指定宽度，默认为1个字符，定长0-255长度</p>
+<p>varchar(M)，字符串，必须指定宽度，变长0-65535字节</p>
+</blockquote>
+<p>日期时间类型：year, date, time,datetime, timestamp</p>
+<blockquote>
+<p>注意一下每一种日期时间的表示范围</p>
+</blockquote>
+<p><img src="/img/article/mysql/1560933691657.png" alt="1560933691657"></p>
+<h2 id="2sql类型"><em>2.sql类型</em></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ddl  数据定义语言  create  drop</span><br><span class="line">dml  数据操作语言  select insert update delete 增删改查</span><br><span class="line">dcl  数据控制语言  grant</span><br></pre></td></tr></table></figure>
+<h2 id="3建表规范"><em>3.建表规范</em></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">create table ruozedata.rz(</span><br><span class="line">id int(11)  not null auto_increment, 第一列必须是自增长id</span><br><span class="line">name varchar(255),</span><br><span class="line">age  int(3),</span><br><span class="line"></span><br><span class="line">create_user varchar(255),</span><br><span class="line">create_time timestamp not null default current_timestamp, # 不准为空，默认值为当前时间current_timestamp</span><br><span class="line"></span><br><span class="line">update_user varchar(255),</span><br><span class="line">    </span><br><span class="line"># 不准为空，默认值为当前时间current_timestamp且当表的数据更新了，update_time字段的时间是自动变化的</span><br><span class="line">update_time timestamp not null default current_timestamp on update current_timestamp,</span><br><span class="line">primary key(id)  主键= 唯一约束 +not null非空约束</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>规范:<br>
+1.表名称  字段名称 不要写中文  尽量不要汉语拼音<br>
+2.统一风格:<br>
+已经存在表结构设计，风格比如是create_user;<br>
+3.第一个字段必须是自增长字段 主键，且 无业务意义   架构设计默认规则<br>
+4.一张表只有一个主键 id，业务字段需要唯一的话，就使用唯一约束来保证。<br>
+5.后面四个字段  务必加上<br>
+6.业务字段  注释务必要加上 ,comment ‘xxxxx’</p>
+</blockquote>
+<h2 id="4增删改查"><em>4.增删改查</em></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 插入数据</span><br><span class="line">insert into ruozedata.rz(name,age) values(&apos;ruoze&apos;,18); </span><br><span class="line"></span><br><span class="line"># 更改数据</span><br><span class="line">update ruozedata.rz set age=38 where name=&apos;ruoze&apos;;</span><br><span class="line"></span><br><span class="line"># 查询数据</span><br><span class="line">select * from ruozedata.rz;</span><br><span class="line"></span><br><span class="line"># 删除数据</span><br><span class="line">delete from ruozedata.rz where id=1;</span><br></pre></td></tr></table></figure>
+<h2 id="5其他语法"><em>5.其他语法</em></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个表</span><br><span class="line"></span><br><span class="line">create table ruozedata.rz(</span><br><span class="line">id    int(11)  not null auto_increment, </span><br><span class="line"></span><br><span class="line">name  varchar(255) comment &apos;姓名&apos;,</span><br><span class="line">age   int(3) comment &apos;年龄&apos;,</span><br><span class="line"></span><br><span class="line">create_user varchar(255),</span><br><span class="line">create_time timestamp not null default current_timestamp,</span><br><span class="line">update_user varchar(255),</span><br><span class="line">update_time timestamp not null default current_timestamp on update current_timestamp,</span><br><span class="line">primary key(id)</span><br><span class="line">);</span><br><span class="line">奠定了数据仓库的建设的基础</span><br><span class="line"></span><br><span class="line"># 插入数据</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values (&apos;ruoze&apos;,18);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values (&apos;jepson&apos;,16);</span><br><span class="line">Query OK, 1 row affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from rz;</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">| id | name   | age  | create_user | create_time         | update_user | update_time         |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">|  1 | ruoze  |   18 | NULL        | 2020-11-16 22:55:15 | NULL        | 2020-11-16 22:55:15 |</span><br><span class="line">|  2 | jepson |   16 | NULL        | 2020-11-16 22:55:25 | NULL        | 2020-11-16 22:55:25 |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line"></span><br><span class="line"># 更新数据</span><br><span class="line">mysql&gt; update ruozedata.rz set age=38 where name=&apos;ruoze&apos;;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from ruozedata.rz;</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">| id | name   | age  | create_user | create_time         | update_user | update_time         |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">|  1 | ruoze  |   38 | NULL        | 2020-11-16 22:55:15 | NULL        | 2020-11-16 22:56:55 |</span><br><span class="line">|  2 | jepson |   16 | NULL        | 2020-11-16 22:55:25 | NULL        | 2020-11-16 22:55:25 |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"># 删除数据</span><br><span class="line">mysql&gt; delete from ruozedata.rz where id=1;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from ruozedata.rz;</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">| id | name   | age  | create_user | create_time         | update_user | update_time         |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">|  2 | jepson |   16 | NULL        | 2020-11-16 22:55:25 | NULL        | 2020-11-16 22:55:25 |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"># 插入create_user,update_user数据</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age,create_user,update_user) values(&apos;ruoze&apos;,18,&apos;xingxing&apos;,&apos;xingxing&apos;);</span><br><span class="line">Query OK, 1 row affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from rz;</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">| id | name   | age  | create_user | create_time         | update_user | update_time         |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">|  2 | jepson |   16 | NULL        | 2020-11-16 22:55:25 | NULL        | 2020-11-16 22:55:25 |</span><br><span class="line">|  3 | ruoze  |   18 | xingxing    | 2020-11-16 23:02:28 | xingxing    | 2020-11-16 23:02:28 |</span><br><span class="line">+----+--------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line"></span><br><span class="line"># 插入数据</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values(&apos;jepson&apos;,16);</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values(&apos;xingxing&apos;,14);</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values(&apos;xiao17&apos;,12);</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values(&apos;jepson&apos;,22);</span><br><span class="line">mysql&gt; insert into ruozedata.rz(name,age) values(&apos;jfpson&apos;,22);</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from rz;</span><br><span class="line">+----+----------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">| id | name     | age  | create_user | create_time         | update_user | update_time         |</span><br><span class="line">+----+----------+------+-------------+---------------------+-------------+---------------------+</span><br><span class="line">|  2 | jepson   |   16 | NULL        | 2020-11-16 22:55:25 | NULL        | 2020-11-16 22:55:25 |</span><br><span class="line">|  3 | ruoze    |   18 | xingxing    | 2020-11-16 23:02:28 | xingxing    | 2020-11-16 23:02:28 |</span><br><span class="line">|  4 | jepson   |   16 | NULL        | 2020-11-16 23:03:52 | NULL        | 2020-11-16 23:03:52 |</span><br><span class="line">|  5 | xingxing |   14 | NULL        | 2020-11-16 23:03:52 | NULL        | 2020-11-16 23:03:52 |</span><br><span class="line">|  6 | xiao17   |   12 | NULL        | 2020-11-16 23:03:52 | NULL        | 2020-11-16 23:03:52 |</span><br><span class="line">|  7 | jepson   |   22 | NULL        | 2020-11-16 23:03:52 | NULL        | 2020-11-16 23:03:52 |</span><br><span class="line">|  8 | jfpson   |   22 | NULL        | 2020-11-16 23:04:24 | NULL        | 2020-11-16 23:04:24 |</span><br><span class="line">+----+----------+------+-------------+---------------------+-------------+---------------------+</span><br></pre></td></tr></table></figure>
+<p><em>1.过滤<code>where</code></em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">select * from ruozedata.rz  where name=&apos;ruoze&apos;;</span><br><span class="line"></span><br><span class="line"># and 相当并且</span><br><span class="line">select * from ruozedata.rz  where name=&apos;jepson&apos; and age=22;</span><br><span class="line"></span><br><span class="line"># or 或者</span><br><span class="line">select * from ruozedata.rz  where age=16 or age=12;</span><br><span class="line"></span><br><span class="line"># in </span><br><span class="line">select * from ruozedata.rz  where age in (16,12);</span><br><span class="line"></span><br><span class="line">select * from ruozedata.rz a where exists (</span><br><span class="line">select b.id from ruozedata.rz b </span><br><span class="line">where (age=16 or age=12 ) and a.id=b.id </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">select * from ruozedata.rz  where age &gt;12;</span><br></pre></td></tr></table></figure>
+<p><em>2.排序语法<code>order by</code></em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># asc 默认正序</span><br><span class="line">select * from ruozedata.rz order by age;</span><br><span class="line">select * from ruozedata.rz order by age asc;</span><br><span class="line"></span><br><span class="line"># desc 倒序</span><br><span class="line">select * from ruozedata.rz order by age desc , name desc ;</span><br></pre></td></tr></table></figure>
+<p><em>3.模糊匹配<code>like</code></em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select * from ruozedata.rz where name like &apos;j%&apos;;  字母j开头</span><br><span class="line">select * from ruozedata.rz where name like &apos;%n&apos;;  字母n开头</span><br><span class="line"></span><br><span class="line">select * from ruozedata.rz where name like &apos;%o%&apos;;  含有o</span><br><span class="line"></span><br><span class="line"># _ 占位符</span><br><span class="line">select * from ruozedata.rz where name like &apos;__p%&apos;; 第三位p</span><br></pre></td></tr></table></figure>
+<p><code>4.合并表</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table t1(id int,name varchar(255));</span><br><span class="line">create table t2(id int,name varchar(255));</span><br><span class="line"></span><br><span class="line">insert into t1 values(1,&apos;ruoze&apos;);</span><br><span class="line">insert into t2 values(1,&apos;ruoze&apos;);</span><br><span class="line">insert into t2 values(2,&apos;jepson&apos;);</span><br><span class="line"></span><br><span class="line"># union 过滤重复</span><br><span class="line">select * from t1;</span><br><span class="line">union</span><br><span class="line">select * from t1;</span><br><span class="line"></span><br><span class="line"># union all 不过滤重复</span><br><span class="line">select * from t1;</span><br><span class="line">union all</span><br><span class="line">select * from t1;</span><br></pre></td></tr></table></figure>
+<p><em>5.分组语法 <code>group by ....having ....</code></em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># 分组/聚合函数</span><br><span class="line">sum </span><br><span class="line">avg</span><br><span class="line">max</span><br><span class="line">min</span><br><span class="line">count</span><br><span class="line"></span><br><span class="line"># 不带分组字段的</span><br><span class="line">select </span><br><span class="line">sum(age),avg(age),max(age),min(age),count(*)</span><br><span class="line">from ruozedata.rz ;</span><br><span class="line"></span><br><span class="line"># 分组字段的</span><br><span class="line">select </span><br><span class="line">name,</span><br><span class="line">sum(age),count(1)</span><br><span class="line">from ruozedata.rz </span><br><span class="line">group by name</span><br><span class="line">having sum(age)&gt;18;</span><br><span class="line"></span><br><span class="line">==&gt; 等价于 子查询进行筛选</span><br><span class="line">select * from </span><br><span class="line">(</span><br><span class="line">	select </span><br><span class="line">	name,</span><br><span class="line">	sum(age) as sum_age,count(1) as c</span><br><span class="line">	from ruozedata.rz </span><br><span class="line">	group by name</span><br><span class="line">) as t where t.sum_age&gt;18;</span><br></pre></td></tr></table></figure>
+<p><strong><em>datetime、timestamp什么区别 ？</em></strong></p>
+<blockquote>
+<p><em>两者都可用来表示YYYY-MM-DD HH:MM:SS[.fraction]类型的日期。</em><br>
+<em>两者的存储方式不一样：</em><br>
+<em>对于TIMESTAMP，它把客户端插入的时间从当前时区转化为UTC（世界标准时间）进行存储。查询时，将其又转化为客户端当前时区进行返回。</em><br>
+<em>而对于DATETIME，不做任何改变，基本上是原样输入和输出。</em></p>
+</blockquote>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Mysql/01Mysql安装/" data-toggle="tooltip" data-placement="top" title="[Mysql]Mysql Linux安装5.7.26">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql常用命令"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">MySQL&#x5E38;&#x7528;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql数据类型"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"><em>MySQL&#x6570;&#x636E;&#x7C7B;&#x578B;</em></span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2sql类型"><span class="toc-nav-number">3.</span> <span class="toc-nav-text"><em>2.sql&#x7C7B;&#x578B;</em></span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3建表规范"><span class="toc-nav-number">4.</span> <span class="toc-nav-text"><em>3.&#x5EFA;&#x8868;&#x89C4;&#x8303;</em></span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4增删改查"><span class="toc-nav-number">5.</span> <span class="toc-nav-text"><em>4.&#x589E;&#x5220;&#x6539;&#x67E5;</em></span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5其他语法"><span class="toc-nav-number">6.</span> <span class="toc-nav-text"><em>5.&#x5176;&#x4ED6;&#x8BED;&#x6CD5;</em></span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Mysql" title="Mysql">Mysql</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

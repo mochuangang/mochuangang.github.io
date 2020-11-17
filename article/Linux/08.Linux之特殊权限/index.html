@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Linux] linux基础之（八）特殊权限 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Linux/08.Linux之特殊权限/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/linux.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                            
+                        </div>
+                        <h1>[Linux] linux基础之（八）特殊权限</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2018-06-15
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="1linux系统特殊权限">1.Linux系统特殊权限</h2>
+<hr>
+<p><em>对可执⾏⽂件的<code>setuid</code>(或<code>setgid</code>)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># ll /usr/bin/passwd</span></span><br><span class="line">-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd</span><br></pre></td></tr></table></figure>
+<p><em>⽬录粘滞位可以为⽂件删除设置特殊限制, 仅⽂件所有者(和root⽤户)可以删除⽬录中的⽂件。</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># ll -d /tmp /var/tmp/</span></span><br><span class="line">drwxrwxrwt. 8 root root 184 Nov 14 19:46 /tmp</span><br><span class="line">drwxrwxrwt. 3 root root  18 Nov  7 20:35 /var/tmp/</span><br></pre></td></tr></table></figure>
+<p><em>最后, 对某⽬录的 <code>setgid</code>权限表示在该⽬录中创建的⽂件将继承该⽬录的组所属关系, ⽽不是继 承⾃创建⽤户, 这通常⽤于组协作⽬录, 将⽂件从默认的专有组⾃动更改为共享组。</em></p>
+<p><strong><em>特殊权限对文件和目录得影响</em></strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特殊权限</th>
+<th style="text-align:left">对⽂件的影响</th>
+<th style="text-align:center">对⽬录的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">u+s suid</td>
+<td style="text-align:left">以拥有⽂件的⽤户身份, ⽽ 不是运⾏⽂件的⽤户身份 执⾏⽂件</td>
+<td style="text-align:center">⽆影响</td>
+</tr>
+<tr>
+<td style="text-align:center">g+s sgid</td>
+<td style="text-align:left">以拥有⽂件的组身份执⾏ ⽂件</td>
+<td style="text-align:center">在⽬录中最新创建的⽂件将其组所有者设置为与 ⽬录的组所有者相匹配</td>
+</tr>
+<tr>
+<td style="text-align:center">o+t sticky</td>
+<td style="text-align:left">⽆影响</td>
+<td style="text-align:center">对⽬录具有写⼊权限的⽤户仅可以删除其所拥有 的⽂件, ⽽⽆法删除或强制保存到其他⽤户所拥 有的⽂件</td>
+</tr>
+</tbody>
+</table>
+<p>如何设置特殊权限<br>
+⽤符号表示: <code>setuid=u+s; setgid=g+s; sticky=o+t</code><br>
+⽤数值表示: <code>setuid=4; setgid=2; sticky=1</code></p>
+<h3 id="11set_uid">1.1set_uid</h3>
+<p><em>⽂件的执⾏有效身份为⽂件的拥有者,⽽不是执⾏者的身份。</em></p>
+<p><img src="/img/article/linux/Snipaste_2020-11-14_23-13-30.png" alt="Snipaste_2020-11-14_23-13-30"></p>
+<p><strong><em>演示</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//检查passwd⽂件权限,匿名⽤户没有权限查看</span><br><span class="line">[root@mcg ~]<span class="comment"># chmod	640	/etc/passwd</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /etc/passwd</span></span><br><span class="line">-rw-r-----	1	root root 1548 Dec	9 18:45	/etc/passwd</span><br><span class="line"></span><br><span class="line">//使⽤普通⽤户⽆法查看</span><br><span class="line">[mcg@mcg root]$	cat	/etc/passwd</span><br><span class="line">cat: /etc/passwd: Permission denied</span><br><span class="line"></span><br><span class="line">//给cat命令赋予suid</span><br><span class="line">1.1set_uid</span><br><span class="line">[root@mcg ~]<span class="comment"># chmod	4755 /bin/cat</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll /bin/cat</span></span><br><span class="line">-rwsr-xr-x.	1 root root	48568 Mar 23 2017 /bin/cat</span><br></pre></td></tr></table></figure>
+<p><strong><em>suid授权⽅法</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">suid 4000 权限字符s(S),⽤户位置上的x位上设置。</span><br><span class="line">授权⽅法：chmod 4755 passwd</span><br><span class="line">		chmod u+s  passwd</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em><code>suid</code>作⽤</em><br>
+<em>让普通⽤户临时拥有可执⾏的⼆进制⽂件的所属主权限，⼆进制⽂件需要有执⾏权限。</em><br>
+<em>当⼆进制⽂件没有执⾏权限,<code>suid</code>的权限显示就是⼤S。<code>suid</code>仅对⼆进制可执⾏程序有效。</em><br>
+<em>如果普通需要操作没有权限的⽂件，为对应的命令赋予<code>Suid</code>权限，可以实现操作。</em><br>
+<em>注意：<code>suid</code>双刃剑,是⼀个⽐较危险的功能,对系统安全有⼀定的威胁。</em></p>
+</blockquote>
+<h3 id="12set_gid">1.2set_gid</h3>
+<p><em>1.⽂件的有效执⾏组身份为⽂件的拥有组,⽽不是执⾏者的组身份</em><br>
+<em>2.⽬录⾥新建的⽂件的拥有组会⾃动继承⽬录的拥有组身份</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg /]<span class="comment"># chmod 777 /opt/</span></span><br><span class="line">[root@mcg /]<span class="comment"># chmod g+s /opt/</span></span><br><span class="line">[root@mcg /]<span class="comment"># su - mcg</span></span><br><span class="line">[mcg@mcg ~]$ mkdir /opt/sgid_test</span><br><span class="line">[mcg@mcg ~]$ ll /opt/sgid_test -d</span><br><span class="line">drwxrwsr-x.	2	mcg	root	4096	Nov	14 00:27	/opt/sgid_test</span><br></pre></td></tr></table></figure>
+<p><strong><em>sgid授权⽅法</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">suid	2000 权限字符s(S),⽤户位置上的x位上设置。</span><br><span class="line">授权⽅法：chmod 2755 directory</span><br><span class="line">		chmod g+s  directory</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em><code>sgid</code>作⽤</em><br>
+<em>针对⽤户组权限位修改，⽤户创建的⽬录或⽂件所属组和该⽬录的所属组⼀致。</em><br>
+<em>默认所有⽤户创建⽂件，⽤户和组都是⾃身，<code>Sgid</code>可以让其他⽤户再此⽬录下创建的⽂件和 ⽬录，具有和此⽬录相同的⽤户组设置。</em><br>
+<em>当为某个⽬录设置了<code>sgid</code>位以后，在该⽬录中新创建的⽂件具有该⽬录的所有组权限，⽽不<br>
+是创建该⽂件的⽤户的默认所有者。这样,使得在多个⽤户之间共享⼀个⽬录中的⽂件变得.简单</em></p>
+</blockquote>
+<h3 id="13sticky粘滞位">1.3sticky粘滞位</h3>
+<p><code>sticky</code>对⽬录有写权限的⽤户仅仅可以删除⽬录⾥属于⾃⼰的⽂件,不能删除其他⽤户的⽂件 <code>/tmp</code> ⽬录是经典的粘滞位⽬录，谁都有写权限，因此安全成问题，常常是⽊⻢第⼀⼿跳板。</p>
+<p><strong><em><code>sticky</code>授权⽅法</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">粘滞位		1000 权限字符t(T),其他⽤户位的x位上设置。</span><br><span class="line">授权⽅法：chmod 1755 /tmp</span><br><span class="line">		chmod o+t  /tmp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><em><code>sticky</code>作⽤</em><br>
+<em>让多个⽤户都具有写权限的⽬录，每个⽤户只能删⾃⼰的⽂件，表现在others的x位，⽤⼩t 表示，</em><br>
+如果没有执⾏权限是T，那么⼀个⽬录即使它的权限为 “777” 如果是设置了粘滞位， 除了⽬录的属主和 ”root“ ⽤户有权限删除，除此之外其他⽤户不能删除这个⽬录。*</p>
+</blockquote>
+<h2 id="2权限属性chattr">2.权限属性chattr</h2>
+<hr>
+<p><em>chatrr 只有 root 用户可以使用，用来修改文件系统的权限属性，建立凌驾于 rwx 基础权限之上的授权。<br>
+chatrr 命令格式：[root@mcg ~]# chattr [±=] [选项] 文件或目录名</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#选项: + 增加权限 -减少权限 =等于某个权限</span></span><br><span class="line"><span class="comment"># a：让文件或目录仅可追加内容</span></span><br><span class="line"><span class="comment"># i：不得任意更动文件或目录</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#1.创建文件并设置属性</span></span><br><span class="line">[root@mcg ~]<span class="comment"># touch file_a file_i</span></span><br><span class="line">[root@mcg ~]<span class="comment"># lsattr file_a file_i</span></span><br><span class="line">---------------- file_a</span><br><span class="line">---------------- file_i</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.使用chattr设置属性，lsattr查看权限限制</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chattr +a file_a</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chattr +i file_i</span></span><br><span class="line">[root@mcg ~]<span class="comment"># lsattr file_a file_i</span></span><br><span class="line">-----a---------- file_a</span><br><span class="line">----i----------- file_i</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.a权限，无法写入和删除文件，但可以追加数据，适合/etc/passwd这样的文件</span></span><br><span class="line">[root@mcg ~]<span class="comment"># echo "aa" &gt; file_a</span></span><br><span class="line">bash: file_a: Operation not permitted</span><br><span class="line">[root@mcg ~]<span class="comment"># rm -f file_a</span></span><br><span class="line">rm: cannot remove ‘file_a’: Operation not permitted</span><br><span class="line">[root@mcg ~]<span class="comment"># echo "aa" &gt;&gt; file_a</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#5.i权限, 无法写入，无法删除，适合不需要更改的重要文件加锁</span></span><br><span class="line">[root@mcg ~]<span class="comment"># echo "i" &gt; file_i</span></span><br><span class="line">bash: file_i: Permission denied</span><br><span class="line">[root@mcg ~]<span class="comment"># echo "i" &gt;&gt; file_i</span></span><br><span class="line">bash: file_i: Permission denied</span><br><span class="line">[root@mcg ~]<span class="comment"># rm -f  file_i</span></span><br><span class="line">rm: cannot remove ‘file_i’: Operation not permitted</span><br><span class="line"></span><br><span class="line"><span class="comment">#6.解除限制</span></span><br><span class="line">[root@tianyun ~]<span class="comment"># chattr -a file100 </span></span><br><span class="line">[root@tianyun ~]<span class="comment"># chattr -i file200</span></span><br></pre></td></tr></table></figure>
+<h2 id="3进程掩码umask">3.进程掩码umask</h2>
+<hr>
+<p><strong><em>1.<code>umask</code>是什么?</em></strong><br>
+<em>当我们登录系统之后创建一个文件总是有一个默认权限的，比如: 目录755、文件644、那么这个权限是怎么来的呢？这就是<code>umask</code>干的事情。<code>umask</code>设置了用户创建文件的默认权限。</em></p>
+<p><strong><em>2.<code>umask</code>是如何改变创建新文件的权限</em></strong><br>
+<em>系统默认<code>umask</code>为022，那么当我们创建一个目录时，正常情况下目录的权限应该是777，但<code>umask</code>表示要减去的值，所以新目录文件的权限应该是777 - 022 =755。至于文件的权限也依次类推666 - 022 =644。</em></p>
+<p><strong><em>3.umask涉及哪些配置文件</em></strong><br>
+<em><code>umask</code>涉及到的相关文件<code>/etc/bashrc /etc/profile ~/.bashrc ~/.bash_profile</code></em></p>
+<blockquote>
+<p><strong><em>注意umask影响的范围</em></strong><br>
+<em>shell (vim,touch) --umask–&gt; 会影响创建的新文件或目录权限<br>
+vsftpd服务如果修改–umask–&gt; 会影响ftp服务中新创建文件或创建目录权限<br>
+useradd如果修改umask–&gt; 会影响用户HOME家目录权限</em></p>
+</blockquote>
+<p><strong><em>4.umask演示示例</em></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.假设umask值为：022（所有位为偶数）</span></span><br><span class="line"><span class="comment">#文件的起始权限值</span></span><br><span class="line">6 6 6  -  0 2 2  = 6 4 4 </span><br><span class="line"></span><br><span class="line"><span class="comment">#2.假设umask值为：045（其他用户组位为奇数）</span></span><br><span class="line"><span class="comment">#计算出来的权限。由于umask的最后一位数字是5，所以，在其他用户组位再加1。</span></span><br><span class="line">6 6 6  -   0 4 5 = 6 2 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.默认目录权限计算方法</span></span><br><span class="line">7 7 7  -  0 2 2 = 7 5 5</span><br><span class="line"> </span><br><span class="line"><span class="comment">#umask所有位全为偶数时</span></span><br><span class="line"><span class="comment"># umask 044</span></span><br><span class="line"><span class="comment"># mkdir d044   目录权限为733</span></span><br><span class="line"><span class="comment"># touch f044   文件权限为622</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#umask部分位为奇数时</span></span><br><span class="line"><span class="comment"># umask 023</span></span><br><span class="line"><span class="comment"># mkdir d023   目录权限为754</span></span><br><span class="line"><span class="comment"># touch f023   文件权限为644</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#umask值的所有位为奇数时</span></span><br><span class="line"><span class="comment"># umask 035</span></span><br><span class="line"><span class="comment"># mkdir d035   目录权限为742</span></span><br><span class="line"><span class="comment"># touch f035   文件权限为642</span></span><br></pre></td></tr></table></figure>
+<p><em>示例1: 在 <code>shell</code> 进程中创建文件</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看当前用户的umask权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># umask</span></span><br><span class="line">0022</span><br><span class="line">[root@mcg ~]<span class="comment"># touch file0022</span></span><br><span class="line">[root@mcg ~]<span class="comment"># mkdir dir0022</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d file0022  dir0022/</span></span><br><span class="line">drwxr-xr-x 2 root root 6 Jan 24 09:02 dir0022/</span><br><span class="line">-rw-r--r-- 1 root root 0 Jan 24 09:02 file0022</span><br></pre></td></tr></table></figure>
+<p><em>示例2: 修改 <code>shell umask</code> 值(临时生效)</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># umask 000</span></span><br><span class="line">[root@mcg ~]<span class="comment"># mkdir dir000</span></span><br><span class="line">[root@mcg ~]<span class="comment"># touch file000</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d dir000 file000</span></span><br><span class="line">drwxrwxrwx 2 root root 6 Jan 24 09:04 dir000</span><br><span class="line">-rw-rw-rw- 1 root root 0 Jan 24 09:04 file000</span><br></pre></td></tr></table></figure>
+<p><em>示例3: 通过<code>umask</code>决定新建用户 HOME 目录的权限</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># vim /etc/login.defs</span></span><br><span class="line">UMASK 077</span><br><span class="line">[root@mcg ~]<span class="comment"># useradd dba</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d /home/dba/</span></span><br><span class="line">drwx------. 4 dba dba 4096 3 月 11 19:50 /home/dba/</span><br><span class="line"></span><br><span class="line">[root@tianyun ~]<span class="comment"># vim /etc/login.defs</span></span><br><span class="line">UMASK 000</span><br><span class="line">[root@mcg ~]<span class="comment"># useradd sa</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d /home/sa/</span></span><br><span class="line">drwxrwxrwx. 4 sa sa 4096 3 月 11 19:53 /home/sa/</span><br></pre></td></tr></table></figure>
+<h2 id="4特殊权限练习题">4.特殊权限练习题</h2>
+<hr>
+<p><code>lab	permissions	setup</code></p>
+<p>考试必考: 创建三个⽤户, 分别为 curly larry moe 这些⽤户都是 stooges 组的成员。<br>
+这些⽤户帐号密码都为 password<br>
+1.要求以上⽤户和组可以在 /home/stooges ⽬录⾥访问,创建,删除⽂件<br>
+2.其他⽤户⼀律不允许访问该⽬录<br>
+3.在该⽬录下新建的⽂件会⾃动属于 stooges 组拥有</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//创建⽤户，组</span><br><span class="line">useradd	curly</span><br><span class="line">useradd	larry</span><br><span class="line">useradd	moe</span><br><span class="line">groupadd stooges</span><br><span class="line"></span><br><span class="line">//创建密码</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"password"</span> |passwd	--stdin	moe</span><br><span class="line">4.特殊权限练习题</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"password"</span> |passwd	--stdin	larry</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"password"</span>	|passwd	--stdin	curry</span><br><span class="line"></span><br><span class="line">//将⽤户加组</span><br><span class="line">gpasswd	-a larry stooges</span><br><span class="line">gpasswd	-a moe stooges</span><br><span class="line">gpasswd	-a curly stooges</span><br><span class="line"></span><br><span class="line">//创建⽬录并配置权限</span><br><span class="line">mkdir /home/stooges</span><br><span class="line">chmod 770 /home/stooges</span><br><span class="line">chown .stooges /home/stooges</span><br><span class="line">chmod g+s /home/stooges</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Linux/07.Linux之特殊权限/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（七）特殊权限">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Linux/07.Linux之基本权限/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（七）基本权限">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1linux系统特殊权限"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.Linux&#x7CFB;&#x7EDF;&#x7279;&#x6B8A;&#x6743;&#x9650;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#11set_uid"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.1set_uid</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#12set_gid"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">1.2set_gid</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#13sticky粘滞位"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">1.3sticky&#x7C98;&#x6EDE;&#x4F4D;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2权限属性chattr"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x6743;&#x9650;&#x5C5E;&#x6027;chattr</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3进程掩码umask"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.&#x8FDB;&#x7A0B;&#x63A9;&#x7801;umask</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4特殊权限练习题"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x7279;&#x6B8A;&#x6743;&#x9650;&#x7EC3;&#x4E60;&#x9898;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

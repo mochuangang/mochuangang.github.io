@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Java] Java（十一）常用类 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Java/11常用类/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                        </div>
+                        <h1>[Java] Java（十一）常用类</h1>
+                        <h2 class="subheading">Java基础.</h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-03-11
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="第十一章-常用类">第十一章 常用类</h1>
+<h2 id="111-包装类">11.1 包装类</h2>
+<h3 id="1111-包装类">11.1.1 包装类</h3>
+<p>当要使用只针对对象设计的API或新特性（例如泛型），那么基本数据类型的数据就需要用包装类来包装。</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>基本数据类型</th>
+<th>包装类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>byte</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>2</td>
+<td>short</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>3</td>
+<td>int</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>4</td>
+<td>long</td>
+<td>Long</td>
+</tr>
+<tr>
+<td>5</td>
+<td>float</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>6</td>
+<td>double</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>7</td>
+<td>char</td>
+<td>Character</td>
+</tr>
+<tr>
+<td>8</td>
+<td>boolean</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>9</td>
+<td>void</td>
+<td>Void</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1112-装箱与拆箱">11.1.2  装箱与拆箱</h3>
+<p>JDK1.5之后，可以自动装箱与拆箱。</p>
+<p>注意：只能与自己对应的类型之间才能实现自动装箱与拆箱。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i = <span class="number">1</span>;</span><br><span class="line">Double d = <span class="number">1</span>;<span class="comment">//错误的，1是int类型</span></span><br></pre></td></tr></table></figure>
+<p>装箱：把基本数据类型转为包装类对象。</p>
+<blockquote>
+<p>转为包装类的对象，是为了使用专门为对象设计的API和特性</p>
+</blockquote>
+<p>拆箱：把包装类对象拆为基本数据类型。</p>
+<blockquote>
+<p>转为基本数据类型，一般是因为需要运算，Java中的大多数运算符是为基本数据类型设计的。比较、算术等</p>
+</blockquote>
+<p>总结：对象（引用数据类型）能用的运算符有哪些？</p>
+<p>（1）instanceof</p>
+<p>（2）=：赋值运算符</p>
+<p>（3）==和!=：用于比较地址，但是要求左右两边对象的类型一致或者是有父子类继承关系。</p>
+<p>（4）对于字符串这一种特殊的对象，支持“+”，表示拼接。</p>
+<h3 id="1113-包装类的一些api">11.1.3 包装类的一些API</h3>
+<p>1、基本数据类型和字符串之间的转换</p>
+<p>（1）把基本数据类型转为字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="comment">//String str = a;//错误的</span></span><br><span class="line"><span class="comment">//方式一：</span></span><br><span class="line">String str = a + <span class="string">""</span>;</span><br><span class="line"><span class="comment">//方式二：</span></span><br><span class="line">String str = String.valueOf(a);</span><br></pre></td></tr></table></figure>
+<p>（2）把字符串转为基本数据类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = Integer.parseInt(<span class="string">"整数的字符串"</span>);</span><br><span class="line"><span class="keyword">double</span> a = Double.parseDouble(<span class="string">"小数的字符串"</span>);</span><br><span class="line"><span class="keyword">boolean</span> b = Boolean.parseBoolean(<span class="string">"true或false"</span>);</span><br></pre></td></tr></table></figure>
+<p>2、数据类型的最大最小值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer.MAX_VALUE和Integer.MIN_VALUE</span><br><span class="line">Long.MAX_VALUE和Long.MIN_VALUE</span><br><span class="line">Double.MAX_VALUE和Double.MIN_VALUE</span><br></pre></td></tr></table></figure>
+<p>3、转大小写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Character.toUpperCase(<span class="string">'x'</span>);</span><br><span class="line">Character.toLowerCase(<span class="string">'X'</span>);</span><br></pre></td></tr></table></figure>
+<p>4、转进制</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer.toBinaryString(<span class="keyword">int</span> i) </span><br><span class="line">Integer.toHexString(<span class="keyword">int</span> i)</span><br><span class="line">Integer.toOctalString(<span class="keyword">int</span> i)</span><br></pre></td></tr></table></figure>
+<h3 id="1114-包装类对象的缓存问题">11.1.4 包装类对象的缓存问题</h3>
+<table>
+<thead>
+<tr>
+<th>包装类</th>
+<th>缓存对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Byte</td>
+<td>-128~127</td>
+</tr>
+<tr>
+<td>Short</td>
+<td>-128~127</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>-128~127</td>
+</tr>
+<tr>
+<td>Long</td>
+<td>-128~127</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>Double</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>Character</td>
+<td>0~127</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>true和false</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Integer i = <span class="number">1</span>;</span><br><span class="line">Integer j = <span class="number">1</span>;</span><br><span class="line">System.out.println(i == j);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">Integer i = <span class="number">128</span>;</span><br><span class="line">Integer j = <span class="number">128</span>;</span><br><span class="line">System.out.println(i == j);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">Integer i = <span class="keyword">new</span> Integer(<span class="number">1</span>);<span class="comment">//新new的在堆中</span></span><br><span class="line">Integer j = <span class="number">1</span>;<span class="comment">//这个用的是缓冲的常量对象，在方法区</span></span><br><span class="line">System.out.println(i == j);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">Integer i = <span class="keyword">new</span> Integer(<span class="number">1</span>);<span class="comment">//新new的在堆中</span></span><br><span class="line">Integer j = <span class="keyword">new</span> Integer(<span class="number">1</span>);<span class="comment">//另一个新new的在堆中</span></span><br><span class="line">System.out.println(i == j);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">Integer i = <span class="keyword">new</span> Integer(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> j = <span class="number">1</span>;</span><br><span class="line">System.out.println(i == j);<span class="comment">//true，凡是和基本数据类型比较，都会先拆箱，按照基本数据类型的规则比较</span></span><br></pre></td></tr></table></figure>
+<h2 id="112-字符串">11.2 字符串</h2>
+<h3 id="1121-字符串的特点">11.2.1 字符串的特点</h3>
+<p>1、字符串String类型本身是final声明的，意味着我们不能继承String。</p>
+<p>2、字符串的对象也是不可变对象，意味着一旦进行修改，就会产生新对象</p>
+<blockquote>
+<p>我们修改了字符串后，如果想要获得新的内容，必须重新接受。</p>
+<p>如果程序中涉及到大量的字符串的修改操作，那么此时的时空消耗比较高。可能需要考虑使用StringBuilder或StringBuffer。</p>
+</blockquote>
+<p>3、String对象内部是用字符数组进行保存的</p>
+<blockquote>
+<p>JDK1.9之前有一个char[] value数组，JDK1.9之后byte[]数组</p>
+</blockquote>
+<p>4、String类中这个char[] values数组也是final修饰的，意味着这个数组不可变，然后它是private修饰，外部不能直接操作它，String类型提供的所有的方法都是用新对象来表示修改后内容的，所以保证了String对象的不可变。</p>
+<p>5、就因为字符串对象设计为不可变，那么所以字符串有常量池来保存很多常量对象</p>
+<p>常量池在方法区。</p>
+<p>如果细致的划分：</p>
+<p>（1）JDK1.6及其之前：方法区</p>
+<p>（2）JDK1.7：堆</p>
+<p>（3）JDK1.8：元空间</p>
+<h3 id="1122-字符串对象的比较">11.2.2  字符串对象的比较</h3>
+<p>1、==：比较是对象的地址</p>
+<blockquote>
+<p>只有两个字符串变量都是指向字符串的常量对象时，才会返回true</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="string">"hello"</span>;</span><br><span class="line">String str2 = <span class="string">"hello"</span>;</span><br><span class="line">str1 == str2<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>2、equals：比较是对象的内容，因为String类型重写equals，区分大小写</p>
+<p>只要两个字符串的字符内容相同，就会返回true</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br><span class="line">String str2 = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br><span class="line">str1.equals(strs) <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>3、equalsIgnoreCase：比较的是对象的内容，不区分大小写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br><span class="line">String str2 = <span class="keyword">new</span> String(<span class="string">"HELLO"</span>);</span><br><span class="line">str1.equalsIgnoreCase(strs) <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>4、compareTo：String类型重写了Comparable接口的抽象方法，自然排序，按照字符的Unicode编码值进行比较大小的，严格区分大小写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="string">"hello"</span>;</span><br><span class="line">String str2 = <span class="string">"world"</span>;</span><br><span class="line">str1.compareTo(str2) <span class="comment">//小于0的值</span></span><br></pre></td></tr></table></figure>
+<p>5、compareToIgnoreCase：不区分大小写，其他按照字符的Unicode编码值进行比较大小</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br><span class="line">String str2 = <span class="keyword">new</span> String(<span class="string">"HELLO"</span>);</span><br><span class="line">str1.compareToIgnoreCase(str2)  <span class="comment">//等于0</span></span><br></pre></td></tr></table></figure>
+<h3 id="1123-空字符的比较">11.2.3 空字符的比较</h3>
+<p>1、哪些是空字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="string">""</span>;</span><br><span class="line">String str2 = <span class="keyword">new</span> String();</span><br><span class="line">String str3 = <span class="keyword">new</span> String(<span class="string">""</span>);</span><br></pre></td></tr></table></figure>
+<p>空字符串：长度为0</p>
+<p>2、如何判断某个字符串是否是空字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">""</span>.equals(str))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(str!=<span class="keyword">null</span>  &amp;&amp; str.isEmpty())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(str!=<span class="keyword">null</span> &amp;&amp; str.equals(<span class="string">""</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(str!=<span class="keyword">null</span> &amp;&amp; str.length()==<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="1124-字符串的对象的个数">11.2.4 字符串的对象的个数</h3>
+<p>1、字符串常量对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="string">"hello"</span>;<span class="comment">//1个，在常量池中</span></span><br></pre></td></tr></table></figure>
+<p>2、字符串的普通对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str2 = <span class="keyword">new</span> String();</span><br><span class="line">String str22 = <span class="keyword">new</span> String(<span class="string">""</span>);</span><br><span class="line"><span class="comment">//两个对象，一个是常量池中的空字符串对象，一个是堆中的空字符串对象</span></span><br></pre></td></tr></table></figure>
+<p>3、字符串的普通对象和常量对象一起</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str3 = <span class="keyword">new</span> String(<span class="string">"hello"</span>);</span><br><span class="line"><span class="comment">//str3首先指向堆中的一个字符串对象，然后堆中字符串的value数组指向常量池中常量对象的value数组</span></span><br></pre></td></tr></table></figure>
+<h3 id="1125-字符串拼接结果">11.2.5 字符串拼接结果</h3>
+<p>原则：</p>
+<p>（1）常量+常量：结果是常量池</p>
+<p>（2）常量与变量 或 变量与变量：结果是堆</p>
+<p>（3）拼接后调用intern方法：结果在常量池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test06</span><span class="params">()</span></span>&#123;</span><br><span class="line">	String s1 = <span class="string">"hello"</span>;</span><br><span class="line">	String s2 = <span class="string">"world"</span>;</span><br><span class="line">	String s3 = <span class="string">"helloworld"</span>;</span><br><span class="line">	</span><br><span class="line">	String s4 = (s1 + <span class="string">"world"</span>).intern();<span class="comment">//把拼接的结果放到常量池中</span></span><br><span class="line">	String s5 = (s1 + s2).intern();</span><br><span class="line">	</span><br><span class="line">	System.out.println(s3 == s4);<span class="comment">//true</span></span><br><span class="line">	System.out.println(s3 == s5);<span class="comment">//true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test05</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">final</span> String s1 = <span class="string">"hello"</span>;</span><br><span class="line">	<span class="keyword">final</span> String s2 = <span class="string">"world"</span>;</span><br><span class="line">	String s3 = <span class="string">"helloworld"</span>;</span><br><span class="line">	</span><br><span class="line">	String s4 = s1 + <span class="string">"world"</span>;<span class="comment">//s4字符串内容也helloworld，s1是常量，"world"常量，常量+ 常量 结果在常量池中</span></span><br><span class="line">	String s5 = s1 + s2;<span class="comment">//s5字符串内容也helloworld，s1和s2都是常量，常量+ 常量 结果在常量池中</span></span><br><span class="line">	String s6 = <span class="string">"hello"</span> + <span class="string">"world"</span>;<span class="comment">//常量+ 常量 结果在常量池中，因为编译期间就可以确定结果</span></span><br><span class="line">	</span><br><span class="line">	System.out.println(s3 == s4);<span class="comment">//true</span></span><br><span class="line">	System.out.println(s3 == s5);<span class="comment">//true</span></span><br><span class="line">	System.out.println(s3 == s6);<span class="comment">//true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test04</span><span class="params">()</span></span>&#123;</span><br><span class="line">	String s1 = <span class="string">"hello"</span>;</span><br><span class="line">	String s2 = <span class="string">"world"</span>;</span><br><span class="line">	String s3 = <span class="string">"helloworld"</span>;</span><br><span class="line">	</span><br><span class="line">	String s4 = s1 + <span class="string">"world"</span>;<span class="comment">//s4字符串内容也helloworld，s1是变量，"world"常量，变量 + 常量的结果在堆中</span></span><br><span class="line">	String s5 = s1 + s2;<span class="comment">//s5字符串内容也helloworld，s1和s2都是变量，变量 + 变量的结果在堆中</span></span><br><span class="line">	String s6 = <span class="string">"hello"</span> + <span class="string">"world"</span>;<span class="comment">//常量+ 常量 结果在常量池中，因为编译期间就可以确定结果</span></span><br><span class="line">	</span><br><span class="line">	System.out.println(s3 == s4);<span class="comment">//false</span></span><br><span class="line">	System.out.println(s3 == s5);<span class="comment">//false</span></span><br><span class="line">	System.out.println(s3 == s6);<span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1126-字符串的api">11.2.6 字符串的API</h3>
+<p>（1）boolean isEmpty()</p>
+<p>（2）int length()</p>
+<p>（3）String concat(xx)：拼接，等价于+</p>
+<p>（4）boolean contanis(xx)</p>
+<p>（5）int indexOf()：从前往后找，要是没有返回-1</p>
+<p>（6）int lastIndexOf()：从后往前找，要是没有返回-1</p>
+<p>（7）char charAt(index)</p>
+<p>（8）new String(char[] ) 或new String(char[] ,int, int)</p>
+<p>（9）char[] toCharArray()</p>
+<p>（10）byte[] getBytes()：编码，把字符串变为字节数组，按照平台默认的字符编码进行编码</p>
+<p>​	byte[] getBytes(字符编码方式)：按照指定的编码方式进行编码</p>
+<p>（11）new String(byte[] ) 或 new String(byte[], int, int)：解码，按照平台默认的字符编码进行解码</p>
+<p>​           new String(byte[]，字符编码方式 ) 或 new String(byte[], int, int，字符编码方式)：解码，按照指定的编码方式进行解码</p>
+<p>（12）String subString(int begin)：从[begin]开始到最后</p>
+<p>String subString(int begin,int end)：从[begin, end)</p>
+<p>（13）boolean matchs(正则表达式)</p>
+<p>（14）String replace(xx,xx)：不支持正则</p>
+<p>String replaceFirst(正则，value)：替换第一个匹配部分</p>
+<p>String repalceAll(正则， value)：替换所有匹配部分</p>
+<p>（15）String[] split(正则)：按照某种规则进行拆分</p>
+<p>（16）boolean startsWith(xx)：是否以xx开头</p>
+<p>boolean endsWith(xx)：是否以xx结尾</p>
+<p>（17）String trim()：去掉前后空白符，字符串中间的空白符不会去掉</p>
+<p>（18）String toUpperCase()：转大写</p>
+<p>（19）String  toLowerCase()：转小写</p>
+<p>面试题：字符串的length和数组的length有什么不同？</p>
+<p>字符串的length()，数组的length属性</p>
+<h2 id="113-可变字符序列">11.3 可变字符序列</h2>
+<p>1、可变字符序列：StringBuilder和StringBuffer</p>
+<p>StringBuffer：老的，线程安全的（因为它的方法有synchronized修饰）</p>
+<p>StringBuilder：线程不安全的</p>
+<p>2、面试题：String和StringBuilder、StringBuffer的区别？</p>
+<p>String：不可变对象，不可变字符序列</p>
+<p>StringBuilder、StringBuffer： 可变字符序列</p>
+<p>3、常用的API，StringBuilder、StringBuffer的API是完全一致的</p>
+<p>（1）append(xx)：拼接，追加</p>
+<p>（2）insert(int index, xx)：插入</p>
+<p>（3）delete(int start, int end)</p>
+<p>deleteCharAt(int index)</p>
+<p>（4）set(int index, xx)</p>
+<p>（5）reverse()：反转</p>
+<p>…  替换、截取、查找…</p>
+<h2 id="114-和数学相关的">11.4 和数学相关的</h2>
+<p>1、java.lang.Math类</p>
+<p>（1）sqrt()：求平方根</p>
+<p>（2）pow(x,y)：求x的y次方</p>
+<p>（3）random()：返回[0,1)范围的小数</p>
+<p>（4）max(x,y)：找x,y最大值</p>
+<p>​	  min(x,y)：找最小值</p>
+<p>（5）round(x)：四舍五入</p>
+<p>​         ceil(x)：进一</p>
+<p>​         floor(x)：退一</p>
+<p>…</p>
+<p>2、java.math包</p>
+<p>BigInteger：大整数</p>
+<p>BigDecimal：大小数</p>
+<p>运算通过方法完成：add(),subtract(),multiply(),divide()…</p>
+<h2 id="115-日期时间api">11.5 日期时间API</h2>
+<h3 id="1151-jdk18之前">11.5.1 JDK1.8之前</h3>
+<p>1、java.util.Date</p>
+<p>new  Date()：当前系统时间</p>
+<p>long  getTime()：返回该日期时间对象距离1970-1-1 0.0.0 0毫秒之间的毫秒值</p>
+<p>new Date(long 毫秒)：把该毫秒值换算成日期时间对象</p>
+<p>2、java.util.Calendar：</p>
+<p>（1）getInstance()：得到Calendar的镀锡</p>
+<p>（2）get(常量)</p>
+<p>3、java.text.SimpleDateFormat：日期时间的格式化</p>
+<p>y：表示年</p>
+<p>M：月</p>
+<p>d：天</p>
+<p>H： 小时，24小时制</p>
+<p>h：小时，12小时制</p>
+<p>m：分</p>
+<p>s：秒</p>
+<p>S：毫秒</p>
+<p>E：星期</p>
+<p>D：年当中的天数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test10</span><span class="params">()</span> <span class="keyword">throws</span> ParseException</span>&#123;</span><br><span class="line">	String str = <span class="string">"2019年06月06日 16时03分14秒 545毫秒  星期四 +0800"</span>;</span><br><span class="line">	SimpleDateFormat sf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy年MM月dd日 HH时mm分ss秒 SSS毫秒  E Z"</span>);</span><br><span class="line">	Date d = sf.parse(str);</span><br><span class="line">	System.out.println(d);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test9</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Date d = <span class="keyword">new</span> Date();</span><br><span class="line"></span><br><span class="line">	SimpleDateFormat sf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy年MM月dd日 HH时mm分ss秒 SSS毫秒  E Z"</span>);</span><br><span class="line">	<span class="comment">//把Date日期转成字符串，按照指定的格式转</span></span><br><span class="line">	String str = sf.format(d);</span><br><span class="line">	System.out.println(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test8</span><span class="params">()</span></span>&#123;</span><br><span class="line">	String[] all = TimeZone.getAvailableIDs();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; all.length; i++) &#123;</span><br><span class="line">		System.out.println(all[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test7</span><span class="params">()</span></span>&#123;</span><br><span class="line">	TimeZone t = TimeZone.getTimeZone(<span class="string">"America/Los_Angeles"</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//getInstance(TimeZone zone)</span></span><br><span class="line">	Calendar c = Calendar.getInstance(t);</span><br><span class="line">	System.out.println(c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test6</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Calendar c = Calendar.getInstance();</span><br><span class="line">	System.out.println(c);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> year = c.get(Calendar.YEAR);</span><br><span class="line">	System.out.println(year);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> month = c.get(Calendar.MONTH)+<span class="number">1</span>;</span><br><span class="line">	System.out.println(month);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test5</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> time = Long.MAX_VALUE;</span><br><span class="line">	Date d = <span class="keyword">new</span> Date(time);</span><br><span class="line">	System.out.println(d);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> time = <span class="number">1559807047979L</span>;</span><br><span class="line">	Date d = <span class="keyword">new</span> Date(time);</span><br><span class="line">	System.out.println(d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Date d = <span class="keyword">new</span> Date();</span><br><span class="line">	<span class="keyword">long</span> time = d.getTime();</span><br><span class="line">	System.out.println(time);<span class="comment">//1559807047979</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">	System.out.println(time);<span class="comment">//1559806982971</span></span><br><span class="line">	<span class="comment">//当前系统时间距离1970-1-1 0:0:0 0毫秒的时间差，毫秒为单位</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Date d = <span class="keyword">new</span> Date();</span><br><span class="line">	System.out.println(d);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1152-jdk18之后">11.5.2 JDK1.8之后</h3>
+<p>java.time及其子包中。</p>
+<p>1、LocalDate、LocalTime、LocalDateTime</p>
+<p>（1）now()：获取系统日期或时间</p>
+<p>（2）of(xxx)：或者指定的日期或时间</p>
+<p>（3）运算：运算后得到新对象，需要重新接受</p>
+<p>plusXxx()：在当前日期或时间对象上加xx</p>
+<p>minusXxx() ：在当前日期或时间对象上减xx</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>now() / now(ZoneId zone)</td>
+<td>静态方法，根据当前时间创建对象/指定时区的对象</td>
+</tr>
+<tr>
+<td>of()</td>
+<td>静态方法，根据指定日期/时间创建对象</td>
+</tr>
+<tr>
+<td>getDayOfMonth()/getDayOfYear()</td>
+<td>获得月份天数(1-31) /获得年份天数(1-366)</td>
+</tr>
+<tr>
+<td>getDayOfWeek()</td>
+<td>获得星期几(返回一个 DayOfWeek 枚举值)</td>
+</tr>
+<tr>
+<td>getMonth()</td>
+<td>获得月份, 返回一个 Month 枚举值</td>
+</tr>
+<tr>
+<td>getMonthValue() / getYear()</td>
+<td>获得月份(1-12) /获得年份</td>
+</tr>
+<tr>
+<td>getHours()/getMinute()/getSecond()</td>
+<td>获得当前对象对应的小时、分钟、秒</td>
+</tr>
+<tr>
+<td>withDayOfMonth()/withDayOfYear()/withMonth()/withYear()</td>
+<td>将月份天数、年份天数、月份、年份修改为指定的值并返回新的对象</td>
+</tr>
+<tr>
+<td>with(TemporalAdjuster  t)</td>
+<td>将当前日期时间设置为校对器指定的日期时间</td>
+</tr>
+<tr>
+<td>plusDays(), plusWeeks(), plusMonths(), plusYears(),plusHours()</td>
+<td>向当前对象添加几天、几周、几个月、几年、几小时</td>
+</tr>
+<tr>
+<td>minusMonths() / minusWeeks()/minusDays()/minusYears()/minusHours()</td>
+<td>从当前对象减去几月、几周、几天、几年、几小时</td>
+</tr>
+<tr>
+<td>plus(TemporalAmount t)/minus(TemporalAmount t)</td>
+<td>添加或减少一个 Duration 或 Period</td>
+</tr>
+<tr>
+<td>isBefore()/isAfter()</td>
+<td>比较两个 LocalDate</td>
+</tr>
+<tr>
+<td>isLeapYear()</td>
+<td>判断是否是闰年（在LocalDate类中声明）</td>
+</tr>
+<tr>
+<td>format(DateTimeFormatter  t)</td>
+<td>格式化本地日期、时间，返回一个字符串</td>
+</tr>
+<tr>
+<td>parse(Charsequence text)</td>
+<td>将指定格式的字符串解析为日期、时间</td>
+</tr>
+</tbody>
+</table>
+<p>2、DateTimeFormatter：日期时间格式化</p>
+<p>该类提供了三种格式化方法：</p>
+<p>预定义的标准格式。如：ISO_DATE_TIME;ISO_DATE</p>
+<p>本地化相关的格式。如：ofLocalizedDate(FormatStyle.MEDIUM)</p>
+<p>自定义的格式。如：ofPattern(“yyyy-MM-dd hh:mm:ss”)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test10</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDateTime now = LocalDateTime.now();</span><br><span class="line">		</span><br><span class="line"><span class="comment">//		DateTimeFormatter df = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG);//2019年6月6日 下午04时40分03秒</span></span><br><span class="line">		DateTimeFormatter df = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);<span class="comment">//19-6-6 下午4:40</span></span><br><span class="line">		String str = df.format(now);</span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test9</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDateTime now = LocalDateTime.now();</span><br><span class="line">		</span><br><span class="line">		DateTimeFormatter df = DateTimeFormatter.ISO_DATE_TIME;<span class="comment">//2019-06-06T16:38:23.756</span></span><br><span class="line">		String str = df.format(now);</span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test8</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDateTime now = LocalDateTime.now();</span><br><span class="line">		</span><br><span class="line">		DateTimeFormatter df = DateTimeFormatter.ofPattern(<span class="string">"yyyy年MM月dd日 HH时mm分ss秒  SSS毫秒  E 是这一年的D天"</span>);</span><br><span class="line">		String str = df.format(now);</span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test7</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDate now = LocalDate.now();</span><br><span class="line">		LocalDate before = now.minusDays(<span class="number">100</span>);</span><br><span class="line">		System.out.println(before);<span class="comment">//2019-02-26</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test06</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDate lai = LocalDate.of(<span class="number">2019</span>, <span class="number">5</span>, <span class="number">13</span>);</span><br><span class="line">		LocalDate go = lai.plusDays(<span class="number">160</span>);</span><br><span class="line">		System.out.println(go);<span class="comment">//2019-10-20</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test05</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDate lai = LocalDate.of(<span class="number">2019</span>, <span class="number">5</span>, <span class="number">13</span>);</span><br><span class="line">		System.out.println(lai.getDayOfYear());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test04</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDate lai = LocalDate.of(<span class="number">2019</span>, <span class="number">5</span>, <span class="number">13</span>);</span><br><span class="line">		System.out.println(lai);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test03</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDateTime now = LocalDateTime.now();</span><br><span class="line">		System.out.println(now);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test02</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalTime now = LocalTime.now();</span><br><span class="line">		System.out.println(now);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span>&#123;</span><br><span class="line">		LocalDate now = LocalDate.now();</span><br><span class="line">		System.out.println(now);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h1 id=""></h1>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Java/12集合/" data-toggle="tooltip" data-placement="top" title="[Java] Java（十二）集合">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Java/09异常/" data-toggle="tooltip" data-placement="top" title="[Java] Java（九）异常">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#第十一章-常用类"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x7B2C;&#x5341;&#x4E00;&#x7AE0; &#x5E38;&#x7528;&#x7C7B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#111-包装类"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">11.1 &#x5305;&#x88C5;&#x7C7B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1111-包装类"><span class="toc-nav-number">1.1.1.</span> <span class="toc-nav-text">11.1.1 &#x5305;&#x88C5;&#x7C7B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1112-装箱与拆箱"><span class="toc-nav-number">1.1.2.</span> <span class="toc-nav-text">11.1.2  &#x88C5;&#x7BB1;&#x4E0E;&#x62C6;&#x7BB1;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1113-包装类的一些api"><span class="toc-nav-number">1.1.3.</span> <span class="toc-nav-text">11.1.3 &#x5305;&#x88C5;&#x7C7B;&#x7684;&#x4E00;&#x4E9B;API</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1114-包装类对象的缓存问题"><span class="toc-nav-number">1.1.4.</span> <span class="toc-nav-text">11.1.4 &#x5305;&#x88C5;&#x7C7B;&#x5BF9;&#x8C61;&#x7684;&#x7F13;&#x5B58;&#x95EE;&#x9898;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#112-字符串"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">11.2 &#x5B57;&#x7B26;&#x4E32;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1121-字符串的特点"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">11.2.1 &#x5B57;&#x7B26;&#x4E32;&#x7684;&#x7279;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1122-字符串对象的比较"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">11.2.2  &#x5B57;&#x7B26;&#x4E32;&#x5BF9;&#x8C61;&#x7684;&#x6BD4;&#x8F83;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1123-空字符的比较"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text">11.2.3 &#x7A7A;&#x5B57;&#x7B26;&#x7684;&#x6BD4;&#x8F83;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1124-字符串的对象的个数"><span class="toc-nav-number">1.2.4.</span> <span class="toc-nav-text">11.2.4 &#x5B57;&#x7B26;&#x4E32;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x4E2A;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1125-字符串拼接结果"><span class="toc-nav-number">1.2.5.</span> <span class="toc-nav-text">11.2.5 &#x5B57;&#x7B26;&#x4E32;&#x62FC;&#x63A5;&#x7ED3;&#x679C;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1126-字符串的api"><span class="toc-nav-number">1.2.6.</span> <span class="toc-nav-text">11.2.6 &#x5B57;&#x7B26;&#x4E32;&#x7684;API</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#113-可变字符序列"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">11.3 &#x53EF;&#x53D8;&#x5B57;&#x7B26;&#x5E8F;&#x5217;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#114-和数学相关的"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">11.4 &#x548C;&#x6570;&#x5B66;&#x76F8;&#x5173;&#x7684;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#115-日期时间api"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">11.5 &#x65E5;&#x671F;&#x65F6;&#x95F4;API</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1151-jdk18之前"><span class="toc-nav-number">1.5.1.</span> <span class="toc-nav-text">11.5.1 JDK1.8&#x4E4B;&#x524D;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1152-jdk18之后"><span class="toc-nav-number">1.5.2.</span> <span class="toc-nav-text">11.5.2 JDK1.8&#x4E4B;&#x540E;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#"><span class="toc-nav-number">2.</span> <span class="toc-nav-text"></span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

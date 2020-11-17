@@ -149,14 +149,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -231,7 +231,7 @@ Other(o): 匿名⽤户(其他⼈)</p>
 <p>rwx, rwx, r-x<br>
 User Group Other</p>
 </blockquote>
-<p>*<strong>3.权限与用户之间的关系？*</strong><br>
+<p><strong><em>1.权限与用户之间的关系？</em></strong><br>
 <em>在Linux系统中，针对文件定义了三种身份，分别是属主(owner)、属组(group)、其他人(others)，每一种身份又对应三种权限，分别是可读(readable)、可写(writable)、可执行(excutable)。</em></p>
 <p><img src="/img/article/linux/Snipaste_2020-11-14_20-57-51.png" alt="Snipaste_2020-11-14_20-57-51"><br>
 *用户对文件资源，有三种角色ugo，当一个用户访问文件流程如下</p>
@@ -240,7 +240,7 @@ User Group Other</p>
 <li>判断用户是否为文件所有组成员，如果是则按组的权限进行访问</li>
 <li>如果不是所有者，也不是该文件所属组，则按匿名权限进行访问*</li>
 </ol>
-<p>*<strong>4.权限中的rwx分别代表什么含义？*</strong><br>
+<p><strong><em>2.权限中的rwx分别代表什么含义？</em></strong><br>
 <em>当我们使用ls -l查看一个文件的详细属性时，能看到每个文件都有一个9位基本权限位，比如: <code>rwxr-xr-x</code>其中每三位字符为一组，分别表示属主权限位，属组权限位，匿名权限位。<br>
 linux中基本权限位则是使用这9位字符来表示，主要控制文件属主(User)、属组(Group)、其他用户(Other)</em></p>
 <table>
@@ -280,15 +280,15 @@ linux中基本权限位则是使用这9位字符来表示，主要控制文件�
 Q1: alice对file1文件拥有什么权限?<br>
 Q2: jack 对 file1.txt 文件有什么权限? 前提:jack 属于 hr 组<br>
 Q3: tom 对 file1.txt 文件有什么权限?</em></p>
-<p>*<strong>1.为什么要设定权限，我们又如何修改一个文件的权限?*</strong><br>
+<p><strong><em>1.为什么要设定权限，我们又如何修改一个文件的权限?</em></strong><br>
 <em>Q1: 为什么要设定权限，可以赋于某个用户或组 – 能够以何种方式 – 访问某个文件<br>
 Q2: <code>Linux</code>下使用<code>chmod</code>命令来变更权限，<code>root</code>用户可以变更所有文件的权限，而普通用户仅能变更属于自己的文件。</em></p>
-<p>*<strong>2.使用chmod设定权限示例*</strong></p>
-<p><em>方式一: ugo</em></p>
+<p><strong><em>2.使用chmod设定权限示例</em></strong><br>
+<em>方式一: ugo</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@mcg ~]<span class="comment"># touch file                    #创建文件</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod a=rwx file              #给所有人添加读写执行权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod a=-rwx file             #取消所有的权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod u=rwx,g=rw,o=- file     #属主读写执行，属组读写，其他人无权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod ug=rwx,o=r file         #属主属组读写执行，其他人读权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll file</span></span><br><span class="line">-rwxrw-r-- 1 root root 0 Apr 13 03:29 file</span><br></pre></td></tr></table></figure>
 <p><em>方式二、number</em></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#选项:  -R递归修改</span></span><br><span class="line">[root@mcg ~]<span class="comment"># touch file</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod 644 file</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod 600 file</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll file</span></span><br><span class="line">-rw------- 1 root root 0 Apr 13 03:29 file</span><br><span class="line"></span><br><span class="line"><span class="comment">#针对目录设定权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># mkdir dir</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod 777 dir/    #修改目录允许所有人访问</span></span><br><span class="line">[root@mcg ~]<span class="comment"># chmod -R 755 dir/ #修改目录及子目录权限</span></span><br><span class="line">[root@mcg ~]<span class="comment"># ll -d dir/</span></span><br><span class="line">drwxr-xr-x 2 root root 6 Apr 13 03:34 dir/</span><br></pre></td></tr></table></figure>
-<p>*<strong>3.权限设置案例*</strong><br>
+<p><strong><em>3.权限设置案例</em></strong><br>
 <em>针对 hr 部门的访问目录/home/hr 设置权限，要求如下:<br>
 1.root 用户和 hr 组的员工可以读、写、执行<br>
 2.其他用户没有任何权限</em></p>
@@ -331,10 +331,11 @@ Q2: <code>Linux</code>下使用<code>chmod</code>命令来变更权限，<code>r
 <p><em>写入权限（w）具有新增、修改文件内容的权限</em><br>
 <em>1.使用vim编辑会提示权限拒绝, 但可强制保存,会覆盖文件的所有内容</em><br>
 <em>2.使用echo命令重定向的方式可以往文件内写入数据,&gt;&gt;可以进行追加</em><br>
-<em>3.使⽤cat命令读取⽂件, 将读取到的⽂件输出交给仅有w权限⽂件的输⼊</em></p>
-<p><em>4.不能删除文件,因为删除文件看的不是文件的属性,需要看上级目录是否有w的权限</em></p>
+<em>3.使⽤cat命令读取⽂件, 将读取到的⽂件输出交给仅有w权限⽂件的输⼊</em><br>
+<em>4.不能删除文件,因为删除文件看的不是文件的属性,需要看上级目录是否有w的权限</em></p>
 <p><em>执行权限（x）具有执行文件的权限</em><br>
-<em>1.执行权限什么用都没有</em><br>
+<em>1.只能进入目录</em><br>
+<em>//注意: 普通⽤户需要有r权限,管理员不需要</em><br>
 <em>2.如果普通用户需要执行文件,需要配合r权限</em></p>
 </blockquote>
 <p><strong>目录权限实验案例:</strong></p>
@@ -384,7 +385,7 @@ Q2: <code>Linux</code>下使用<code>chmod</code>命令来变更权限，<code>r
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/Linux/07.Linux之特殊权限/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（七）特殊权限">&larr; Previous Post</a>
+                            <a href="/article/Linux/08.Linux之特殊权限/" data-toggle="tooltip" data-placement="top" title="[Linux] linux基础之（八）特殊权限">&larr; Previous Post</a>
                         </li>
                     
                     
@@ -397,6 +398,14 @@ Q2: <code>Linux</code>下使用<code>chmod</code>命令来变更权限，<code>r
                 <br>
 
                 <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
                 
                 <!--打赏-->
 

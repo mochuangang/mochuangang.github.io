@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Java] Java（十四）IO流 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Java/14IO流/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                        </div>
+                        <h1>[Java] Java（十四）IO流</h1>
+                        <h2 class="subheading">Java基础.</h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-03-14
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="第14章-io流">第14章 IO流</h1>
+<h2 id="141-javaiofile类">14.1 java.io.File类</h2>
+<p>它是文件和目录路径名的抽象描述。</p>
+<p>API：</p>
+<p>（1）getName()：获取文件或目录的名称</p>
+<p>（2）getPath()：获取文件或目录的路径</p>
+<p>（3）getAbsolutePath()：获取文件或目录的绝对路径</p>
+<p>（4） getCanonicalPath()：获取文件或目录的规范路径</p>
+<p>（5）long length()：获取文件的长度，单位字节</p>
+<p>（6）long lastModified()：最后修改时间，单位毫秒</p>
+<p>（7）String getParent()：获取上级或父目录</p>
+<p>​          File getParentFile()：获取上级或父目录</p>
+<p>（8）isFile()：判断是否是文件，当且仅当是文件并且是存在的，才会true</p>
+<p>（9）isDirectory()：判断是否是目录，当且仅当是目录并且存在的，才会true</p>
+<p>（10）exists()：是否存在</p>
+<p>（11）isHidden()：是否隐藏</p>
+<p>（12）canWrite()：是否可写</p>
+<p>（13）canRead()：是否可读</p>
+<p>（14）String[] list()：获取下一级</p>
+<p>​	    File[]  listFiles()：获取下一级</p>
+<p>​             File[] listFiles(FileFilter f)：获取下一级，但是会过滤掉一下文件和目录</p>
+<p>（15）createNewFile()：创建文件</p>
+<p>​            createTempFile(String prefix, String suffix)</p>
+<p>（16）mkdir()：创建一级目录，如果父目录不存在，就失败，但是不报异常</p>
+<p>​            mkdirs()：创建多级目录</p>
+<p>（17）delete()：删除文件或空目录</p>
+<p>（18）renameTo(File f)：重命名文件或目录</p>
+<h2 id="142-io流的四大抽象基类">14.2 IO流的四大抽象基类</h2>
+<p>1、四大超类</p>
+<p>（1）InputStream：字节输入流</p>
+<p>（2）OutputStream：字节输出流</p>
+<p>（3）Reader：字符输入流</p>
+<p>（4）Writer：字符输出流</p>
+<p>2、分类</p>
+<p>（1）按照方向分：输入流和输出流</p>
+<p>（2）按照处理的方式不同：字节流和字符流</p>
+<p>字符流只能处理纯文本的数据（使用范围很窄）</p>
+<p>（3）按照角色不同：节点流和处理流</p>
+<p>处理流是建立在节点流的基础上的，处理流需要包装一个节点流的对象。</p>
+<p>处理流也可以包装另外一个处理流。</p>
+<blockquote>
+<p>其实JDK中IO体系是用到了一个装饰者设计模式</p>
+</blockquote>
+<p>3、API</p>
+<p>（1）InputStream：</p>
+<p>int read()：一次读取一个字节，返回的是本次读取的字节的值，如果流末尾返回-1</p>
+<p>int read(byte[] data)：一次读取多个字节，读取的数据存储到data字节数组中，最多读取data.length个字节，返回的是实际本次读取的字节的个数，如果流末尾返回-1。从data[0]开始存储。</p>
+<p>int read(byte[] data,int offset, int len)：一次读取多个字节，读取的数据存储到data字节数组中，最多读取len个字节，返回的是实际本次读取的字节的个数，如果流末尾返回-1。从data[offset]开始存储。</p>
+<p>void close()：关闭</p>
+<p>（2）OutputStream：</p>
+<p>void write(int data)：一次写一个字节</p>
+<p>void write(byte[] data)：一次写整个字节数组</p>
+<p>void write(byte[] data, int offset, int len)：一次字节数组的一部分，从[offset]开始，一共len个</p>
+<p>void close()：关闭</p>
+<p>void flush()：刷新</p>
+<p>（3）Reader：</p>
+<p>int read()：一次读取一个字符，返回的是本次读取的字符的Unicode值，如果流末尾返回-1</p>
+<p>int read(char[] data)：一次读取多个字符，读取的数据存储到data字符数组中，最多读取data.length个字符，返回的是实际本次读取的字符的个数，如果流末尾返回-1。从data[0]开始存储。</p>
+<p>int read(char[] data,int offset, int len)：一次读取多个字符，读取的数据存储到data字符数组中，最多读取len个字符，返回的是实际本次读取的字符的个数，如果流末尾返回-1。从data[offset]开始存储。</p>
+<p>void close()：关闭</p>
+<p>（4）Writer</p>
+<p>void write(int data)：一次写一个字符</p>
+<p>void write(char[] data)：一次写整个字符数组</p>
+<p>void write(char[] data, int offset, int len)：一次字符数组的一部分，从[offset]开始，一共len个</p>
+<p>void write(String str)：一次写整个字符串</p>
+<p>void write(String str, int offset, int count)：一次写字符串的一部分，从[offset]开始，一共count个</p>
+<p>void close()：关闭</p>
+<p>void flush()：刷新</p>
+<h2 id="143-文件io流">14.3 文件IO流</h2>
+<p>1、类型</p>
+<p>FileInputStream：文件字节输入流，可以读取任意类型的文件</p>
+<p>FileOutputStream：文件字节输出流，可以把字节数据输出到任意类型的文件</p>
+<p>FileReader：文件字符输入流，只能读取纯文本的文件。按照平台默认的字符编码进行解码。</p>
+<p>FileWriter：文件字符输出流，只能把字符数据输出到纯文本文件。按照平台默认的字符编码进行编码。</p>
+<p>2、读写文件的代码</p>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">copy</span><span class="params">(File src, File dest)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">    <span class="comment">//选择IO流</span></span><br><span class="line">    FileInputStream fis = <span class="keyword">new</span> FileInputStream(src);</span><br><span class="line">    FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(dest);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//读写</span></span><br><span class="line">    <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">        <span class="keyword">int</span> len = fis.read(data);</span><br><span class="line">        <span class="keyword">if</span>(len==-<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        fos.write(data,<span class="number">0</span>,len);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//关闭</span></span><br><span class="line">     fis.close();</span><br><span class="line">    fos.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="144-缓冲io流">14.4 缓冲IO流</h2>
+<p>1、分为</p>
+<p>BufferedInputStream：字节输入缓冲流，给InputStream系列IO流增加缓冲效果<br>
+BufferedOutputStream：字节输出缓冲流，给OutputStream系列IO流增加缓冲效果<br>
+BufferedReader：字符输入缓冲流，给Reader系列IO流增加缓冲效果</p>
+<blockquote>
+<p>String readLine()：按行读取</p>
+</blockquote>
+<p>BufferedWriter：字符输出缓冲流，给Writer系列IO流增加缓冲效果</p>
+<blockquote>
+<p>void newLine()：输出换行符</p>
+</blockquote>
+<p>2、默认的缓冲区的大小是8192 = 1024 * 8（字节/字符）</p>
+<p>3、可以给读写的过程提高效率</p>
+<blockquote>
+<p>不仅仅是可以给文件IO流增加缓冲效果，可以给任意符合对应类型的IO流增加缓冲效果。</p>
+</blockquote>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">copyBuffer</span><span class="params">(File src, File dest)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">    <span class="comment">//选择IO流</span></span><br><span class="line">    FileInputStream fis = <span class="keyword">new</span> FileInputStream(src);</span><br><span class="line">    FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(dest);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//BufferedInputStream只能给FileInputStream增加缓冲效果，读的过程加快了</span></span><br><span class="line">    BufferedInputStream bis = <span class="keyword">new</span> BufferedInputStream(fis);<span class="comment">//fis在里面，bis在外面，fis比喻成内衣，bis比喻成外套</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//BufferedOutputStream只能FileOutputStream增加缓冲效果，写的过程加快了</span></span><br><span class="line">    BufferedOutputStream bos = <span class="keyword">new</span> BufferedOutputStream(fos);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//数据流向：src--&gt;fis--&gt;bis（从fis先缓冲到bis）--&gt;data--&gt;bos（从data缓冲到bos中）--&gt;fos--&gt;dest</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//读写</span></span><br><span class="line">    <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">        <span class="keyword">int</span> len = bis.read(data);</span><br><span class="line">        <span class="keyword">if</span>(len==-<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        bos.write(data,<span class="number">0</span>,len);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//关闭</span></span><br><span class="line">    <span class="comment">//关闭比喻成脱衣服</span></span><br><span class="line">    bos.close();</span><br><span class="line">       fos.close();</span><br><span class="line">       </span><br><span class="line">    bis.close();<span class="comment">//先脱外套，再脱内衣</span></span><br><span class="line">    fis.close();	    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="145-编码与解码的io流转换流">14.5  编码与解码的IO流（转换流）</h2>
+<p>1、编码：OutputStreamWriter</p>
+<p>​	可以把字符流转为字节流输出，并且在转换的过程中，可以指定字符编码。</p>
+<p>2、解码：InputStreamReader</p>
+<p>​	可以把字节输入流转为字符输入流，并且在转换的过程中，可以指定字符编码。</p>
+<p>3、示例代码：解码（文件是GBK，当前平台是UTF-8）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">		<span class="comment">//因为这里想要用在程序中按照“指定”的编码方式进行解码，而不是按照平台“默认的”编码方式进行解码</span></span><br><span class="line">		<span class="comment">//所以，我这里仍然用FileInputStream字节流，把文件编码后的数据，原样读取</span></span><br><span class="line">		<span class="comment">//从文件到FileInputStream fis内存的过程中，先不解码</span></span><br><span class="line">		<span class="comment">//因为如果选择FileReader，从文件到FileReader的过程中，就已经按照平台“默认的”编码方式解码好了，我们无法控制</span></span><br><span class="line">		</span><br><span class="line">		FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"d:/File类概述.txt"</span>);</span><br><span class="line">		<span class="comment">//我要使用InputStreamReader，把FileInputStream转为字符流</span></span><br><span class="line"><span class="comment">//		InputStreamReader isr = new InputStreamReader(fis);//如果没有指定，还是按照默认的编码方式</span></span><br><span class="line">		InputStreamReader isr = <span class="keyword">new</span> InputStreamReader(fis,<span class="string">"GBK"</span>);<span class="comment">//如果指定，就按照指定的编码方式解码</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//文件--&gt;fis（字节流）--&gt;解码--&gt;isr（字符流）--&gt;br -&gt;读取的是字符</span></span><br><span class="line">		<span class="comment">//字符流，要么按照char[]读取，要么可以用BufferedReader包装按行读取</span></span><br><span class="line">		BufferedReader br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line">		String line;</span><br><span class="line">		<span class="keyword">while</span>((line = br.readLine()) !=<span class="keyword">null</span>)&#123;</span><br><span class="line">			System.out.println(line);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		br.close();</span><br><span class="line">		isr.close();</span><br><span class="line">		fis.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>4、示例代码：编码（文件是GBK，当前平台是UTF-8）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">		String hua = <span class="string">"File类可以使用文件路径字符串来创建File实例"</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//因为想要用在程序中进行编码，所以这里选用FileOutputStream</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">"d:/File类概述.txt"</span>,<span class="keyword">true</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//这里xx，想要直接操作字符串，那么必须是字符流，而fos是字节流，无法直接操作字符串</span></span><br><span class="line"><span class="comment">//		xx.write("\r\n");</span></span><br><span class="line"><span class="comment">//		xx.write(hua);</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//数据流向：内存 --&gt; osw （字符流）--&gt;在写入fos过程中进行编码--&gt;fos（字节流）--&gt;文件</span></span><br><span class="line">		</span><br><span class="line">		OutputStreamWriter osw = <span class="keyword">new</span> OutputStreamWriter(fos,<span class="string">"GBK"</span>);</span><br><span class="line">		osw.write(<span class="string">"\r\n"</span>);</span><br><span class="line">		osw.write(hua);</span><br><span class="line">		</span><br><span class="line">		osw.close();</span><br><span class="line">		fos.close();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="146-数据io流">14.6 数据IO流</h2>
+<p>1、类型</p>
+<p>DataInputStream：允许应用程序以与机器无关方式从底层输入流中读取基本 Java 数据类型。<br>
+DataOutputStream：允许应用程序以适当方式将基本 Java 数据类型写入输出流中。</p>
+<blockquote>
+<p>它俩必须配对使用</p>
+<p>读的顺序要与写的顺序一致</p>
+</blockquote>
+<p>2、API</p>
+<table>
+<thead>
+<tr>
+<th>DataOutputStream</th>
+<th>DataInputStream</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>writeInt(xx)：输出int类型整数</td>
+<td>int readInt()</td>
+</tr>
+<tr>
+<td>writeDouble(xx)：输出double类型</td>
+<td>double readDouble()</td>
+</tr>
+<tr>
+<td>writeBoolean(xx)</td>
+<td>boolean readBoolean()</td>
+</tr>
+<tr>
+<td>writeLong(xx)</td>
+<td>long readLong()</td>
+</tr>
+<tr>
+<td>writeChar(xx)</td>
+<td>char readChar()</td>
+</tr>
+<tr>
+<td>writeByte(xx)</td>
+<td>byte readByte()</td>
+</tr>
+<tr>
+<td>writeShort(xx)</td>
+<td>short readShort()</td>
+</tr>
+<tr>
+<td>writeFloat(xx)</td>
+<td>float readFloat()</td>
+</tr>
+<tr>
+<td>writeUTF(String str)：输出字符串的</td>
+<td>String readUTF()</td>
+</tr>
+</tbody>
+</table>
+<h2 id="147-对象io流">14.7 对象IO流</h2>
+<p>1、类型</p>
+<p>ObjectOutputStream：对象序列化，输出对象，把对象转为字节序列输出</p>
+<p>ObjectInputStream：对象反序列化，读取对象，把字节序列重构成Java对象</p>
+<p>2、API</p>
+<p>ObjectOutputStream：writeObject(对象)</p>
+<p>ObjectInputStream：Object  readObject()</p>
+<p>3、序列化需要注意哪些内容？</p>
+<p>（1）所有要序列化的对象的类型都必须实现java.io.Serializable接口</p>
+<blockquote>
+<p>如果对象的属性类型也是引用数据类型，那么也要实现java.io.Serializable接口</p>
+</blockquote>
+<p>（2）希望类的修改对象反序列化不产生影响，那么我们最后能够增加一个序列化版本ID</p>
+<blockquote>
+<p>private static final long serialVersionUID = 1L;</p>
+</blockquote>
+<p>（3）如果有些属性不想要序列化，可以加transient</p>
+<p>（4）如果某个属性前面有static修饰，也不参与序列化</p>
+<p>4、除了Serializable接口之外，还可以实现java.io.Externalizable接口，但是要求重写：</p>
+<p>void readExternal(ObjectInput in)<br>
+void writeExternal(ObjectOutput out)</p>
+<p>关于哪些属性序列化和反序列化，由程序员自己定。</p>
+<h2 id="148-其他的io流相关内容">14.8 其他的IO流相关内容</h2>
+<p>1、如果要实现按行读取，可选择什么类型？</p>
+<p>BufferedReader：String readLine()</p>
+<p>Scanner：String nextLine()</p>
+<p>2、如果要按行输出，可以选择什么类型？</p>
+<p>（1）自己处理\r\n</p>
+<p>（2）BufferedWriter：newLine()</p>
+<p>（3）PrintStream和PrintWriter：println()</p>
+<h2 id="149-jdk17之后引入新trycatch">14.9 JDK1.7之后引入新try…catch</h2>
+<p>语法格式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>(需要关闭的资源对象的声明)&#123;</span><br><span class="line">    业务逻辑代码</span><br><span class="line">&#125;<span class="keyword">catch</span>(异常类型 e)&#123;</span><br><span class="line">    处理异常代码</span><br><span class="line">&#125;<span class="keyword">catch</span>(异常类型 e)&#123;</span><br><span class="line">    处理异常代码</span><br><span class="line">&#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>它没有finally，也不需要程序员去关闭资源对象，无论是否发生异常，都会关闭资源对象</p>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test03</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//从d:/1.txt(GBK)文件中，读取内容，写到项目根目录下1.txt(UTF-8)文件中</span></span><br><span class="line">	<span class="keyword">try</span>(</span><br><span class="line">		FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"d:/1.txt"</span>);</span><br><span class="line">		InputStreamReader isr = <span class="keyword">new</span> InputStreamReader(fis,<span class="string">"GBK"</span>);</span><br><span class="line">		BufferedReader br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line">		</span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">"1.txt"</span>);</span><br><span class="line">		OutputStreamWriter osw = <span class="keyword">new</span> OutputStreamWriter(fos,<span class="string">"UTF-8"</span>);</span><br><span class="line">		BufferedWriter bw = <span class="keyword">new</span> BufferedWriter(osw);</span><br><span class="line">	)&#123;</span><br><span class="line">		String str;</span><br><span class="line">		<span class="keyword">while</span>((str = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">			bw.write(str);</span><br><span class="line">			bw.newLine();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Java/15网络编程/" data-toggle="tooltip" data-placement="top" title="[Java] Java（十五）网络编程">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Java/13泛型/" data-toggle="tooltip" data-placement="top" title="[Java] Java（十三）泛型">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#第14章-io流"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x7B2C;14&#x7AE0; IO&#x6D41;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#141-javaiofile类"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">14.1 java.io.File&#x7C7B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#142-io流的四大抽象基类"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">14.2 IO&#x6D41;&#x7684;&#x56DB;&#x5927;&#x62BD;&#x8C61;&#x57FA;&#x7C7B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#143-文件io流"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">14.3 &#x6587;&#x4EF6;IO&#x6D41;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#144-缓冲io流"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">14.4 &#x7F13;&#x51B2;IO&#x6D41;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#145-编码与解码的io流转换流"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">14.5  &#x7F16;&#x7801;&#x4E0E;&#x89E3;&#x7801;&#x7684;IO&#x6D41;&#xFF08;&#x8F6C;&#x6362;&#x6D41;&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#146-数据io流"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">14.6 &#x6570;&#x636E;IO&#x6D41;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#147-对象io流"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">14.7 &#x5BF9;&#x8C61;IO&#x6D41;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#148-其他的io流相关内容"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">14.8 &#x5176;&#x4ED6;&#x7684;IO&#x6D41;&#x76F8;&#x5173;&#x5185;&#x5BB9;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#149-jdk17之后引入新trycatch"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text">14.9 JDK1.7&#x4E4B;&#x540E;&#x5F15;&#x5165;&#x65B0;try&#x2026;catch</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
