@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Hive] 01-Hive 部署 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Hive/01Hive部署/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                            
+                        </div>
+                        <h1>[Hive] 01-Hive 部署</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-12-06
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>Hive：<br>
+Hadoop广义：以Apache Hadoop软件为主体的生态圈 包含hive、sqoop、hbase、kafka、spark、flink<br>
+Hadoop狭义：Apache Hadoop软件<br>
+	hdfs                存储<br>
+	mapreduce     计算<br>
+	yarn                资源作业的分配调度</p>
+</blockquote>
+<blockquote>
+<p>Apache的顶级项目或者是孵化项目<br>
+顶级项目：<a href="http://xxx.apache.org" target="_blank" rel="noopener">xxx.apache.org</a><br>
+GitHub地址：<a href="http://github.com/apache/xxx" target="_blank" rel="noopener">github.com/apache/xxx</a><br>
+CDH版本：<a href="http://archive.cloudera.com/cdh5/cdh/5/" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/</a><br>
+下载：hive-1.1.0-cdh5.16.2.tar.gz<br>
+Hadoop、Hive、Sqoop、HBase   选择的尾号一定是相同的<br>
+Spark除外</p>
+<p>The Apache Hive ™ data warehouse software facilitates<br>
+reading, writing, and managing large datasets<br>
+residing in distributed storage using SQL</p>
+<p>HDFS的数据能否使用Hive来进行处理？？（必须可以）<br>
+distributed storage<br>
+	HDFS  HDFS存储<br>
+	S3      亚马逊对象存储<br>
+	OSS   阿里云存储<br>
+	COS   腾讯云存储</p>
+<p>A command line tool and JDBC driver are<br>
+provided to connect users to Hive</p>
+</blockquote>
+<h2 id="1hive基本概念">1.Hive基本概念</h2>
+<p>1.1 什么是Hive<br>
+Hive：由Facebook开源用于解决海量结构化日志的数据统计工具。<br>
+Hive是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张表，并提供类SQL查询功能。<br>
+<strong>本质是：将HQL转化成MapReduce程序</strong><br>
+<img src="/img/article/hive/Snipaste_2020-12-06_14-08-18.png" alt="Snipaste_2020-12-06_14-08-18"><br>
+1）HDFS：Hive处理的数据存储在HDFS上[x]<br>
+2）MR：   Hive作业(SQL)是通过Hive的框架翻译成MR作业<br>
+			      还支持Tez  Spark引擎；<br>
+			      不管底层到底是使用什么引擎，对于用户来说是不感知<br>
+			      同样的SQL，只需要通过一个参数切换，就可以运行不同的执行引擎之上<br>
+3）YARN： Hive的作业是提交到YARN上面去运行的</p>
+<p>Hadoop：开发可以使用单机，生产上肯定都是分布式的<br>
+Hive其实就是一个客户端（提交机器）而已，没有集群的概念<br>
+	SQL ==&gt; Hive ==&gt; MR ==&gt; YARN</p>
+<p>Hive职责：将SQL翻译成底层对应的执行引擎作业<br>
+统一的元数据（metadata）管理 == metastore<br>
+	元数据：描述数据的数据  schema<br>
+	源数据：<br>
+举个栗子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">HDFS上面有一个文件user.txt</span><br><span class="line">	1,PK,30</span><br><span class="line">	2,若泽,31</span><br><span class="line">	3,星星,16</span><br><span class="line"></span><br><span class="line">每行数据就是一个普通的字符串而已，多列使用指定的分隔符关联在一起</span><br><span class="line">	table: pk_user   &lt;== user.txt</span><br><span class="line">	id: int		</span><br><span class="line">	name: string</span><br><span class="line">	age: int</span><br><span class="line">	sep: ,</span><br><span class="line"></span><br><span class="line">Spark SQL/Impala/Presto.... 统一使用metastore</span><br></pre></td></tr></table></figure>
+<p>Hive<br>
+	数据是存放在distributed storage上的<br>
+	元数据是存储在metastore所对应的底层数据库中的(MySQL)</p>
+<h2 id="2hive架构-sql-on-hadoop">2.Hive架构 （SQL on Hadoop）</h2>
+<p><img src="/img/article/hive/Hive%E6%9E%B6%E6%9E%84.png" alt="Hive架构"></p>
+<ol>
+<li>
+<p>用户接口：Client<br>
+CLI（command-line interface）、JDBC/ODBC(jdbc访问hive)、WEBUI（浏览器访问hive）</p>
+</li>
+<li>
+<p>元数据：Metastore<br>
+元数据包括：表名、表所属的数据库（默认是default）、表的拥有者、列/分区字段、表的类型（是否是外部表）、表的数据所在目录等；<br>
+<strong>默认存储在自带的derby数据库中，推荐使用MySQL存储Metastore</strong></p>
+</li>
+<li>
+<p>Hadoop<br>
+使用HDFS进行存储，使用MapReduce进行计算。</p>
+</li>
+<li>
+<p>驱动器：Driver<br>
+（1）解析器（SQL Parser）：将SQL字符串转换成抽象语法树AST，这一步一般都用第三方工具库完成，比如antlr；对AST进行语法分析，比如表是否存在、字段是否存在、SQL语义是否有误。<br>
+（2）编译器（Physical Plan）：将AST编译生成逻辑执行计划。<br>
+（3）优化器（Query Optimizer）：对逻辑执行计划进行优化。<br>
+（4）执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说，就是MR/Spark。</p>
+</li>
+</ol>
+<p><img src="/img/article/hive/Snipaste_2020-12-06_15-08-41.png" alt="Snipaste_2020-12-06_15-08-41"></p>
+<p>Hive通过给用户提供的一系列交互接口，接收到用户的指令(SQL)，使用自己的Driver，结合元数据(MetaStore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。</p>
+<p>Hive vs RDBMS</p>
+<ul>
+<li>分布式</li>
+<li>节点数</li>
+<li>成本</li>
+<li>数据量</li>
+<li>insert update delete</li>
+<li>事务</li>
+<li>延时性：批处理/离线处理</li>
+</ul>
+<p>Hive适用场景</p>
+<ul>
+<li>批处理/离线处理</li>
+<li>延时性很大的</li>
+<li>尽量少涉及到update或者delete这种操作，虽然是支持的</li>
+</ul>
+<p>Hive优缺点<br>
+	优：易上手、比MR使用起来简单的多<br>
+	缺：高延时</p>
+<h2 id="3hive安装地址">3.Hive安装地址</h2>
+<p>3.1 Hive官网地址：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3.2 文档查看地址：```https://cwiki.apache.org/confluence/display/Hive/GettingStarted</span><br></pre></td></tr></table></figure></p>
+<p>3.2 Apache版本下载地址：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3.3 CDH版本下载地址：```http://archive.cloudera.com/cdh5/cdh/5/</span><br></pre></td></tr></table></figure></p>
+<p>3.3 github地址：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 4.Hive 安装部署</span><br><span class="line"></span><br><span class="line">4.1 Hive安装及配置</span><br><span class="line"></span><br><span class="line">（1）把下载`hive-1.1.0-cdh5.16.2.tar.gz` 上传到`Linux`的/home/hadoop/software目录下</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">[hadoop@ruozedata001 software]$ ll</span><br><span class="line">total 731128</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 434354462 Nov 22 09:31 hadoop-2.6.0-cdh5.16.2.tar.gz</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 128800223 Dec  6 09:45 hive-1.1.0-cdh5.16.2.tar.gz</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 185515842 Apr 30  2020 jdk-8u144-linux-x64.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>（2）解压<code>hive-1.1.0-cdh5.16.2.tar.gz</code>到<code>/home/hadoop/app/</code>目录下面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ tar xf hive-1.1.0-cdh5.16.2.tar.gz -C /home/hadoop/app/</span><br><span class="line">[hadoop@ruozedata001 app]$ ln -s hive-1.1.0-cdh5.16.2/ hive</span><br><span class="line">[hadoop@ruozedata001 app]$ ll</span><br><span class="line">total 0</span><br><span class="line">lrwxrwxrwx  1 hadoop hadoop  23 Nov 22 12:13 hadoop -&gt; hadoop-2.6.0-cdh5.16.2/</span><br><span class="line">drwxr-xr-x 16 hadoop hadoop 267 Nov 22 17:41 hadoop-2.6.0-cdh5.16.2</span><br><span class="line">lrwxrwxrwx  1 hadoop hadoop  20 Dec  6 11:37 hive -&gt; hive-1.1.0-cdh5.16.2</span><br><span class="line">drwxr-xr-x 11 hadoop hadoop 197 Jun  3  2019 hive-1.1.0-cdh5.16.2</span><br></pre></td></tr></table></figure>
+<p>（3）配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ vim /home/hadoop/.bashrc</span><br><span class="line">添加一下内容</span><br><span class="line"><span class="meta">#</span><span class="bash">HIVE_HOME</span></span><br><span class="line">export HIVE_HOME=/home/hadoop/app/hive</span><br><span class="line">export PATH=$&#123;HIVE_HOME&#125;/bin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">source</span>生效</span></span><br><span class="line">[hadoop@ruozedata001 ~]$ source /home/hadoop/.bashrc</span><br></pre></td></tr></table></figure>
+<p>（4）Hive目录结构</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 hive]$ ll</span><br><span class="line">drwxr-xr-x 2 hadoop hadoop     48 Jun  3  2019 auxlib</span><br><span class="line">drwxr-xr-x 3 hadoop hadoop    119 Dec  6 12:29 bin</span><br><span class="line">drwxr-xr-x 2 hadoop hadoop    232 Dec  6 18:34 conf</span><br><span class="line">drwxr-xr-x 4 hadoop hadoop   8192 Dec  6 13:03 lib</span><br><span class="line"></span><br><span class="line">auxlib ==&gt; UDF函数编程jar包</span><br><span class="line">conf   ==&gt; Hive相关的配置文件</span><br><span class="line">lib    ==&gt; Hive相关的jar包</span><br><span class="line">bin    ==&gt; Hive相关的脚本</span><br></pre></td></tr></table></figure>
+<h2 id="5hive基本操作">5.Hive基本操作</h2>
+<p>（1）启动hive</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动Hive,必须先启动hdfs和yarn</span></span><br><span class="line">[hadoop@ruozedata001 hive]$ jps</span><br><span class="line">37920 NameNode</span><br><span class="line">38017 DataNode</span><br><span class="line">38357 ResourceManager</span><br><span class="line">38455 NodeManager</span><br><span class="line">38201 SecondaryNameNode</span><br><span class="line">[hadoop@ruozedata001 bin]$ ./hive</span><br></pre></td></tr></table></figure>
+<p>（2）查看数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hive中默认有一个数据库，名称叫default</span><br><span class="line"><span class="meta">hive&gt;</span><span class="bash"> show databases;</span></span><br><span class="line">default</span><br></pre></td></tr></table></figure>
+<p>（3）打开默认数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> use default;</span></span><br></pre></td></tr></table></figure>
+<p>（4）显示default数据库中的表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> show tables;</span></span><br></pre></td></tr></table></figure>
+<p>（5）创建一张表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> create table student(id int, name string);</span></span><br></pre></td></tr></table></figure>
+<p>（6）显示数据库中有几张表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> show tables;</span></span><br></pre></td></tr></table></figure>
+<p>（7）查看表的结构</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> desc student;</span></span><br><span class="line">OK</span><br><span class="line">id                  	int                 	                    </span><br><span class="line">name                	string              	                    </span><br><span class="line">age                 	int</span><br></pre></td></tr></table></figure>
+<p>（8）向表中插入数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> insert into student values(1,<span class="string">"zhangsan"</span>,20);</span></span><br></pre></td></tr></table></figure>
+<p>（9）查询表中数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> select * from student;</span></span><br><span class="line">OK</span><br><span class="line">1	zhangsan	20</span><br><span class="line">Time taken: 0.113 seconds, Fetched: 1 row(s)</span><br></pre></td></tr></table></figure>
+<p>（10）退出hive</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">hive&gt;</span><span class="bash"> quit;</span></span><br></pre></td></tr></table></figure>
+<p>说明：（查看hive在hdfs中的结构）</p>
+<p>数据库：在hdfs中表现为${hive.metastore.warehouse.dir}目录下一个文件夹</p>
+<p>表：在hdfs中表现所属db目录下一个文件夹，文件夹中存放该表中的具体数据</p>
+<h2 id="6遇到的问题">6.遇到的问题</h2>
+<p>再打开一个客户端窗口启动hive，会产生java.sql.SQLException异常。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 通过查看日志,那么hive的日志存放在哪里？？</span></span><br><span class="line">[hadoop@ruozedata001 conf]$ pwd</span><br><span class="line">/home/hadoop/app/hive/conf</span><br><span class="line">[hadoop@ruozedata001 conf]$ ll</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 3505 Dec  6 19:04 hive-log4j.properties</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 3505 Jun  3  2019 hive-log4j.properties.template</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">默认是没有hive-log4j.properties的，需要把 hive-log4j.properties.template，改为 hive-log4j.properties</span></span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata001 conf]$ cat hive-log4j.properties</span><br><span class="line">hive.log.threshold=ALL</span><br><span class="line">hive.root.logger=WARN,DRFA</span><br><span class="line">hive.log.dir=$&#123;java.io.tmpdir&#125;/$&#123;user.name&#125;</span><br><span class="line">hive.log.file=hive.log</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="variable">$&#123;java.io.tmpdir&#125;</span>/<span class="variable">$&#123;user.name&#125;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">&#123;java.io.tmpdir&#125; 是/tmp/目录</span></span><br><span class="line"><span class="meta">$</span><span class="bash">&#123;user.name&#125; 是当前用户名</span></span><br><span class="line">合起来是/tmp/hadoop/hive.log</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata001 conf]$ tailf /tmp/hadoop/hive.log </span><br><span class="line">Caused by: ERROR XJ040: Failed to start database 'metastore_db' with class loader sun.misc.Launcher$AppClassLoader@3b9a45b3, see the next exception for details.</span><br><span class="line">	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)</span><br><span class="line">	at org.apache.derby.impl.jdbc.SQLExceptionFactory.wrapArgsForTransportAcrossDRDA(Unknown Source)</span><br><span class="line">	... 86 more</span><br><span class="line">Caused by: ERROR XSDB6: Another instance of Derby may have already booted the database /home/hadoop/app/hive-1.1.0-cdh5.16.2/bin/metastore_db.</span><br><span class="line">	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)</span><br><span class="line">	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)</span><br><span class="line">	at org.apache.derby.impl.store.raw.data.BaseDataFileFactory.privGetJBMSLockOnDB(Unknown Source)</span><br><span class="line">	at org.apache.derby.impl.store.raw.data.BaseDataFileFactory.run(Unknown Source)</span><br><span class="line">	at java.security.AccessController.doPrivileged(Native Method)</span><br><span class="line">	at org.apache.derby.impl.store.raw.data.BaseDataFileFactory.getJBMSLockOnDB(Unknown Source)</span><br><span class="line">	at org.apache.derby.impl.store.raw.data.BaseDataFileFactory.boot(Unknown Source)</span><br></pre></td></tr></table></figure>
+<p>原因是，Metastore默认存储在自带的derby数据库中,<br>
+derby是一个单session,只能单独开一个窗口，生产中推荐使用MySQL存储Metastore;</p>
+<h2 id="7hive-元数据配置到mysql">7.Hive 元数据配置到MySql</h2>
+<p>（1）安装<code>MySql</code>，我的已经安装好了<br>
+（2）拷贝<code>mysql-connector-java-5.1.47.jar</code>，到/home//hadoop/app/hive/lib/目录下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 lib]$ ll mysql-connector-java-5.1.47.jar </span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 1007502 Nov 15 11:34 mysql-connector-java-5.1.47.jar</span><br></pre></td></tr></table></figure>
+<p>（3）配置Metastore到MySql</p>
+<p>​	1．在<code>/home//hadoop/app/hive/conf/</code>目录下创建一个hive-site.xml</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 conf]$ touch hive-site.xml</span><br><span class="line">[hadoop@ruozedata001 conf]$ vim hive-site.xml</span><br></pre></td></tr></table></figure>
+<p>​	2.根据官方文档配置参数，拷贝数据到hive-site.xml文件中<br>
+​		<a href="https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+Administration" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+Administration</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># ruozedata_pk_hive在启动的时候会自己创建该库</span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionURL<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>jdbc:mysql://192.168.9.101:3306/ruozedata_pk_hive?createDatabaseIfNotExist=true&amp;amp;useSSL=false&amp;amp;</span><br><span class="line">        useUnicode=true&amp;amp;characterEncoding=UTF-8<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionDriverName<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionUserName<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>root<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>javax.jdo.option.ConnectionPassword<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>​	3．配置完后，多窗口启动Hive测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 hive]$ bin/hive</span><br></pre></td></tr></table></figure>
+<pre><code>4. 启动Hive后，回到MySql窗口查看数据库，显示增加了`ruozedata_pk_hive`
+</code></pre>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> </span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show databases;</span></span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| ruozedata          |</span><br><span class="line">| ruozedata_pk_hive  |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br><span class="line">6 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>Hive表默认的存储路径<br>
+	<code>/user/hive/warehouse</code>  默认的<code>default</code>数据库存放的路径<br>
+	每个表都对应储存在某个数据库下的，默认就是<code>default</code>数据库</p>
+<p>​	5.在mysql查看metastore数据库<br>
+​		重点关注DBS，TBLS，COLUMN_V2表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"># 存着数据库信息</span><br><span class="line">DBS: databases</span><br><span class="line">mysql&gt; select * from DBS \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">          DB_ID: 1  # DB的id</span><br><span class="line">           DESC: Default Hive database</span><br><span class="line">DB_LOCATION_URI: hdfs://ruozedata001:9000/user/hive/warehouse # 默认存储的位置</span><br><span class="line">           NAME: default #默认的数据库</span><br><span class="line">     OWNER_NAME: public</span><br><span class="line">     OWNER_TYPE: ROLE</span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-------------------------</span></span><br><span class="line">#存着表的信息</span><br><span class="line">TBLS: <span class="keyword">Tables</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> TBLS \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">            TBL_ID: 2  # 表的id</span><br><span class="line">       CREATE_TIME: 1607232452</span><br><span class="line">             DB_ID: 1  #这个表属于哪个数据库，数据库的id为1，关联着DBS的id</span><br><span class="line">  LAST_ACCESS_TIME: 0</span><br><span class="line">             OWNER: hadoop  # hadoop用户创建的</span><br><span class="line">        OWNER_TYPE: USER</span><br><span class="line">         RETENTION: 0</span><br><span class="line">             SD_ID: 2</span><br><span class="line">          TBL_NAME: pk_user2  # 表名</span><br><span class="line">          TBL_TYPE: MANAGED_TABLE</span><br><span class="line">VIEW_EXPANDED_TEXT: NULL</span><br><span class="line">VIEW_ORIGINAL_TEXT: NULL</span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">#COLUMNS_v2 存着字段的信息</span><br><span class="line">COLUMNS_V2: <span class="keyword">column</span> </span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> COLUMNS_V2 \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">      CD_ID: 2</span><br><span class="line">    <span class="keyword">COMMENT</span>: <span class="literal">NULL</span></span><br><span class="line">COLUMN_NAME: <span class="keyword">id</span>  # 字段名字为 <span class="keyword">id</span></span><br><span class="line">  TYPE_NAME: <span class="built_in">int</span> # 字段的类型为 <span class="built_in">int</span></span><br><span class="line">INTEGER_IDX: <span class="number">0</span>  # 对应着表字段的索引</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="keyword">ERROR</span>: </span><br><span class="line"><span class="keyword">No</span> <span class="keyword">query</span> specified</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Hive/02 Hive命令/" data-toggle="tooltip" data-placement="top" title="[Hive] 02-Hive 属性配置及DDL语句">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Hadoop/07.Hadoop-/" data-toggle="tooltip" data-placement="top" title="[Hadoop]06 container优化">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1hive基本概念"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.Hive&#x57FA;&#x672C;&#x6982;&#x5FF5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2hive架构-sql-on-hadoop"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.Hive&#x67B6;&#x6784; &#xFF08;SQL on Hadoop&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3hive安装地址"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.Hive&#x5B89;&#x88C5;&#x5730;&#x5740;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5hive基本操作"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">5.Hive&#x57FA;&#x672C;&#x64CD;&#x4F5C;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6遇到的问题"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">6.&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7hive-元数据配置到mysql"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">7.Hive &#x5143;&#x6570;&#x636E;&#x914D;&#x7F6E;&#x5230;MySql</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

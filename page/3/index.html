@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/archives/3/">
+    <link rel="canonical" href="http://www.mochuangang.com/page/3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -134,6 +134,13 @@
 
                         
                         <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archive/">Archives</a>
                         </li>
                         
@@ -142,13 +149,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,32 +211,30 @@
 
 <div class="post-preview">
 
-    <a href="/article/Java/02Java的基础语法/">
+    <a href="/article/Java/12集合/">
         <h2 class="post-title">
                                  
-            [Java] Java（二）基础语法
+            [Java] Java（十二）集合
         </h2>
         <h3 class="post-subtitle">
             Java基础.
         </h3>
         <div class="post-content-preview">
-            第二章 Java的基础语法
-2.1 标识符
-简单的说，凡是程序员自己命名的部分都可以称为标识符。
-即给类、变量、方法、包等命名的字符序列，称为标识符。
-1、标识符的命名规则
-（1）Java的标识符只能使用26个英文字母大小写，0-9的数字，下划线_，美元符号$
-（2）不能使用Java的关键字（包含保留字）和特殊值
-（3）数字不能开头
-（4）不能包含空格
-（5）严格区分大小写
-2、标识符的命名......
+            第十二章 集合
+12.1 概念
+数据结构：存储数据的某种结构
+（1）底层的物理结构
+①数组：开辟连续的存储空间，每一个元素使用[下标]进行区别
+②链式：不需要开辟连续的存储空间，但是需要“结点”来包装要存储的数据，结点包含两部分内容：
+​	A、数据
+​	B、记录其他结点的地址，例如：next，pre，left，right，parent等
+（2）表现出来的逻辑结构：动态数组、单向链表、双向链表......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-02
+            2020-03-12
         </p>
         <div class="tags">
             
@@ -250,32 +248,67 @@
 
 <div class="post-preview">
 
-    <a href="/article/Java/01Java概述/">
+    <a href="/article/Java/11常用类/">
         <h2 class="post-title">
                                  
-            [Java] Java（一）概述
+            [Java] Java（十一）常用类
         </h2>
         <h3 class="post-subtitle">
             Java基础.
         </h3>
         <div class="post-content-preview">
-            第一章 Java概述
-1.1 Java历史
-Java诞生于SUN（Stanford University Network），09年SUN被Oracle（甲骨文）收购。
-Java之父是詹姆斯.高斯林(James Gosling)。
-1996年发布JDK1.0版。
-目前最新的版本是Java12。我们学习的Java8。
-1.2 Java语言最主要的特点
+            第十一章 常用类
+11.1 包装类
+11.1.1 包装类
+当要使用只针对对象设计的API或新特性（例如泛型），那么基本数据类型的数据就需要用包装类来包装。
 
-特点一：面向对象
 
-两个基本概念：类、对象......
+
+序号
+基本数据类型
+包装类
+
+
+
+
+1
+byte
+Byte
+
+
+2
+short
+Short
+
+
+3
+int
+Integer
+
+
+4
+long
+Long
+
+
+5
+float
+Float
+
+
+6
+double
+Double
+
+
+7
+ch......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-01
+            2020-03-11
         </p>
         <div class="tags">
             
@@ -289,37 +322,33 @@ Java之父是詹姆斯.高斯林(James Gosling)。
 
 <div class="post-preview">
 
-    <a href="/article/Linux/17.Linux之任务计划/">
+    <a href="/article/Java/09异常/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十七）任务计划
+            [Java] Java（九）异常
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.计划任务基本概述]
-[2.计划任务时间管理]
-[3.计划任务编写实践]
-[4.计划任务如何调试]
-
-1.计划任务基本概述
-*1.什么是crond*
-crond就是计划任务，类似于我们平时生活中的闹钟。定点执行。
-*2.为什么要使用crond*
-crond主要是做一些周期性的任务，比如: 凌晨3点定时备份数据。比如：11点开启网站抢购接口，12点关闭网站抢购接口。
-*3.计划任务主要分......
+            第九章 异常
+9.1 异常的类型的体系结构
+1、异常系列的超父类：java.lang.Throwable
+（1）只有它或它子类的对象，才能被JVM或throw语句“抛”出
+（2）也只有它或它子类的对象，才能被catch“捕获”
+2、Throwable分为两大派别
+（1）Error：严重的错误，需要停下来重新设计、升级解决这个问题
+（2）Exception： 一般的异常，可以通过判断、检验进行......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-24
+            2020-03-09
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -329,41 +358,31 @@ crond主要是做一些周期性的任务，比如: 凌晨3点定时备份数据
 
 <div class="post-preview">
 
-    <a href="/article/Linux/16.Linux之系统服务/">
+    <a href="/article/Java/08枚举与注解/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十六）系统服务
+            [Java] Java（八）枚举与注解
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.Linux启动流程]
-[2.Linux运行级别]
-[3.Linux systemd]
-[4.Linux单用户模式]
-[5.Linux下救援模式]
-
-1.Linux启动流程
-*CentOS6启动级别*
-*CentOS6 VS Centos7开机启动流程图解*
-2.Linux运行级别
-1.什么是运行级别，运行级别就是操作系统当前正在运行的功能级别
-
-
-
-System V init运行级别......
+            第八章  枚举与注解
+8.1 枚举
+1、枚举（JDK1.5引入的）
+枚举类型的对象是有限、固定的几个常量对象。
+2、语法格式
+1234567891011//形式一：枚举类型中只有常量对象列表【修饰符】 enum 枚举类型名&#123;    常量对象列表&#125;//形式二：枚举类型中只有常量对象列表【修饰符】 enum 枚举类型名&#123;    常量对象列表;        其他成员......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-23
+            2020-03-08
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -373,37 +392,40 @@ System V init运行级别......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/15.Linux之进程管理/">
+    <a href="/article/Java/07面向对象的高级特性/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十五）进程管理
+            [Java] Java（七）面向对象的高级特性
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[2.监控进程状态]
-[3.管理进程状态]
-[4.管理后台进程]
-[5.进程的优先级[进阶]]
-[6.系统平均负载[进阶]]
-
-*1.什么是进程*
-比如: 开发写的代码我们称为程序，那么将开发的代码运行起来。我们称为进程。
-总结一句话就是: 当我们运行一个程序，那么我们将运行的程序叫进程。
-PS1: 当程序运行为进程后，系统会为该进程分配内存，以及进程运行的身份和权限。
-PS2: 在进程运......
+            第七章 面向对象的高级特性
+修饰符的学习围绕三个问题：
+（1）单词的意思
+（2）可以修饰什么？
+（3）用它修饰后有什么不同？
+7.1 关键字：final
+final：最终的
+用法：
+（1）修饰类（包括外部类、内部类类）
+表示这个类不能被继承，没有子类
+（2）修饰方法
+表示这个方法不能被重写
+（3）修饰变量（成员变量（类变量、实例变量），局部变量）
+表示这个变量的值不能被修改
+注意：如果某个成......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-22
+            2020-03-07
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -413,39 +435,66 @@ PS2: 在进程运......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/14.Linux之磁盘管理/">
+    <a href="/article/Java/06面向对象的基本特征/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十四）磁盘管理
+            [Java] Java（六）面向对象的基本特征
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.磁盘的基本概念]
-[2.磁盘的基本结构]
-[3.磁盘的预备知识]
-[4.磁盘基本分区Fdisk]
-[5.磁盘的基本分区Gdisk]
-[6.磁盘挂载方式Mount]
-[7.虚拟磁盘介绍SWAP]
+            第六章 面向对象的基本特征
+面向对象的基本特征：
+1、封装
+2、继承
+3、多态
+6.1 封装
+1、好处：
+（1）隐藏实现细节，方便使用者使用
+（2）安全，可以控制可见范围
+2、如何实现封装？
+通过权限修饰符
 
-1.磁盘的基本概念
-1.什么是磁盘*
-绝大多数人对硬盘都不陌生，
-一块小小的硬盘里，就可以存储海量的照片音乐和电影，尤其是我们喜爱的各类动作片。
-但如此小的空间，是如何储存那么多信息的呢？*......
+面试题：请按照可见范围从小到大（从大到小）列出权限修饰符？
+
+
+
+
+修饰符
+本类
+本包
+其他包的子类
+任意位置
+
+
+
+
+private
+√
+×
+×
+×
+
+
+缺省
+√
+√
+×
+×
+
+
+p......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-21
+            2020-03-06
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -455,38 +504,34 @@ PS2: 在进程运......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/13.Linux之软件管理/">
+    <a href="/article/Java/05面向对象/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十三）软件管理
+            [Java] Java（五）面向对象基础
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.RPM基本概述]
-[2.RPM使用示例]
-[3.YUM基本介绍]
-[4.YUM实践案例]
-[5.搭建本地仓库]
-[6.源码包管理实践]
-
-1.RPM基本概述
-*1.什么是rpm?*
-RPM全称 RPM Package Manager 缩写，由红帽开发用于软件包的安装升级卸载与查询
-*2.rpm包名组成部分?*
-RPM包命名以-将软件分成了若干部分bash-4.2.46-28.el7.......
+            第五章 面向对象基础
+5.1 类与对象
+1、类：一类具有相同特性的事物的抽象描述。
+​      对象：类的一个个体，实例，具体的存在。
+​     类是对象的设计模板。
+2、如何声明类？
+123【修饰符】 class 类名&#123;    成员列表：属性、方法、构造器、代码块、内部类&#125;
+3、如何创建对象？
+123new 类名();  //匿名对象类名 对象名 = new 类名(......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-20
+            2020-03-05
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -496,37 +541,36 @@ RPM包命名以-将软件分成了若干部分bash-4.2.46-28.el7.......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/12.Linux之压缩打包/">
+    <a href="/article/Java/04数组/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十二）压缩打包
+            [Java] Java（四）数组
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.文件打包与压缩]
-[1.gzip打包与压缩]
-[1.zip打包与压缩]
-[2.tar打包与压缩]
-
-1.文件打包与压缩
-*1.什么是文件压缩?*
-将多个文件或目录合并成为一个特殊的文件。比如: 搬家…脑补画面 img.
-*2.为什么要对文件进行压缩？*
-当我们在传输大量的文件时，通常都会选择将该文件进行压缩，然后在进行传输。
-首先：压缩后的文件会比压缩前的文件小。一个28G的文件夹压......
+            第四章 数组
+4.1 数组的相关概念和名词（了解）
+1、数组(array)：
+​	一组具有相同数据类型的数据的按照一定顺序排列的集合。
+​       把有限的几个相同类型的变量使用一个名称来进行统一管理。
+2、数组名：
+​	（1）这个数组名，代表的是一组数
+​	（2）这个数组名中存储的整个数组的“首地址”
+3、下标(index)：
+​	我们使用编号、索引、下标来区别表示一组数当中某一个。
+......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-19
+            2020-03-04
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -536,40 +580,34 @@ RPM包命名以-将软件分成了若干部分bash-4.2.46-28.el7.......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/11.Linux之文件查找/">
+    <a href="/article/Java/10多线程/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十一）文件查找
+            [Java] Java（十）多线程
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.find查找概述]
-[2.find查找示例]
-
-1.find查找概述
-为什么要有文件查找，因为很多时候我们可能会忘了某个文件所在的位置，此时就需要通过find来查找。
-find命令可以根据不同的条件来进行查找文件，例如：文件名称、文件大小、文件修改时间、属主属组、权限、等等方式。同时find命令是Linux下必须掌握的。
-*find 命令的基本语法如下*
-
-
-
-命令
-路径
-选项
-表达......
+            第十章  多线程
+10.1 相关的概念
+1、程序（Program）
+​	为了实现一个功能，完成一个任务而选择一种编程语言编写的一组指令的集合。
+2、进程（Process）
+​	程序的一次运行。操作系统会给这个进程分配资源（内存）。
+​	进程是操作系统分配资源的最小单位。
+​	进程与进程之间的内存是独立，无法直接共享。
+​	最早的DOS操作系统是单任务的，同一时间只能运行一个进程。后来现在的操......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-18
+            2020-03-04
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -579,36 +617,36 @@ find命令可以根据不同的条件来进行查找文件，例如：文件名�
 
 <div class="post-preview">
 
-    <a href="/article/Linux/10.Linux之输入输出/">
+    <a href="/article/Java/03流程控制语句结构/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十）输入输出
+            [Java] Java（三）流程控制语句结构
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.重定向概述]
-[2.输出重定向]
-[3.输入重定向]
-[4.进程管道技术]
-
-1.重定向概述
-*1.什么是重定向*
-将原本要输出到屏幕的数据信息，重新定向到某个指定的文件中。比如：每天凌晨定时备份数据，希望将备份数据的结果保存到某个文件中。这样第二天通过查看文件的内容就知道昨天备份的数据是成功还是失败。
-*2.为何要使用重定向*
-1.当屏幕输出的信息很重要，而且希望保存重要的信息时；......
+            第三章 流程控制语句结构
+流程控制语句结构分为：
+1、顺序结构：从上到下依次执行
+2、分支结构：多个分支选择其中一个分支执行
+3、循环结构：重复执行某些代码
+3.1 顺序结构
+执行过程：从上到下顺序执行
+3.1.1 输出语句
+1、System.out.print(输出内容); #输出内容后不换行
+2、System.out.println(输出内容);  #输出内容后换行
+1234567891......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-17
+            2020-03-03
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -623,12 +661,12 @@ find命令可以根据不同的条件来进行查找文件，例如：文件名�
 <ul class="pager">
     
         <li class="previous">
-            <a href="/archives/2/">&larr; Newer Posts</a>
+            <a href="/page/2/">&larr; Newer Posts</a>
         </li>
     
     
         <li class="next">
-            <a href="/archives/4/">Older Posts &rarr;</a>
+            <a href="/page/4/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -661,15 +699,23 @@ find命令可以根据不同的条件来进行查找文件，例如：文件名�
     <div class="tags">
         
             
+            <a href="/tags/#Hadoop" title="Hadoop" rel="8">Hadoop</a>
+            
+        
+            
+            <a href="/tags/#Hive" title="Hive" rel="2">Hive</a>
+            
+        
+            
+            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
+            
+        
+            
             <a href="/tags/#Java" title="Java" rel="19">Java</a>
             
         
             
             <a href="/tags/#Mysql" title="Mysql" rel="3">Mysql</a>
-            
-        
-            
-            <a href="/tags/#Linux" title="Linux" rel="20">Linux</a>
             
         
     </div>
@@ -725,23 +771,23 @@ find命令可以根据不同的条件来进行查找文件，例如：文件名�
     <ul>
       
         <li>
-          <a href="/article/Mysql/02Mysql常用命令/">[Mysql]Mysql（二）常用命令</a>
+          <a href="/article/Hive/02 Hive命令/">[Hive] 02-Hive 属性配置及DDL语句</a>
         </li>
       
         <li>
-          <a href="/article/Mysql/01Mysql安装/">[Mysql]Mysql Linux安装5.7.26</a>
+          <a href="/article/Hive/01Hive部署/">[Hive] 01-Hive 部署</a>
         </li>
       
         <li>
-          <a href="/article/Mysql/MySQL复习笔记/">[Mysql] Mysql复习笔记</a>
+          <a href="/article/Hadoop/07.Hadoop-/">[Hadoop]06 container优化</a>
         </li>
       
         <li>
-          <a href="/article/Java/19Idea快捷键/">[Java] Idea快捷键大全</a>
+          <a href="/article/Hadoop/08.Hadoop-源码编译/">[Hadoop]06 Hadoop源码编译</a>
         </li>
       
         <li>
-          <a href="/article/Java/18设计模式/">[Java] Java（十八）设计模式</a>
+          <a href="/article/Hadoop/06.Hadoop-MapReduce-yarn架构/">[Hadoop]06 MapReduce/Yarn架构</a>
         </li>
       
     </ul>
@@ -762,7 +808,7 @@ find命令可以根据不同的条件来进行查找文件，例如：文件名�
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>

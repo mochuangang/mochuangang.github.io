@@ -134,6 +134,13 @@
 
                         
                         <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archive/">Archives</a>
                         </li>
                         
@@ -142,13 +149,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,30 +211,31 @@
 
 <div class="post-preview">
 
-    <a href="/article/Mysql/02Mysql常用命令/">
+    <a href="/article/Hive/02 Hive命令/">
         <h2 class="post-title">
                                  
-            [Mysql]Mysql（二）常用命令
+            [Hive] 02-Hive 属性配置及DDL语句
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            MySQL常用命令
-修改用户密码
-1mysql&gt; alter user root@localhost identified by &apos;123456&apos;;
-赋予数据库所有表的授权给root用户
-123456mysql&gt;GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY......
+            1.Hive中参数设置的几种方式
+官网配置：https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties
+
+
+hive-site.xml  全局的
+1234567891011# 添加 查询表的头信息配置&lt;property&gt;    &lt;name&gt;hive.cli.print.header......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-11-16
+            2020-12-07
         </p>
         <div class="tags">
             
-              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
+              <a href="/tags/#Hive" title="Hive">Hive</a>
             
         </div>
     
@@ -244,30 +245,36 @@
 
 <div class="post-preview">
 
-    <a href="/article/Mysql/01Mysql安装/">
+    <a href="/article/Hive/01Hive部署/">
         <h2 class="post-title">
                                  
-            [Mysql]Mysql Linux安装5.7.26
+            [Hive] 01-Hive 部署
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.卸载Centos7自带 MariaDB
-检查mariadb是否已安装
-12[root@ruozedata01 local]# yum list installed | grep mariadb mariadb-libs.x86_64   1:5.5.56-2.el7     @anaconda
-全部卸载
-1[root@ruozedata01 local]# yum remove mari......
+            
+Hive：
+Hadoop广义：以Apache Hadoop软件为主体的生态圈 包含hive、sqoop、hbase、kafka、spark、flink
+Hadoop狭义：Apache Hadoop软件
+	hdfs                存储
+	mapreduce     计算
+	yarn                资源作业的分配调度
+
+
+Apache的顶级项目或者是孵化项目
+顶......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-11-15
+            2020-12-06
         </p>
         <div class="tags">
             
-              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
+              <a href="/tags/#Hive" title="Hive">Hive</a>
             
         </div>
     
@@ -277,32 +284,35 @@
 
 <div class="post-preview">
 
-    <a href="/article/Mysql/MySQL复习笔记/">
+    <a href="/article/Hadoop/07.Hadoop-/">
         <h2 class="post-title">
                                  
-            [Mysql] Mysql复习笔记
+            [Hadoop]06 container优化
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            第一章 数据库概述
-1.1 数据库概述
-DBMS：数据库管理系统（Database Management System）是一种操纵和管理数据库的大型软件，例如建立、使用和维护数据库。
-DB：数据库（Database）
-SQL：结构化查询语言，（Structure Query Language），专门用来操作/访问数据库的通用语言。
-MySQL：其中的一款关系型数据库管理系统
-以下是2019年......
+            1.container 容器
+关于yarn的调优，其实就是调整container
+container是虚拟化的，是memory + cpu vcore组成的，是专门运行任务
+举个栗子：
+生产上应该如何调优container参数？
+假设128G  16 物理core
+1.1 系统装完  消耗1G
+1.2 系统要预留20%内存 （1G）
+给当前进程服务，防止出现oom-kill机制
+Linux系......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-04-08
+            2020-12-03
         </p>
         <div class="tags">
             
-              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -312,59 +322,26 @@ MySQL：其中的一款关系型数据库管理系统
 
 <div class="post-preview">
 
-    <a href="/article/Java/19Idea快捷键/">
+    <a href="/article/Hadoop/08.Hadoop-源码编译/">
         <h2 class="post-title">
                                  
-            [Java] Idea快捷键大全
+            [Hadoop]06 Hadoop源码编译
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            
-十九章Idea快捷键大全（Windows）
-Ctrl
-
-
-
-快捷键
-介绍
-
-
-
-
-Ctrl + F
-在当前文件进行文本查找 （必备）
-
-
-Ctrl + R
-在当前文件进行文本替换 （必备）
-
-
-Ctrl + Z
-撤销 （必备）
-
-
-Ctrl + Y
-删除光标所在行 或 删除选中的行 （必备）
-
-
-Ctrl + X
-剪切光标所在行 或 剪切选择内容
-
-
-Ctrl + C
-复制光标所在行 或 ......
+            ...
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-19
+            2020-12-03
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -374,30 +351,38 @@ Ctrl + C
 
 <div class="post-preview">
 
-    <a href="/article/Java/18设计模式/">
+    <a href="/article/Hadoop/06.Hadoop-MapReduce-yarn架构/">
         <h2 class="post-title">
                                  
-            [Java] Java（十八）设计模式
+            [Hadoop]06 MapReduce/Yarn架构
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第十八章 设计模式
-18.1 模板设计模式（了解）
-1、当解决某个问题，或者完成某个功能时，主体的算法结构（步骤）是确定的，只是其中的一个或者几个小的步骤不确定，要有使用者（子类）来确定时，就可以使用模板设计模式
-2、示例代码：计算任意一段代码的运行时间
-123456789101112131415161718//模板类public abstract class CalTime&#123;  ......
+            MapReduce  java代码  生产不用
+Hive 执行引擎 就是 MapReduce
+1.分布式计算框架
+map  映射
+指的是一组数据按照规则映射为一组
+string=a b a
+(a,1)
+(b,1)
+(a,1)
+reduce 归约  汇总
+(a,2)
+(b,1)
+1234567891011121314151617SQL:id  name1    a2    b3    a4  ......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-18
+            2020-12-02
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -407,31 +392,31 @@ Ctrl + C
 
 <div class="post-preview">
 
-    <a href="/article/Java/17Java8/">
+    <a href="/article/Hadoop/05.Hadoop命令/">
         <h2 class="post-title">
                                  
-            [Java] Java8（十七）
+            [Hadoop]05.Hadoop命令
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第十七章 Java8
-17.1 Lambda表达式与函数式接口
-Lambda写的好可以极大的减少代码冗余，同时可读性也好过冗长的匿名内部类。
-17.1.1 函数式接口
-lambda表达式其实就是实现SAM接口的语法糖，所谓SAM接口就是Single Abstract Method，即该接口中只有一个抽象方法需要实现，当然该接口可以包含其他非抽象方法。
-其实只要满足“SAM”特征的接口都可以称......
+            1.SecondaryNameNode：SNN
+
+1.snn执行checkpoint动作时候，nn会停止使用当前的edit文件515-516，
+会暂时将读写操作记录到一个新的edit文件中 517
+2.snn将nn的fsimage 514 和 edits文件 515-516 远程下载到本地
+3.snn将fsimage 514加载到内存中，将 edits文件 515-516 内容之内存中从头到......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-17
+            2020-11-29
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -441,35 +426,42 @@ lambda表达式其实就是实现SAM接口的语法糖，所谓SAM接口就是Si
 
 <div class="post-preview">
 
-    <a href="/article/Java/16反射/">
+    <a href="/article/Hadoop/04.Hadoop-HDFS主从架构/">
         <h2 class="post-title">
                                  
-            [Java] Java（十六）反射
+            [Hadoop]04.Hadoop HDFS主从架构
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第十六章 反射（难点）
-16.1 类加载
-1、类在内存中的生命周期：加载–&gt;使用–&gt;卸载
-2、类的加载又分为三个阶段：
-（1）加载：load
-（2）连接：link
-①验证：校验合法性
-②准备：准备对应的内存（方法区），创建Class对象，为类变量赋默认值，为静态常量赋初始值。
-③解析：把字节码中的符号引用替换为对应的直接地址引用
-（3）初始化：initialize（类初始化），大......
+            HDFS组成架构
+
+1.NameNode (nn)：就是Master，它是一个主管，管理者。
+
+管理HDFS的名称空间；
+配置副本策略；
+管理数据块（Block)映射信息；
+处理客户端读写请求。
+
+2.DataNode：就是Slave。NameNode下达命令，DataNode执行实际的操作。
+
+存储实际的数据块；
+执行数据块的读/写操作。
+
+3.Client：就是客户端。
+
+文件切分。文件......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-16
+            2020-11-26
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -479,34 +471,40 @@ lambda表达式其实就是实现SAM接口的语法糖，所谓SAM接口就是Si
 
 <div class="post-preview">
 
-    <a href="/article/Java/15网络编程/">
+    <a href="/article/Hadoop/01.Hadoop概述/">
         <h2 class="post-title">
                                  
-            [Java] Java（十五）网络编程
+            [Hadoop]01-Hadoop概述
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第十五章 网络编程（了解）
-学习它为了更好的理解：web（服务器端和客户端的通信）、数据库（服务器端和客户端的数据传输）等原理。
-15.1 主机IP
-在程序中表示：
-（1）值的表示
-IPV4：32位整数，8位一组，用.分割，例如：192.168.11.45
-​	每个8位的范围[0,255]
-IPV6：128位整数表示，16位一组，用:分割，例如：X:X:X:X:X:X:X:X
-​	每个16位......
+            1.Hadoop是什么
+
+
+Hadoop是一个由Apache基金会所开发的分不是系统基础架构
+主要解决，海量数据的存储和海量数据的分析计算问题
+广义上来说：Hadoop通常是指一个更广泛的概念–Hadoop生态圈
+
+
+以Apache Hadoop软件为主的生态圈 包含hive、sqoop、hbase、kafka、spark、flink
+
+
+狭义上来说：Apache Hadoop软件
+
+
+hd......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-15
+            2020-11-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -516,34 +514,33 @@ IPV6：128位整数表示，16位一组，用:分割，例如：X:X:X:X:X:X:X:X
 
 <div class="post-preview">
 
-    <a href="/article/Java/14IO流/">
+    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
         <h2 class="post-title">
                                  
-            [Java] Java（十四）IO流
+            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第14章 IO流
-14.1 java.io.File类
-它是文件和目录路径名的抽象描述。
-API：
-（1）getName()：获取文件或目录的名称
-（2）getPath()：获取文件或目录的路径
-（3）getAbsolutePath()：获取文件或目录的绝对路径
-（4） getCanonicalPath()：获取文件或目录的规范路径
-（5）long length()：获取文件的长度，单位字节......
+            
+修改原因
+
+Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
+
+Hadoop修改
+
+1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-14
+            2020-11-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -553,34 +550,31 @@ API：
 
 <div class="post-preview">
 
-    <a href="/article/Java/13泛型/">
+    <a href="/article/Hadoop/02.Hadoop伪分布式部署/">
         <h2 class="post-title">
                                  
-            [Java] Java（十三）泛型
+            [Hadoop]02-Hadoop伪分布式部署
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第13章 泛型
-13.1 泛型的概述
-泛型：参数化类型
-类型形参：，，，，，。。。。
-类型实参：必须是引用数据类型，不能是基本数据类型
-​	，，，&lt;ArrayList&gt;。。。
-13.2 形式一：泛型类与泛型接口
-1、声明语法格式：
-12345678910【修饰符】 class 类名/接口&lt;类型形参列表&gt;&#123;    &#125;【修饰符】 class 类名/接口......
+            系统环境：VMware虚拟机
+系统版本：CentOS Linux release 7.5.1804 (Core)
+修改主机名
+1[root@ruozedata001 ~]# hostnamectl set-hostname ruozedata001
+添加域名映射 centos–&gt;windows
+12345[root@ruozedata001 ~]# vim /etc/hosts127.......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-13
+            2020-11-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -596,7 +590,7 @@ API：
     
     
         <li class="next">
-            <a href="/archives/2/">Older Posts &rarr;</a>
+            <a href="/page/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -629,15 +623,23 @@ API：
     <div class="tags">
         
             
+            <a href="/tags/#Hadoop" title="Hadoop" rel="8">Hadoop</a>
+            
+        
+            
+            <a href="/tags/#Hive" title="Hive" rel="2">Hive</a>
+            
+        
+            
+            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
+            
+        
+            
             <a href="/tags/#Java" title="Java" rel="19">Java</a>
             
         
             
             <a href="/tags/#Mysql" title="Mysql" rel="3">Mysql</a>
-            
-        
-            
-            <a href="/tags/#Linux" title="Linux" rel="20">Linux</a>
             
         
     </div>
@@ -693,23 +695,23 @@ API：
     <ul>
       
         <li>
-          <a href="/article/Mysql/02Mysql常用命令/">[Mysql]Mysql（二）常用命令</a>
+          <a href="/article/Hive/02 Hive命令/">[Hive] 02-Hive 属性配置及DDL语句</a>
         </li>
       
         <li>
-          <a href="/article/Mysql/01Mysql安装/">[Mysql]Mysql Linux安装5.7.26</a>
+          <a href="/article/Hive/01Hive部署/">[Hive] 01-Hive 部署</a>
         </li>
       
         <li>
-          <a href="/article/Mysql/MySQL复习笔记/">[Mysql] Mysql复习笔记</a>
+          <a href="/article/Hadoop/07.Hadoop-/">[Hadoop]06 container优化</a>
         </li>
       
         <li>
-          <a href="/article/Java/19Idea快捷键/">[Java] Idea快捷键大全</a>
+          <a href="/article/Hadoop/08.Hadoop-源码编译/">[Hadoop]06 Hadoop源码编译</a>
         </li>
       
         <li>
-          <a href="/article/Java/18设计模式/">[Java] Java（十八）设计模式</a>
+          <a href="/article/Hadoop/06.Hadoop-MapReduce-yarn架构/">[Hadoop]06 MapReduce/Yarn架构</a>
         </li>
       
     </ul>
@@ -730,7 +732,7 @@ API：
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>

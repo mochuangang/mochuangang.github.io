@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Hadoop]04.Hadoop HDFS主从架构 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Hadoop/04.Hadoop-HDFS主从架构/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+                            
+                        </div>
+                        <h1>[Hadoop]04.Hadoop HDFS主从架构</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-11-26
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>HDFS组成架构<br>
+<img src="/img/article/hadoop/Snipaste_2020-12-01_21-10-00.png" alt="Snipaste_2020-12-01_21-10-00"></p>
+<p>1.NameNode (nn)：就是Master，它是一个主管，管理者。</p>
+<ol>
+<li>管理HDFS的名称空间；</li>
+<li>配置副本策略；</li>
+<li>管理数据块（Block)映射信息；</li>
+<li>处理客户端读写请求。</li>
+</ol>
+<p>2.DataNode：就是Slave。NameNode下达命令，DataNode执行实际的操作。</p>
+<ol>
+<li>存储实际的数据块；</li>
+<li>执行数据块的读/写操作。</li>
+</ol>
+<p>3.Client：就是客户端。</p>
+<ol>
+<li>文件切分。文件上传HDFS的时候，Client将文件切分成一个一个的Block，然后进行上传；</li>
+<li>与NameNode交互，获取文件的位置信息；</li>
+<li>与DataNode交互，读取或者写入数据；</li>
+<li>Client提供一些命令来管理HDFS，比如NameNode格式化；</li>
+<li>Client可以通过一些命令来访问HDFS，比如对HDFS增删改查操作；</li>
+</ol>
+<p>4.SecondaryNameNode：并非NameNode的热备，当NameNode挂掉的时候，它并不能马上替换NameNode并提供服务</p>
+<ol>
+<li>辅助NameNode，分担其工作量，比如定期合并Fsimage和Edits，并推送给NameNode；</li>
+<li>在紧急情况下，可辅助恢复NameNode（只可以恢复部分，并不是所有）。</li>
+</ol>
+<h2 id="1hdfs主从架构">1.HDFS主从架构</h2>
+<p>1.1 namenode: nn 名称节点</p>
+<p>a.文件的名称<br>
+b.文件的目录结构<br>
+c.文件的属性  权限 副本数 创建时间</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ hdfs dfs -ls /</span><br><span class="line">20/12/01 20:52:19 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Found 3 items</span><br><span class="line">drwxrwx---   - hadoop supergroup          0 2020-11-25 08:24 /tmp</span><br><span class="line">drwxr-xr-x   - hadoop supergroup          0 2020-11-24 21:31 /user</span><br><span class="line">drwxr-xr-x   - hadoop supergroup          0 2020-11-25 08:02 /wordcount</span><br></pre></td></tr></table></figure>
+<p>d.一个文件被对应切割哪些数据块（包含副本数的块） ==》 对应分布在哪些datanode<br>
+blockmap 块映射  nn是不会持久化存储这种映射关系<br>
+是通过集群的启动和运行时，dn定期汇报blockreport给nn，然后在内存中动态维护这种映射关系。</p>
+<p>作用：<br>
+管理文件系统的命名空间，其实就是维护文件系统树的文件和文件夹<br>
+镜像文件 fsimage<br>
+编辑日志文件 editlogs</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-rw-rw-r-- 1 hadoop hadoop      42 Nov 25 19:04 edits_0000000000000000511-0000000000000000512</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      42 Nov 25 20:04 edits_0000000000000000513-0000000000000000514</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      42 Nov 25 21:04 edits_0000000000000000515-0000000000000000516</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop 1048576 Nov 25 21:04 edits_inprogress_0000000000000000517</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop    4230 Nov 25 20:04 fsimage_0000000000000000514</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      62 Nov 25 20:04 fsimage_0000000000000000514.md5</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop    4230 Nov 25 21:04 fsimage_0000000000000000516</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      62 Nov 25 21:04 fsimage_0000000000000000516.md5</span><br></pre></td></tr></table></figure>
+<p>secondary namenode: snn 第二名称节点<br>
+a.fsimage editlog文件拿过来合并  备份 推送给nn</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-rw-rw-r-- 1 hadoop hadoop      42 Nov 25 19:04 edits_0000000000000000511-0000000000000000512</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      42 Nov 25 20:04 edits_0000000000000000513-0000000000000000514</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      42 Nov 25 21:04 edits_0000000000000000515-0000000000000000516</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop    4230 Nov 25 20:04 fsimage_0000000000000000514</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      62 Nov 25 20:04 fsimage_0000000000000000514.md5</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop    4230 Nov 25 21:04 fsimage_0000000000000000516</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop      62 Nov 25 21:04 fsimage_0000000000000000516.md5</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop     200 Nov 25 21:04 VERSION</span><br></pre></td></tr></table></figure>
+<p>将老大的<br>
+fsimage_0000000000000000514<br>
+edits_0000000000000000515-0000000000000000516  ==》检测点动作 checkpoint<br>
+合并 fsimage_0000000000000000516  将516推送给nn<br>
+而新的读写记录则在 edits_inprogress_0000000000000000517编辑日志里</p>
+<p>checkpoint的时间间隔，默认是3600秒<br>
+dfs.namenode.checkpoint.period  3600     #单位秒<br>
+dfs.namenode.checkpoint.txns    1000000</p>
+<p>早期为了解决nn是单点的，单点故障，增加一个snn，1小时的checkpoint<br>
+虽然能够减轻单点故障的带来的数据丢失风险，但是生产上不允许使用snn</p>
+<p>11:00 checkpoint<br>
+11:30  数据一直在写 突然nn硬盘挂了  无法恢复<br>
+拿snn节点的最新的fsimage，那么只能恢复11点的数据</p>
+<p>在生产上是不允许snn，是使用HA 高可靠，是通过配置另外一个实时的备份nn节点，<br>
+随时等待老大active nn 挂掉，然后成为老大</p>
+<p>1.2. datanode ：数据节点 dn<br>
+a.存储数据块 和 数据块的校验和</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 subdir0]$ pwd</span><br><span class="line">/home/hadoop/tmp/dfs/data/current/BP-1245831-192.168.0.3-1605965291938/current/finalized/subdir0/subdir0</span><br><span class="line">[hadoop@ruozedata001 subdir0]$</span><br></pre></td></tr></table></figure>
+<p>b. 每隔一定的时间去发送blockreport ，默认是6小时</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dfs.blockreport.intervalMsec          21600000=6h</span><br><span class="line">dfs.datanode.directoryscan.interval   21600=6h</span><br></pre></td></tr></table></figure>
+<p>补充:<a href="https://ruozedata.github.io/2019/06/06/%E7%94%9F%E4%BA%A7HDFS%20Block%E6%8D%9F%E5%9D%8F%E6%81%A2%E5%A4%8D%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5(%E5%90%AB%E6%80%9D%E8%80%83%E9%A2%98)/" target="_blank" rel="noopener">生产HDFS Block损坏恢复最佳实践(含思考题)</a></p>
+<h2 id="2hdfs写流程-面试">2.HDFS写流程： 面试</h2>
+<p><img src="/img/article/hadoop/HDFS%E5%86%99%E6%B5%81%E7%A8%8B.png" alt="HDFS写流程"></p>
+<p>对用户是无感知的<br>
+2.1 HDFS Client调用FileSystem.create(filePath)方法，去和NN进行【RPC】通信。<br>
+NN会去check这个文件是否存在，是否有权限创建这个文件。<br>
+假如都可以，就创建一个新的文件，但是这时没有数据，是不关联任何block的。<br>
+NN根据文件的大小，根据块大小 副本数，计算要上传多少的块和对应哪些DN节点上。<br>
+最终这个信息返回给客户端【FSDataOutputStream】对象</p>
+<p>2.2 Client 调用客户端【FSDataOutputStream】对象的write方法，<br>
+根据【副本放置策略】，将第一个块的第一个副本写到DN1，写完复制到DN2，写完再复制到DN3.<br>
+当第三个副本写完，就返回一个ack package确认包给DN2,DN2接收到ack 加上自己写完，<br>
+发送ack给DN1，DN1接收到ack加上自己写完，就发送ack给客户端【FSDataOutputStream】对象，<br>
+告诉它第一个块三副本写完了。<br>
+以此类推。</p>
+<p>2.3.当所有的块全部写完，Client调用【FSDataOutputStream】对象的close方法，<br>
+关闭输出流。再次调用FileSystem.complete方法 ，告诉nn文件写成功。</p>
+<blockquote>
+<p>伪分布式 1台dn，副本数参数必须设置是1吗？<br>
+设置2 也可以写，显示丢失一个副本</p>
+</blockquote>
+<blockquote>
+<p>生产上分布式  3台dn，副本数参数是3，如果其中一个dn挂了，数据是否能够写入？<br>
+可以的<br>
+也可以指定副本数来写入</p>
+</blockquote>
+<blockquote>
+<p>生产上分布式  &gt;3台dn，副本数参数是3，如果其中一个dn挂了，数据是否能够写入？<br>
+肯定写</p>
+</blockquote>
+<h2 id="3hdfs读流程面试">3.HDFS读流程：面试</h2>
+<p><img src="/img/article/hadoop/HDFS%E8%AF%BB%E6%B5%81%E7%A8%8B.png" alt="HDFS读流程"></p>
+<p>3.1Client调用FileSystem的open方法(filePath)，#filePath是路径<br>
+与NN进行【rpc】通信，返回该文件的部分或者全部的block列表<br>
+也就是返回【FSDataIntputStream】对象</p>
+<p>3.2Client调度【FSDataIntputStream】对象的read方法，<br>
+与第一个块的最近的DN的进行读取，读取完成后，会check，假如ok就关闭与DN通信。<br>
+假如不ok，就会记录块+DN的信息，下次就不从这个节点读取。那么从第二个节点读取。<br>
+然后与第二个块的最近的DN的进行读取，以此类推。<br>
+假如当block的列表全部读取完成，文件还没结束，就调用FileSystem从NN获取下一批次的block列表。</p>
+<p>3.3.Client调用【FSDataIntputStream】对象的close方法，关闭输入流。</p>
+<h2 id="4副本放置策略-不光光面试需要生产也需要">4.副本放置策略  不光光面试需要，生产也需要</h2>
+<p><a href="https://www.bilibili.com/video/BV1eE411p7un" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1eE411p7un</a></p>
+<p><img src="/img/article/hadoop/HDFS%E6%9C%BA%E6%9E%B6.png" alt="HDFS机架"></p>
+<p>生产上读写操作  尽量选择DN节点操作<br>
+第一个副本：<br>
+放置在上传的DN节点上，就近原则，节省IO<br>
+假如非DN节点，就随机挑选一个磁盘不太慢，cpu不太忙的节点。</p>
+<p>第二个副本:<br>
+放置在第一个副本的不同机架上的某个节点</p>
+<p>第三个副本:<br>
+与第二个副本放置同一个机架的不同节点上。</p>
+<p>如果副本数设置更多，随机放。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Hadoop/05.Hadoop命令/" data-toggle="tooltip" data-placement="top" title="[Hadoop]05.Hadoop命令">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Hadoop/01.Hadoop概述/" data-toggle="tooltip" data-placement="top" title="[Hadoop]01-Hadoop概述">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1hdfs主从架构"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.HDFS&#x4E3B;&#x4ECE;&#x67B6;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2hdfs写流程-面试"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.HDFS&#x5199;&#x6D41;&#x7A0B;&#xFF1A; &#x9762;&#x8BD5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3hdfs读流程面试"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.HDFS&#x8BFB;&#x6D41;&#x7A0B;&#xFF1A;&#x9762;&#x8BD5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4副本放置策略-不光光面试需要生产也需要"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x526F;&#x672C;&#x653E;&#x7F6E;&#x7B56;&#x7565;  &#x4E0D;&#x5149;&#x5149;&#x9762;&#x8BD5;&#x9700;&#x8981;&#xFF0C;&#x751F;&#x4EA7;&#x4E5F;&#x9700;&#x8981;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
