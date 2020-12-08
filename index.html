@@ -471,6 +471,42 @@ reduce 归约  汇总
 
 <div class="post-preview">
 
+    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
+        <h2 class="post-title">
+                                 
+            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+修改原因
+
+Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
+
+Hadoop修改
+
+1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-11-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/Hadoop/01.Hadoop概述/">
         <h2 class="post-title">
                                  
@@ -495,42 +531,6 @@ Hadoop是一个由Apache基金会所开发的分不是系统基础架构
 
 
 hd......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
-        <h2 class="post-title">
-                                 
-            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-修改原因
-
-Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
-
-Hadoop修改
-
-1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
         </div>
     </a>
     
@@ -631,11 +631,11 @@ Hadoop修改
             
         
             
-            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
+            <a href="/tags/#Java" title="Java" rel="19">Java</a>
             
         
             
-            <a href="/tags/#Java" title="Java" rel="19">Java</a>
+            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
             
         
             
