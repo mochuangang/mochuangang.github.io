@@ -392,6 +392,39 @@ reduce 归约  汇总
 
 <div class="post-preview">
 
+    <a href="/article/Linux/Linux查看运行进程所在目录/">
+        <h2 class="post-title">
+                                 
+            [Linux] linux查看运行进程所在目录
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。这时，我们需要通过以下的方法来查看进程的详细信息：
+inux启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。
+ll /proc/PID
+
+cwd符号链接的是进程运行目录；......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-11-30
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Linux" title="Linux">Linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/Hadoop/05.Hadoop命令/">
         <h2 class="post-title">
                                  
@@ -458,42 +491,6 @@ reduce 归约  汇总
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
             2020-11-26
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
-        <h2 class="post-title">
-                                 
-            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-修改原因
-
-Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
-
-Hadoop修改
-
-1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-22
         </p>
         <div class="tags">
             
@@ -590,7 +587,7 @@ hd......
     
     
         <li class="next">
-            <a href="/page/2/">Older Posts &rarr;</a>
+            <a href="/archives/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
