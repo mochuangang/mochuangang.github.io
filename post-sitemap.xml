@@ -7,8 +7,16 @@
     </url>
 
     <url>
+        <loc>http://www.mochuangang.com/article/Hive/03%20Hive%20%E5%88%86%E5%8C%BA%E8%A1%A8/</loc>
+        <lastmod>2020-12-13T15:02:32.803Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://www.mochuangang.com/article/Hive/02%20Hive%E5%91%BD%E4%BB%A4/</loc>
-        <lastmod>2020-12-08T13:53:06.845Z</lastmod>
+        <lastmod>2020-12-13T15:02:31.210Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

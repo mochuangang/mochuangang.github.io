@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/archives/5/">
+    <link rel="canonical" href="http://www.mochuangang.com/page/2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -211,36 +211,33 @@
 
 <div class="post-preview">
 
-    <a href="/article/Linux/10.Linux之输入输出/">
+    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（十）输入输出
+            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
             
-[1.重定向概述]
-[2.输出重定向]
-[3.输入重定向]
-[4.进程管道技术]
+修改原因
 
-1.重定向概述
-*1.什么是重定向*
-将原本要输出到屏幕的数据信息，重新定向到某个指定的文件中。比如：每天凌晨定时备份数据，希望将备份数据的结果保存到某个文件中。这样第二天通过查看文件的内容就知道昨天备份的数据是成功还是失败。
-*2.为何要使用重定向*
-1.当屏幕输出的信息很重要，而且希望保存重要的信息时；......
+Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
+
+Hadoop修改
+
+1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-17
+            2020-11-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -250,36 +247,30 @@
 
 <div class="post-preview">
 
-    <a href="/article/Linux/09.Linux之ACL控制/">
+    <a href="/article/MySql/02Mysql常用命令/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（九）ACL控制
+            [Mysql]Mysql（二）常用命令
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            
-[1.ACL访问控制概述]
-[2.ACL高级特性MASK]
-[3.ACL高级特性Default]
-[4.ACL访问控制实践案例]
-
-1.ACL访问控制概述
-上一章节我们学习了基础权限UGO、特殊权限，但所有的权限是针对某一类用户设置的, 如果希望对文件进行自定义权限控制，就需要用到文件的访问控制列表ACL
-
-UGO设置基本权限: 只能一个用户，一个组和其他人
-ACL设置基本权限： r、w、......
+            MySQL常用命令
+修改用户密码
+1mysql&gt; alter user root@localhost identified by &apos;123456&apos;;
+赋予数据库所有表的授权给root用户
+123456mysql&gt;GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-16
+            2020-11-16
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
             
         </div>
     
@@ -289,30 +280,30 @@ ACL设置基本权限： r、w、......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/07.Linux之特殊权限/">
+    <a href="/article/MySql/01Mysql安装/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（七）特殊权限
+            [Mysql]Mysql Linux安装5.7.26
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.Linux系统特殊权限
-
-对可执⾏⽂件的setuid(或setgid)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:
-12[root@mcg ~]# ll /usr/bin/passwd-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd
-⽬录粘滞位可以为⽂件删除设......
+            1.卸载Centos7自带 MariaDB
+检查mariadb是否已安装
+12[root@ruozedata01 local]# yum list installed | grep mariadb mariadb-libs.x86_64   1:5.5.56-2.el7     @anaconda
+全部卸载
+1[root@ruozedata01 local]# yum remove mari......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-15
+            2020-11-15
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
             
         </div>
     
@@ -322,30 +313,32 @@ ACL设置基本权限： r、w、......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/08.Linux之特殊权限/">
+    <a href="/article/MySql/MySQL复习笔记/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（八）特殊权限
+            [Mysql] Mysql复习笔记
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.Linux系统特殊权限
-
-对可执⾏⽂件的setuid(或setgid)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:
-12[root@mcg ~]# ll /usr/bin/passwd-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd
-⽬录粘滞位可以为⽂件删除设......
+            第一章 数据库概述
+1.1 数据库概述
+DBMS：数据库管理系统（Database Management System）是一种操纵和管理数据库的大型软件，例如建立、使用和维护数据库。
+DB：数据库（Database）
+SQL：结构化查询语言，（Structure Query Language），专门用来操作/访问数据库的通用语言。
+MySQL：其中的一款关系型数据库管理系统
+以下是2019年......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-15
+            2020-04-08
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
             
         </div>
     
@@ -355,33 +348,59 @@ ACL设置基本权限： r、w、......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/07.Linux之基本权限/">
+    <a href="/article/Java/19Idea快捷键/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（七）基本权限
+            [Java] Idea快捷键大全
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
             
-[1.权限基本概述]
-[2.权限设置示例]
-[3.权限设置案例]
-[4.属主属组设置]
+十九章Idea快捷键大全（Windows）
+Ctrl
 
-1.权限基本概述
-Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每个⽂件或⽬录都有⼀组共9个基础权限位，每三个字符被分为⼀组，他们分别是属主权限位(占三个字符)、属组权限位(占三个 字符)、其他⽤户权限位(占三个字符)。 ⽐如rwxr-xr-x linux中正是这9个权限位来控制⽂......
+
+
+快捷键
+介绍
+
+
+
+
+Ctrl + F
+在当前文件进行文本查找 （必备）
+
+
+Ctrl + R
+在当前文件进行文本替换 （必备）
+
+
+Ctrl + Z
+撤销 （必备）
+
+
+Ctrl + Y
+删除光标所在行 或 删除选中的行 （必备）
+
+
+Ctrl + X
+剪切光标所在行 或 剪切选择内容
+
+
+Ctrl + C
+复制光标所在行 或 ......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-14
+            2020-03-19
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -391,32 +410,30 @@ Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每
 
 <div class="post-preview">
 
-    <a href="/article/Linux/06.Linux之用户管理/">
+    <a href="/article/Java/18设计模式/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（六）用户管理
+            [Java] Java（十八）设计模式
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            Linux⽤户属于多⽤户操作系统,在windows中，可以创建多个⽤户，但不允许同⼀时间多个⽤户 进⾏系统登陆，但是Linux可以同时⽀持多个⽤户同时登陆操作系统，登陆后互相之间并不影 响。
-
-用户和组存在的意义
-
-1.系统上的每一个进程(运行的程序)，都需要一个特定的用户运行
-2.通常在公司是使用普通用户管理服务器，因为root权限过大，容易造成故障。
-3.访问一个文件或目录受到用户的限制......
+            第十八章 设计模式
+18.1 模板设计模式（了解）
+1、当解决某个问题，或者完成某个功能时，主体的算法结构（步骤）是确定的，只是其中的一个或者几个小的步骤不确定，要有使用者（子类）来确定时，就可以使用模板设计模式
+2、示例代码：计算任意一段代码的运行时间
+123456789101112131415161718//模板类public abstract class CalTime&#123;  ......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-14
+            2020-03-18
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -426,36 +443,31 @@ Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每
 
 <div class="post-preview">
 
-    <a href="/article/Linux/05.Linux之VIM编辑器/">
+    <a href="/article/Java/17Java8/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（五）VIM编辑器
+            [Java] Java8（十七）
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            
-[1.VIM基本概述]
-[2.VIM模式使用]
-[3.VIM扩展知识]
-[4.VIM练习示例]
-
-1.VIM基本介绍
-
-vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆⽂件，⽽配置⼀个服务就是在 修改其配置⽂件的参数。 vim 编辑器是运维⼯程师必须掌握的⼀个⼯具, 没有它很多⼯作都⽆法 完成。vim其实是vi 的升级版 那么vi 与 vim 有什么区别？
-
-......
+            第十七章 Java8
+17.1 Lambda表达式与函数式接口
+Lambda写的好可以极大的减少代码冗余，同时可读性也好过冗长的匿名内部类。
+17.1.1 函数式接口
+lambda表达式其实就是实现SAM接口的语法糖，所谓SAM接口就是Single Abstract Method，即该接口中只有一个抽象方法需要实现，当然该接口可以包含其他非抽象方法。
+其实只要满足“SAM”特征的接口都可以称......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-13
+            2020-03-17
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -465,32 +477,35 @@ vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆�
 
 <div class="post-preview">
 
-    <a href="/article/Linux/04.Linux之文件属性/">
+    <a href="/article/Java/16反射/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（四）文件属性
+            [Java] Java（十六）反射
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            1.Linux系统文件属性
-
-上图中ls -il 每列含义如下：
-12345678第⼀列		 Inode第⼆列		 ⽂件类型及权限第三列		 硬链接数第四列		 属主权限第五列		 属组权限第六列		 ⽂件或⽬录的⼤⼩第七⼋九列   最近修改时间第⼗列		 ⽂件或⽬录名字
-2.Linux系统⽂件类型
-
-1.通常我们使用颜色或者后缀名称来区分文件类型，但很多时候不是很准确，所以我们可以通过ls......
+            第十六章 反射（难点）
+16.1 类加载
+1、类在内存中的生命周期：加载–&gt;使用–&gt;卸载
+2、类的加载又分为三个阶段：
+（1）加载：load
+（2）连接：link
+①验证：校验合法性
+②准备：准备对应的内存（方法区），创建Class对象，为类变量赋默认值，为静态常量赋初始值。
+③解析：把字节码中的符号引用替换为对应的直接地址引用
+（3）初始化：initialize（类初始化），大......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-12
+            2020-03-16
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -500,28 +515,34 @@ vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆�
 
 <div class="post-preview">
 
-    <a href="/article/Linux/03.Linux之基础命令/">
+    <a href="/article/Java/15网络编程/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（三）基础命令
+            [Java] Java（十五）网络编程
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            1.系统目录结构
-几乎所有的计算机操作系统都是使用目录结构组织文件。具体来说就是在一个目录中存放子目录和文件, 而在子目录中又会进一步存放子目录和文件，以此类推形成一个树状的文件结构，由于其结构很像一棵树的分支, 所以该结构又被称为“目录树”。
-Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;根⽬录&quot;下, ⽬录名为&quot;/&quot;。FHS（⽂件 系......
+            第十五章 网络编程（了解）
+学习它为了更好的理解：web（服务器端和客户端的通信）、数据库（服务器端和客户端的数据传输）等原理。
+15.1 主机IP
+在程序中表示：
+（1）值的表示
+IPV4：32位整数，8位一组，用.分割，例如：192.168.11.45
+​	每个8位的范围[0,255]
+IPV6：128位整数表示，16位一组，用:分割，例如：X:X:X:X:X:X:X:X
+​	每个16位......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-11
+            2020-03-15
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -531,31 +552,34 @@ Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;
 
 <div class="post-preview">
 
-    <a href="/article/Linux/02.linux之Bash初识/">
+    <a href="/article/Java/14IO流/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（二）Bash初识
+            [Java] Java（十四）IO流
         </h2>
         <h3 class="post-subtitle">
-            
+            Java基础.
         </h3>
         <div class="post-content-preview">
-            02.Linux系统Bash初识
-1.Linux系统终端概述
-服务器终端切换:Ctrl+Alt+F1…F6
-虚拟机终端切换:Ctrl+Shift+Alt+F1…F6
-虚拟终端由mingetty程序生成
-1234567// 物理理机执⾏行行为本地终端[root@mcg ~]# tty/dev/tty1//通过⽹网络使⽤用模拟终端远程连接Linux, ⽇日常运维中就是这种⽅方式。[root@mc......
+            第14章 IO流
+14.1 java.io.File类
+它是文件和目录路径名的抽象描述。
+API：
+（1）getName()：获取文件或目录的名称
+（2）getPath()：获取文件或目录的路径
+（3）getAbsolutePath()：获取文件或目录的绝对路径
+（4） getCanonicalPath()：获取文件或目录的规范路径
+（5）long length()：获取文件的长度，单位字节......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-10
+            2020-03-14
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -570,12 +594,12 @@ Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;
 <ul class="pager">
     
         <li class="previous">
-            <a href="/archives/4/">&larr; Newer Posts</a>
+            <a href="/">&larr; Newer Posts</a>
         </li>
     
     
         <li class="next">
-            <a href="/archives/6/">Older Posts &rarr;</a>
+            <a href="/page/3/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -612,7 +636,7 @@ Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="2">Hive</a>
+            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
             
         
             
@@ -680,6 +704,10 @@ Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;
     <ul>
       
         <li>
+          <a href="/article/Hive/03 Hive 分区表/">[Hive] 03-Hive 分区表</a>
+        </li>
+      
+        <li>
           <a href="/article/Hive/02 Hive命令/">[Hive] 02-Hive 属性配置及DDL语句</a>
         </li>
       
@@ -693,10 +721,6 @@ Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;
       
         <li>
           <a href="/article/Hadoop/08.Hadoop-源码编译/">[Hadoop]06 Hadoop源码编译</a>
-        </li>
-      
-        <li>
-          <a href="/article/Hadoop/06.Hadoop-MapReduce-yarn架构/">[Hadoop]06 MapReduce/Yarn架构</a>
         </li>
       
     </ul>
@@ -717,7 +741,7 @@ Linux系统中也沿⽤了这种⽂件结构, 所有⽬录和⽂件都在 &quot;
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>

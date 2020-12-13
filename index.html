@@ -211,6 +211,39 @@
 
 <div class="post-preview">
 
+    <a href="/article/Hive/03 Hive 分区表/">
+        <h2 class="post-title">
+                                 
+            [Hive] 03-Hive 分区表
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1.分区表
+分区表实际上就是对应一个HDFS文件系统上的独立的文件夹，该文件夹下是该分区所有的数据文件。Hive中的分区就是分目录，把一个大的数据集根据业务需要分割成小的数据集。在查询时通过WHERE子句中的表达式选择查询所需要的指定的分区，这样的查询效率会提高很多。
+1.1 分区表基本操作
+1.引入分区表（需要根据日期对日志进行管理：记录日志、查询操作）
+1234# 例如/user/hiv......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-12-13
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hive" title="Hive">Hive</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/Hive/02 Hive命令/">
         <h2 class="post-title">
                                  
@@ -392,39 +425,6 @@ reduce 归约  汇总
 
 <div class="post-preview">
 
-    <a href="/article/Linux/Linux查看运行进程所在目录/">
-        <h2 class="post-title">
-                                 
-            [Linux] linux查看运行进程所在目录
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。这时，我们需要通过以下的方法来查看进程的详细信息：
-inux启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。
-ll /proc/PID
-
-cwd符号链接的是进程运行目录；......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-30
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
     <a href="/article/Hadoop/05.Hadoop命令/">
         <h2 class="post-title">
                                  
@@ -587,7 +587,7 @@ hd......
     
     
         <li class="next">
-            <a href="/archives/2/">Older Posts &rarr;</a>
+            <a href="/page/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -624,7 +624,7 @@ hd......
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="2">Hive</a>
+            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
             
         
             
@@ -692,6 +692,10 @@ hd......
     <ul>
       
         <li>
+          <a href="/article/Hive/03 Hive 分区表/">[Hive] 03-Hive 分区表</a>
+        </li>
+      
+        <li>
           <a href="/article/Hive/02 Hive命令/">[Hive] 02-Hive 属性配置及DDL语句</a>
         </li>
       
@@ -705,10 +709,6 @@ hd......
       
         <li>
           <a href="/article/Hadoop/08.Hadoop-源码编译/">[Hadoop]06 Hadoop源码编译</a>
-        </li>
-      
-        <li>
-          <a href="/article/Hadoop/06.Hadoop-MapReduce-yarn架构/">[Hadoop]06 MapReduce/Yarn架构</a>
         </li>
       
     </ul>
@@ -729,7 +729,7 @@ hd......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>
