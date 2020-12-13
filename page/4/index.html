@@ -328,6 +328,39 @@ Java之父是詹姆斯.高斯林(James Gosling)。
 
 <div class="post-preview">
 
+    <a href="/article/Linux/Linux查看运行进程所在目录/">
+        <h2 class="post-title">
+                                 
+            [Linux] linux查看运行进程所在目录
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。这时，我们需要通过以下的方法来查看进程的详细信息：
+inux启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。
+ll /proc/PID
+
+cwd符号链接的是进程运行目录；......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-11-30
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Linux" title="Linux">Linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/Linux/17.Linux之任务计划/">
         <h2 class="post-title">
                                  
@@ -355,39 +388,6 @@ crond主要是做一些周期性的任务，比如: 凌晨3点定时备份数据
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
             2018-06-24
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/Linux/Linux查看运行进程所在目录/">
-        <h2 class="post-title">
-                                 
-            [Linux] linux查看运行进程所在目录
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。这时，我们需要通过以下的方法来查看进程的详细信息：
-inux启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。
-ll /proc/PID
-
-cwd符号链接的是进程运行目录；......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-30
         </p>
         <div class="tags">
             
@@ -735,11 +735,11 @@ RPM包命名以-将软件分成了若干部分bash-4.2.46-28.el7.......
         </li>
       
         <li>
-          <a href="/article/Hadoop/07.Hadoop-/">[Hadoop]06 container优化</a>
+          <a href="/article/Hadoop/07.Hadoop-/">[Hadoop]07 container优化</a>
         </li>
       
         <li>
-          <a href="/article/Hadoop/08.Hadoop-源码编译/">[Hadoop]06 Hadoop源码编译</a>
+          <a href="/article/Hadoop/08.Hadoop-源码编译/">[Hadoop]08 Hadoop源码编译</a>
         </li>
       
     </ul>
