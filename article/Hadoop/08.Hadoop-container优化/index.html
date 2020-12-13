@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Hadoop]08 Hadoop源码编译 - 莫传刚 | Blog
+          [Hadoop]08 container优化 - 莫传刚 | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/article/Hadoop/08.Hadoop-源码编译/">
+    <link rel="canonical" href="http://www.mochuangang.com/article/Hadoop/08.Hadoop-container优化/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -91,7 +91,7 @@
                               <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                             
                         </div>
-                        <h1>[Hadoop]08 Hadoop源码编译</h1>
+                        <h1>[Hadoop]08 container优化</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by 莫传刚 on
@@ -212,7 +212,27 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <h2 id="1container-容器">1.container 容器</h2>
+<p>关于<code>yarn</code>的调优，其实就是调整<code>container</code><br>
+<code>container</code>是虚拟化的，是<code>memory + cpu vcore</code>组成的，是专门运行任务</p>
+<p>举个栗子：</p>
+<p>生产上应该如何调优container参数？<br>
+假设128G  16 物理core<br>
+1.1 系统装完  消耗1G<br>
+1.2 系统要预留20%内存 （1G）<br>
+给当前进程服务，防止出现oom-kill机制<br>
+Linux系统防止夯住<br>
+给未来部署软件预留空间<br>
+128*20%=25.6G==26G</p>
+<p>还剩：102G</p>
+<p>1.3 DN 和 NM 节点<br>
+在生产上是部署在同一台机器上的，为了是存储和计算一体，数据本地化。<br>
+DN = 2G<br>
+NM = 4G   NM 进程本身的内存</p>
+<p>102 -2-4=96G, 这96G是真正container容器总内存，这才是真正计算的小弟</p>
+<p>1.4  container内存<br>
+<a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.16.2/" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.16.2/</a></p>
+
                 
 
                 <hr>
@@ -220,12 +240,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/Hadoop/07.Hadoop-/" data-toggle="tooltip" data-placement="top" title="[Hadoop]07 container优化">&larr; Previous Post</a>
+                            <a href="/article/Hive/01Hive部署/" data-toggle="tooltip" data-placement="top" title="[Hive] 01-Hive 部署">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/Hadoop/06.Hadoop-MapReduce-yarn架构/" data-toggle="tooltip" data-placement="top" title="[Hadoop]06 MapReduce/Yarn架构">Next Post &rarr;</a>
+                            <a href="/article/Hadoop/07.Hadoop-源码编译/" data-toggle="tooltip" data-placement="top" title="[Hadoop]07 Hadoop源码编译">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -283,7 +303,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1container-容器"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.container &#x5BB9;&#x5668;</span></a></li></ol>
         
         </div>
       </aside>
