@@ -317,25 +317,16 @@ Apache的顶级项目或者是孵化项目
 
 <div class="post-preview">
 
-    <a href="/article/Hadoop/08.Hadoop-container优化/">
+    <a href="/article/Hadoop/07.Hadoop-源码编译/">
         <h2 class="post-title">
                                  
-            [Hadoop]08 container优化
+            [Hadoop]07 Hadoop源码编译
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.container 容器
-关于yarn的调优，其实就是调整container
-container是虚拟化的，是memory + cpu vcore组成的，是专门运行任务
-举个栗子：
-生产上应该如何调优container参数？
-假设128G  16 物理core
-1.1 系统装完  消耗1G
-1.2 系统要预留20%内存 （1G）
-给当前进程服务，防止出现oom-kill机制
-Linux系......
+            ...
         </div>
     </a>
     
@@ -355,16 +346,25 @@ Linux系......
 
 <div class="post-preview">
 
-    <a href="/article/Hadoop/07.Hadoop-源码编译/">
+    <a href="/article/Hadoop/08.Hadoop-container优化/">
         <h2 class="post-title">
                                  
-            [Hadoop]07 Hadoop源码编译
+            [Hadoop]08 container优化
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            ...
+            1.container 容器
+关于yarn的调优，其实就是调整container
+container是虚拟化的，是memory + cpu vcore组成的，是专门运行任务
+举个栗子：
+生产上应该如何调优container参数？
+假设128G  16 物理core
+1.1 系统装完  消耗1G
+1.2 系统要预留20%内存 （1G）
+给当前进程服务，防止出现oom-kill机制
+Linux系......
         </div>
     </a>
     
@@ -416,6 +416,39 @@ reduce 归约  汇总
         <div class="tags">
             
               <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Linux/Linux查看运行进程所在目录/">
+        <h2 class="post-title">
+                                 
+            [Linux] linux查看运行进程所在目录
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。这时，我们需要通过以下的方法来查看进程的详细信息：
+inux启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。
+ll /proc/PID
+
+cwd符号链接的是进程运行目录；......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-11-30
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -545,40 +578,6 @@ hd......
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/Hadoop/02.Hadoop伪分布式部署/">
-        <h2 class="post-title">
-                                 
-            [Hadoop]02-Hadoop伪分布式部署
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            系统环境：VMware虚拟机
-系统版本：CentOS Linux release 7.5.1804 (Core)
-修改主机名
-1[root@ruozedata001 ~]# hostnamectl set-hostname ruozedata001
-添加域名映射 centos–&gt;windows
-12345[root@ruozedata001 ~]# vim /etc/hosts127.......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -587,7 +586,7 @@ hd......
     
     
         <li class="next">
-            <a href="/page/2/">Older Posts &rarr;</a>
+            <a href="/archives/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -620,15 +619,15 @@ hd......
     <div class="tags">
         
             
-            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
-            
-        
-            
             <a href="/tags/#Hadoop" title="Hadoop" rel="8">Hadoop</a>
             
         
             
             <a href="/tags/#Java" title="Java" rel="19">Java</a>
+            
+        
+            
+            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
             
         
             
@@ -704,11 +703,11 @@ hd......
         </li>
       
         <li>
-          <a href="/article/Hadoop/08.Hadoop-container优化/">[Hadoop]08 container优化</a>
+          <a href="/article/Hadoop/07.Hadoop-源码编译/">[Hadoop]07 Hadoop源码编译</a>
         </li>
       
         <li>
-          <a href="/article/Hadoop/07.Hadoop-源码编译/">[Hadoop]07 Hadoop源码编译</a>
+          <a href="/article/Hadoop/08.Hadoop-container优化/">[Hadoop]08 container优化</a>
         </li>
       
     </ul>
