@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/archives/3/">
+    <link rel="canonical" href="http://www.mochuangang.com/page/5/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,34 +211,37 @@
 
 <div class="post-preview">
 
-    <a href="/article/Java/14IO流/">
+    <a href="/article/Linux/12.Linux之压缩打包/">
         <h2 class="post-title">
                                  
-            [Java] Java（十四）IO流
+            [Linux] linux基础之（十二）压缩打包
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第14章 IO流
-14.1 java.io.File类
-它是文件和目录路径名的抽象描述。
-API：
-（1）getName()：获取文件或目录的名称
-（2）getPath()：获取文件或目录的路径
-（3）getAbsolutePath()：获取文件或目录的绝对路径
-（4） getCanonicalPath()：获取文件或目录的规范路径
-（5）long length()：获取文件的长度，单位字节......
+            
+[1.文件打包与压缩]
+[1.gzip打包与压缩]
+[1.zip打包与压缩]
+[2.tar打包与压缩]
+
+1.文件打包与压缩
+*1.什么是文件压缩?*
+将多个文件或目录合并成为一个特殊的文件。比如: 搬家…脑补画面 img.
+*2.为什么要对文件进行压缩？*
+当我们在传输大量的文件时，通常都会选择将该文件进行压缩，然后在进行传输。
+首先：压缩后的文件会比压缩前的文件小。一个28G的文件夹压......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-14
+            2018-06-19
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -248,34 +251,40 @@ API：
 
 <div class="post-preview">
 
-    <a href="/article/Java/13泛型/">
+    <a href="/article/Linux/11.Linux之文件查找/">
         <h2 class="post-title">
                                  
-            [Java] Java（十三）泛型
+            [Linux] linux基础之（十一）文件查找
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第13章 泛型
-13.1 泛型的概述
-泛型：参数化类型
-类型形参：，，，，，。。。。
-类型实参：必须是引用数据类型，不能是基本数据类型
-​	，，，&lt;ArrayList&gt;。。。
-13.2 形式一：泛型类与泛型接口
-1、声明语法格式：
-12345678910【修饰符】 class 类名/接口&lt;类型形参列表&gt;&#123;    &#125;【修饰符】 class 类名/接口......
+            
+[1.find查找概述]
+[2.find查找示例]
+
+1.find查找概述
+为什么要有文件查找，因为很多时候我们可能会忘了某个文件所在的位置，此时就需要通过find来查找。
+find命令可以根据不同的条件来进行查找文件，例如：文件名称、文件大小、文件修改时间、属主属组、权限、等等方式。同时find命令是Linux下必须掌握的。
+*find 命令的基本语法如下*
+
+
+
+命令
+路径
+选项
+表达......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-13
+            2018-06-18
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -285,34 +294,36 @@ API：
 
 <div class="post-preview">
 
-    <a href="/article/Java/12集合/">
+    <a href="/article/Linux/10.Linux之输入输出/">
         <h2 class="post-title">
                                  
-            [Java] Java（十二）集合
+            [Linux] linux基础之（十）输入输出
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第十二章 集合
-12.1 概念
-数据结构：存储数据的某种结构
-（1）底层的物理结构
-①数组：开辟连续的存储空间，每一个元素使用[下标]进行区别
-②链式：不需要开辟连续的存储空间，但是需要“结点”来包装要存储的数据，结点包含两部分内容：
-​	A、数据
-​	B、记录其他结点的地址，例如：next，pre，left，right，parent等
-（2）表现出来的逻辑结构：动态数组、单向链表、双向链表......
+            
+[1.重定向概述]
+[2.输出重定向]
+[3.输入重定向]
+[4.进程管道技术]
+
+1.重定向概述
+*1.什么是重定向*
+将原本要输出到屏幕的数据信息，重新定向到某个指定的文件中。比如：每天凌晨定时备份数据，希望将备份数据的结果保存到某个文件中。这样第二天通过查看文件的内容就知道昨天备份的数据是成功还是失败。
+*2.为何要使用重定向*
+1.当屏幕输出的信息很重要，而且希望保存重要的信息时；......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-12
+            2018-06-17
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -322,71 +333,36 @@ API：
 
 <div class="post-preview">
 
-    <a href="/article/Java/11常用类/">
+    <a href="/article/Linux/09.Linux之ACL控制/">
         <h2 class="post-title">
                                  
-            [Java] Java（十一）常用类
+            [Linux] linux基础之（九）ACL控制
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第十一章 常用类
-11.1 包装类
-11.1.1 包装类
-当要使用只针对对象设计的API或新特性（例如泛型），那么基本数据类型的数据就需要用包装类来包装。
+            
+[1.ACL访问控制概述]
+[2.ACL高级特性MASK]
+[3.ACL高级特性Default]
+[4.ACL访问控制实践案例]
 
+1.ACL访问控制概述
+上一章节我们学习了基础权限UGO、特殊权限，但所有的权限是针对某一类用户设置的, 如果希望对文件进行自定义权限控制，就需要用到文件的访问控制列表ACL
 
-
-序号
-基本数据类型
-包装类
-
-
-
-
-1
-byte
-Byte
-
-
-2
-short
-Short
-
-
-3
-int
-Integer
-
-
-4
-long
-Long
-
-
-5
-float
-Float
-
-
-6
-double
-Double
-
-
-7
-ch......
+UGO设置基本权限: 只能一个用户，一个组和其他人
+ACL设置基本权限： r、w、......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-11
+            2018-06-16
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -396,33 +372,30 @@ ch......
 
 <div class="post-preview">
 
-    <a href="/article/Java/09异常/">
+    <a href="/article/Linux/08.Linux之特殊权限/">
         <h2 class="post-title">
                                  
-            [Java] Java（九）异常
+            [Linux] linux基础之（八）特殊权限
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第九章 异常
-9.1 异常的类型的体系结构
-1、异常系列的超父类：java.lang.Throwable
-（1）只有它或它子类的对象，才能被JVM或throw语句“抛”出
-（2）也只有它或它子类的对象，才能被catch“捕获”
-2、Throwable分为两大派别
-（1）Error：严重的错误，需要停下来重新设计、升级解决这个问题
-（2）Exception： 一般的异常，可以通过判断、检验进行......
+            1.Linux系统特殊权限
+
+对可执⾏⽂件的setuid(或setgid)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:
+12[root@mcg ~]# ll /usr/bin/passwd-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd
+⽬录粘滞位可以为⽂件删除设......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-09
+            2018-06-15
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -432,31 +405,30 @@ ch......
 
 <div class="post-preview">
 
-    <a href="/article/Java/08枚举与注解/">
+    <a href="/article/Linux/07.Linux之特殊权限/">
         <h2 class="post-title">
                                  
-            [Java] Java（八）枚举与注解
+            [Linux] linux基础之（七）特殊权限
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第八章  枚举与注解
-8.1 枚举
-1、枚举（JDK1.5引入的）
-枚举类型的对象是有限、固定的几个常量对象。
-2、语法格式
-1234567891011//形式一：枚举类型中只有常量对象列表【修饰符】 enum 枚举类型名&#123;    常量对象列表&#125;//形式二：枚举类型中只有常量对象列表【修饰符】 enum 枚举类型名&#123;    常量对象列表;        其他成员......
+            1.Linux系统特殊权限
+
+对可执⾏⽂件的setuid(或setgid)权限表示将以⽂件的⽤户(或组)身份运⾏命令, ⽽不是以运⾏命令 的⽤户身份, 以password命令为例:
+12[root@mcg ~]# ll /usr/bin/passwd-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd
+⽬录粘滞位可以为⽂件删除设......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-08
+            2018-06-15
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -466,40 +438,33 @@ ch......
 
 <div class="post-preview">
 
-    <a href="/article/Java/07面向对象的高级特性/">
+    <a href="/article/Linux/07.Linux之基本权限/">
         <h2 class="post-title">
                                  
-            [Java] Java（七）面向对象的高级特性
+            [Linux] linux基础之（七）基本权限
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第七章 面向对象的高级特性
-修饰符的学习围绕三个问题：
-（1）单词的意思
-（2）可以修饰什么？
-（3）用它修饰后有什么不同？
-7.1 关键字：final
-final：最终的
-用法：
-（1）修饰类（包括外部类、内部类类）
-表示这个类不能被继承，没有子类
-（2）修饰方法
-表示这个方法不能被重写
-（3）修饰变量（成员变量（类变量、实例变量），局部变量）
-表示这个变量的值不能被修改
-注意：如果某个成......
+            
+[1.权限基本概述]
+[2.权限设置示例]
+[3.权限设置案例]
+[4.属主属组设置]
+
+1.权限基本概述
+Linux中的⽂件或⽬录的权限和⽤户及⽤户组关联很⼤,Linux中每个⽂件或⽬录都有⼀组共9个基础权限位，每三个字符被分为⼀组，他们分别是属主权限位(占三个字符)、属组权限位(占三个 字符)、其他⽤户权限位(占三个字符)。 ⽐如rwxr-xr-x linux中正是这9个权限位来控制⽂......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-07
+            2018-06-14
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -509,66 +474,32 @@ final：最终的
 
 <div class="post-preview">
 
-    <a href="/article/Java/06面向对象的基本特征/">
+    <a href="/article/Linux/06.Linux之用户管理/">
         <h2 class="post-title">
                                  
-            [Java] Java（六）面向对象的基本特征
+            [Linux] linux基础之（六）用户管理
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第六章 面向对象的基本特征
-面向对象的基本特征：
-1、封装
-2、继承
-3、多态
-6.1 封装
-1、好处：
-（1）隐藏实现细节，方便使用者使用
-（2）安全，可以控制可见范围
-2、如何实现封装？
-通过权限修饰符
+            Linux⽤户属于多⽤户操作系统,在windows中，可以创建多个⽤户，但不允许同⼀时间多个⽤户 进⾏系统登陆，但是Linux可以同时⽀持多个⽤户同时登陆操作系统，登陆后互相之间并不影 响。
 
-面试题：请按照可见范围从小到大（从大到小）列出权限修饰符？
+用户和组存在的意义
 
-
-
-
-修饰符
-本类
-本包
-其他包的子类
-任意位置
-
-
-
-
-private
-√
-×
-×
-×
-
-
-缺省
-√
-√
-×
-×
-
-
-p......
+1.系统上的每一个进程(运行的程序)，都需要一个特定的用户运行
+2.通常在公司是使用普通用户管理服务器，因为root权限过大，容易造成故障。
+3.访问一个文件或目录受到用户的限制......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-06
+            2018-06-14
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -578,73 +509,71 @@ p......
 
 <div class="post-preview">
 
-    <a href="/article/Java/05面向对象/">
+    <a href="/article/Linux/05.Linux之VIM编辑器/">
         <h2 class="post-title">
                                  
-            [Java] Java（五）面向对象基础
+            [Linux] linux基础之（五）VIM编辑器
         </h2>
         <h3 class="post-subtitle">
-            Java基础.
+            
         </h3>
         <div class="post-content-preview">
-            第五章 面向对象基础
-5.1 类与对象
-1、类：一类具有相同特性的事物的抽象描述。
-​      对象：类的一个个体，实例，具体的存在。
-​     类是对象的设计模板。
-2、如何声明类？
-123【修饰符】 class 类名&#123;    成员列表：属性、方法、构造器、代码块、内部类&#125;
-3、如何创建对象？
-123new 类名();  //匿名对象类名 对象名 = new 类名(......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-03-05
-        </p>
-        <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
-            
-        </div>
-    
+[1.VIM基本概述]
+[2.VIM模式使用]
+[3.VIM扩展知识]
+[4.VIM练习示例]
 
-</div>
-<hr>
+1.VIM基本介绍
 
-<div class="post-preview">
+vi和 vim 命令是linux中强⼤的⽂本编辑器, 由于Linux系统⼀切皆⽂件，⽽配置⼀个服务就是在 修改其配置⽂件的参数。 vim 编辑器是运维⼯程师必须掌握的⼀个⼯具, 没有它很多⼯作都⽆法 完成。vim其实是vi 的升级版 那么vi 与 vim 有什么区别？
 
-    <a href="/article/Java/04数组/">
-        <h2 class="post-title">
-                                 
-            [Java] Java（四）数组
-        </h2>
-        <h3 class="post-subtitle">
-            Java基础.
-        </h3>
-        <div class="post-content-preview">
-            第四章 数组
-4.1 数组的相关概念和名词（了解）
-1、数组(array)：
-​	一组具有相同数据类型的数据的按照一定顺序排列的集合。
-​       把有限的几个相同类型的变量使用一个名称来进行统一管理。
-2、数组名：
-​	（1）这个数组名，代表的是一组数
-​	（2）这个数组名中存储的整个数组的“首地址”
-3、下标(index)：
-​	我们使用编号、索引、下标来区别表示一组数当中某一个。
 ......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2020-03-04
+            2018-06-13
         </p>
         <div class="tags">
             
-              <a href="/tags/#Java" title="Java">Java</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Linux/04.Linux之文件属性/">
+        <h2 class="post-title">
+                                 
+            [Linux] linux基础之（四）文件属性
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1.Linux系统文件属性
+
+上图中ls -il 每列含义如下：
+12345678第⼀列		 Inode第⼆列		 ⽂件类型及权限第三列		 硬链接数第四列		 属主权限第五列		 属组权限第六列		 ⽂件或⽬录的⼤⼩第七⼋九列   最近修改时间第⼗列		 ⽂件或⽬录名字
+2.Linux系统⽂件类型
+
+1.通常我们使用颜色或者后缀名称来区分文件类型，但很多时候不是很准确，所以我们可以通过ls......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2018-06-12
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -659,12 +588,12 @@ p......
 <ul class="pager">
     
         <li class="previous">
-            <a href="/archives/2/">&larr; Newer Posts</a>
+            <a href="/page/4/">&larr; Newer Posts</a>
         </li>
     
     
         <li class="next">
-            <a href="/archives/4/">Older Posts &rarr;</a>
+            <a href="/page/6/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -701,11 +630,11 @@ p......
             
         
             
-            <a href="/tags/#Java" title="Java" rel="19">Java</a>
+            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
+            <a href="/tags/#Java" title="Java" rel="19">Java</a>
             
         
             
@@ -769,6 +698,10 @@ p......
     <ul>
       
         <li>
+          <a href="/article/Sqoop/01 Sqoop/">[Hive] 01-Sqoop部署与使用</a>
+        </li>
+      
+        <li>
           <a href="/article/Hive/03 Hive 分区表/">[Hive] 03-Hive 分区表</a>
         </li>
       
@@ -782,10 +715,6 @@ p......
       
         <li>
           <a href="/article/Hadoop/07.Hadoop-源码编译/">[Hadoop]07 Hadoop源码编译</a>
-        </li>
-      
-        <li>
-          <a href="/article/Hadoop/08.Hadoop-container优化/">[Hadoop]08 container优化</a>
         </li>
       
     </ul>
@@ -806,7 +735,7 @@ p......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>

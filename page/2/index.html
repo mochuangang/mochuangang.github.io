@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://www.mochuangang.com/archives/6/">
+    <link rel="canonical" href="http://www.mochuangang.com/page/2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,31 +211,33 @@
 
 <div class="post-preview">
 
-    <a href="/article/Linux/02.linux之Bash初识/">
+    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
         <h2 class="post-title">
                                  
-            [Linux] linux基础之（二）Bash初识
+            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            02.Linux系统Bash初识
-1.Linux系统终端概述
-服务器终端切换:Ctrl+Alt+F1…F6
-虚拟机终端切换:Ctrl+Shift+Alt+F1…F6
-虚拟终端由mingetty程序生成
-1234567// 物理理机执⾏行行为本地终端[root@mcg ~]# tty/dev/tty1//通过⽹网络使⽤用模拟终端远程连接Linux, ⽇日常运维中就是这种⽅方式。[root@mc......
+            
+修改原因
+
+Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
+
+Hadoop修改
+
+1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-10
+            2020-11-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -245,42 +247,31 @@
 
 <div class="post-preview">
 
-    <a href="/article/Linux/01.Linux之系统安装/">
+    <a href="/article/Hadoop/02.Hadoop伪分布式部署/">
         <h2 class="post-title">
                                  
-            [Linux]Linux基础之（一）虚拟机安装系统
+            [Hadoop]02-Hadoop伪分布式部署
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.虚拟机安装Linux系统
-第1步：在虚拟机管理界⾯中单击“开启此虚拟机”按钮后数秒就看到 RHEL 7.4 系统安装界⾯，如图 1-所示。
-
-
-
-
-描述
-含义
-
-
-
-
-Install Red Hat Enterprise Linux 7.4
-安装Redhat Linux7.4系统
-
-
-Test this media &amp; install Red Hat Enterprise Lin......
+            系统环境：VMware虚拟机
+系统版本：CentOS Linux release 7.5.1804 (Core)
+修改主机名
+1[root@ruozedata001 ~]# hostnamectl set-hostname ruozedata001
+添加域名映射 centos–&gt;windows
+12345[root@ruozedata001 ~]# vim /etc/hosts127.......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-09
+            2020-11-22
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
             
         </div>
     
@@ -290,27 +281,30 @@ Test this media &amp; install Red Hat Enterprise Lin......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/linux命令总结/">
+    <a href="/article/MySql/02Mysql常用命令/">
         <h2 class="post-title">
                                  
-            [Linux]Linux命令总结
+            [Mysql]Mysql（二）常用命令
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            linux 命令总结
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979......
+            MySQL常用命令
+修改用户密码
+1mysql&gt; alter user root@localhost identified by &apos;123456&apos;;
+赋予数据库所有表的授权给root用户
+123456mysql&gt;GRANT ALL PRIVILEGES ON *.* TO &apos;root&apos;@&apos;%&apos; IDENTIFIED BY......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-09
+            2020-11-16
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
             
         </div>
     
@@ -320,29 +314,269 @@ Test this media &amp; install Red Hat Enterprise Lin......
 
 <div class="post-preview">
 
-    <a href="/article/Linux/linux基础优化/">
+    <a href="/article/MySql/01Mysql安装/">
         <h2 class="post-title">
                                  
-            [Linux]Linux系统基础优化
+            [Mysql]Mysql Linux安装5.7.26
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            1.CentOS6.9系统基础优化
-[TOC]
-1. hosts文件配置
-1234567891011121314\cp /etc/hosts&#123;,.bak&#125;cat &gt;/etc/hosts&lt;&lt;EOF127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4::1......
+            1.卸载Centos7自带 MariaDB
+检查mariadb是否已安装
+12[root@ruozedata01 local]# yum list installed | grep mariadb mariadb-libs.x86_64   1:5.5.56-2.el7     @anaconda
+全部卸载
+1[root@ruozedata01 local]# yum remove mari......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by 莫传刚 on
-            2018-06-09
+            2020-11-15
         </p>
         <div class="tags">
             
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/MySql/MySQL复习笔记/">
+        <h2 class="post-title">
+                                 
+            [Mysql] Mysql复习笔记
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            第一章 数据库概述
+1.1 数据库概述
+DBMS：数据库管理系统（Database Management System）是一种操纵和管理数据库的大型软件，例如建立、使用和维护数据库。
+DB：数据库（Database）
+SQL：结构化查询语言，（Structure Query Language），专门用来操作/访问数据库的通用语言。
+MySQL：其中的一款关系型数据库管理系统
+以下是2019年......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-04-08
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Mysql" title="Mysql">Mysql</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Java/19Idea快捷键/">
+        <h2 class="post-title">
+                                 
+            [Java] Idea快捷键大全
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            
+十九章Idea快捷键大全（Windows）
+Ctrl
+
+
+
+快捷键
+介绍
+
+
+
+
+Ctrl + F
+在当前文件进行文本查找 （必备）
+
+
+Ctrl + R
+在当前文件进行文本替换 （必备）
+
+
+Ctrl + Z
+撤销 （必备）
+
+
+Ctrl + Y
+删除光标所在行 或 删除选中的行 （必备）
+
+
+Ctrl + X
+剪切光标所在行 或 剪切选择内容
+
+
+Ctrl + C
+复制光标所在行 或 ......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-19
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Java/18设计模式/">
+        <h2 class="post-title">
+                                 
+            [Java] Java（十八）设计模式
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            第十八章 设计模式
+18.1 模板设计模式（了解）
+1、当解决某个问题，或者完成某个功能时，主体的算法结构（步骤）是确定的，只是其中的一个或者几个小的步骤不确定，要有使用者（子类）来确定时，就可以使用模板设计模式
+2、示例代码：计算任意一段代码的运行时间
+123456789101112131415161718//模板类public abstract class CalTime&#123;  ......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-18
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Java/17Java8/">
+        <h2 class="post-title">
+                                 
+            [Java] Java8（十七）
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            第十七章 Java8
+17.1 Lambda表达式与函数式接口
+Lambda写的好可以极大的减少代码冗余，同时可读性也好过冗长的匿名内部类。
+17.1.1 函数式接口
+lambda表达式其实就是实现SAM接口的语法糖，所谓SAM接口就是Single Abstract Method，即该接口中只有一个抽象方法需要实现，当然该接口可以包含其他非抽象方法。
+其实只要满足“SAM”特征的接口都可以称......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-17
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Java/16反射/">
+        <h2 class="post-title">
+                                 
+            [Java] Java（十六）反射
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            第十六章 反射（难点）
+16.1 类加载
+1、类在内存中的生命周期：加载–&gt;使用–&gt;卸载
+2、类的加载又分为三个阶段：
+（1）加载：load
+（2）连接：link
+①验证：校验合法性
+②准备：准备对应的内存（方法区），创建Class对象，为类变量赋默认值，为静态常量赋初始值。
+③解析：把字节码中的符号引用替换为对应的直接地址引用
+（3）初始化：initialize（类初始化），大......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-16
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Java/15网络编程/">
+        <h2 class="post-title">
+                                 
+            [Java] Java（十五）网络编程
+        </h2>
+        <h3 class="post-subtitle">
+            Java基础.
+        </h3>
+        <div class="post-content-preview">
+            第十五章 网络编程（了解）
+学习它为了更好的理解：web（服务器端和客户端的通信）、数据库（服务器端和客户端的数据传输）等原理。
+15.1 主机IP
+在程序中表示：
+（1）值的表示
+IPV4：32位整数，8位一组，用.分割，例如：192.168.11.45
+​	每个8位的范围[0,255]
+IPV6：128位整数表示，16位一组，用:分割，例如：X:X:X:X:X:X:X:X
+​	每个16位......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-03-15
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Java" title="Java">Java</a>
             
         </div>
     
@@ -357,9 +591,13 @@ Test this media &amp; install Red Hat Enterprise Lin......
 <ul class="pager">
     
         <li class="previous">
-            <a href="/archives/5/">&larr; Newer Posts</a>
+            <a href="/">&larr; Newer Posts</a>
         </li>
     
+    
+        <li class="next">
+            <a href="/page/3/">Older Posts &rarr;</a>
+        </li>
     
 </ul>
 
@@ -395,11 +633,11 @@ Test this media &amp; install Red Hat Enterprise Lin......
             
         
             
-            <a href="/tags/#Java" title="Java" rel="19">Java</a>
+            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
+            <a href="/tags/#Java" title="Java" rel="19">Java</a>
             
         
             
@@ -463,6 +701,10 @@ Test this media &amp; install Red Hat Enterprise Lin......
     <ul>
       
         <li>
+          <a href="/article/Sqoop/01 Sqoop/">[Hive] 01-Sqoop部署与使用</a>
+        </li>
+      
+        <li>
           <a href="/article/Hive/03 Hive 分区表/">[Hive] 03-Hive 分区表</a>
         </li>
       
@@ -476,10 +718,6 @@ Test this media &amp; install Red Hat Enterprise Lin......
       
         <li>
           <a href="/article/Hadoop/07.Hadoop-源码编译/">[Hadoop]07 Hadoop源码编译</a>
-        </li>
-      
-        <li>
-          <a href="/article/Hadoop/08.Hadoop-container优化/">[Hadoop]08 container优化</a>
         </li>
       
     </ul>
@@ -500,7 +738,7 @@ Test this media &amp; install Red Hat Enterprise Lin......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>

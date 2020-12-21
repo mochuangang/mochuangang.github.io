@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Hive] 01-Sqoop部署与使用 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Sqoop/01 Sqoop/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                            
+                        </div>
+                        <h1>[Hive] 01-Sqoop部署与使用</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-12-18
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="1sqoop简介">1.Sqoop简介</h2>
+<p>Sqoop是一款开源的工具，主要用于在Hadoop(Hive)与传统的数据库(mysql、postgresql…)间进行数据的传递，可以将一个关系型数据库（例如 ： MySQL ,Oracle ,Postgres等）中的数据导进到Hadoop的HDFS中，也可以将HDFS的数据导进到关系型数据库中。</p>
+<p>Sqoop项目开始于2009年，最早是作为Hadoop的一个第三方模块存在，后来为了让使用者能够快速部署，也为了让开发人员能够更快速的迭代开发，Sqoop独立成为一个<a href="https://baike.baidu.com/item/Apache/6265" target="_blank" rel="noopener">Apache</a>项目。</p>
+<p>Sqoop1 1.4.7<br>
+Sqoop2的最新版本是1.99.7。请注意，2与1不兼容，且特征不完整，它并不打算用于生产部署。</p>
+<h2 id="2sqoop原理">2.Sqoop原理</h2>
+<p>将导入或导出命令翻译成mapreduce程序来实现。<br>
+在翻译出的mapreduce中主要是对inputformat和outputformat进行定制。</p>
+<h2 id="3sqoop安装">3.Sqoop安装</h2>
+<p>安装Sqoop的前提是已经具备Java和Hadoop的环境。</p>
+<h3 id="31-下载并解压">3.1 下载并解压</h3>
+<p>CDH下载地址：<a href="http://archive.cloudera.com/cdh5/cdh/5/" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/</a><br>
+Apache下载地址：<a href="http://mirrors.hust.edu.cn/apache/sqoop/1.4.6/" target="_blank" rel="noopener">http://mirrors.hust.edu.cn/apache/sqoop/1.4.6/</a></p>
+<p>上传安装包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ cd software/</span><br><span class="line">[hadoop@ruozedata001 software]$ ll</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop  30867985 Dec 13 21:26 sqoop-1.4.6-cdh5.16.2.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压sqoop安装包到指定目录，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ tar xf sqoop-1.4.6-cdh5.16.2.tar.gz -C /home/hadoop/app/</span><br><span class="line">[hadoop@ruozedata001 app]$ ln -s sqoop-1.4.6-cdh5.16.2/ sqoop</span><br></pre></td></tr></table></figure>
+<h3 id="32-修改配置文件">3.2 修改配置文件</h3>
+<p>Sqoop的配置文件与大多数大数据框架类似，在sqoop根目录下的conf目录中。</p>
+<ol>
+<li>复制配置文件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 conf]$ cp sqoop-env-template.sh sqoop-env.sh</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>修改配置文件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改配置文件sqoop-env.sh</span></span><br><span class="line"><span class="meta">$</span><span class="bash">SQOOP_HOME/conf/sqoop-env.sh </span></span><br><span class="line">export HADOOP_COMMON_HOME=/home/hadoop/app/hadoop</span><br><span class="line">export HADOOP_MAPRED_HOME=/home/hadoop/app/hadoop</span><br><span class="line">export HIVE_HOME=/home/hadoop/app/hive</span><br></pre></td></tr></table></figure>
+<p>3.3 拷贝JDBC驱动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">拷贝MySQL驱动包到$SQOOP_HOME/lib/目录下</span><br><span class="line">mysql-connector-java-5.1.47.jar</span><br><span class="line">[hadoop@ruozedata001 sqoop]$ cd lib</span><br><span class="line">[hadoop@ruozedata001 lib]$ ll mysql-connector-java-5.1.47.jar </span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 1007502 Dec 21 11:50 mysql-connector-java-5.1.47.jar</span><br><span class="line"></span><br><span class="line">拷贝hive jar包到$SQOOP_HOME/lib/目录下</span><br><span class="line">[hadoop@ruozedata001 lib]$ cp $HIVE_HOME/lib/hive-common-1.1.0-cdh5.16.2.jar $SQOOP_HOME/lib</span><br><span class="line">[hadoop@ruozedata001 lib]$ cp $HIVE_HOME/lib/hive-shims-* $SQOOP_HOME/lib</span><br><span class="line"></span><br><span class="line">拷贝hive配置文件</span><br><span class="line">[hadoop@ruozedata001 lib]$ cp $HIVE_HOME/conf/hive-site.xml $SQOOP_HOME/conf</span><br></pre></td></tr></table></figure>
+<h3 id="34-系统环境变量">3.4 系统环境变量</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ vim .bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash">SQOOP_HOME</span></span><br><span class="line">export SQOOP_HOME=/home/hadoop/app/sqoop</span><br><span class="line">export PATH=$SQOOP_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<h3 id="35-验证sqoop">3.5 验证Sqoop</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 通过某一个<span class="built_in">command</span>来验证sqoop配置是否正确：</span></span><br><span class="line">[hadoop@ruozedata001 sqoop]$ sqoop help</span><br><span class="line">出现一些Warning警告（警告信息已省略），并伴随着帮助命令的输出：</span><br><span class="line"></span><br><span class="line">Warning: /home/hadoop/app/sqoop/../hbase does not exist! HBase imports will fail.</span><br><span class="line">Please set $HBASE_HOME to the root of your HBase installation.</span><br><span class="line">Warning: /home/hadoop/app/sqoop/../hcatalog does not exist! HCatalog jobs will fail.</span><br><span class="line">Please set $HCAT_HOME to the root of your HCatalog installation.</span><br><span class="line">Warning: /home/hadoop/app/sqoop/../accumulo does not exist! Accumulo imports will fail.</span><br><span class="line">Please set $ACCUMULO_HOME to the root of your Accumulo installation.</span><br><span class="line">Warning: /home/hadoop/app/sqoop/../zookeeper does not exist! Accumulo imports will fail.</span><br><span class="line">Please set $ZOOKEEPER_HOME to the root of your Zookeeper installation.</span><br><span class="line">20/12/21 12:10:02 INFO sqoop.Sqoop: Running Sqoop version: 1.4.6-cdh5.16.2</span><br><span class="line">usage: sqoop COMMAND [ARGS]</span><br><span class="line"></span><br><span class="line">Available commands:</span><br><span class="line">  codegen            Generate code to interact with database records</span><br><span class="line">  create-hive-table  Import a table definition into Hive</span><br><span class="line">  eval               Evaluate a SQL statement and display the results</span><br><span class="line">  export             Export an HDFS directory to a database table</span><br><span class="line">  help               List available commands</span><br><span class="line">  import             Import a table from a database to HDFS</span><br><span class="line">  import-all-tables  Import tables from a database to HDFS</span><br><span class="line">  import-mainframe   Import datasets from a mainframe server to HDFS</span><br><span class="line">  job                Work with saved jobs</span><br><span class="line">  list-databases     List available databases on a server</span><br><span class="line">  list-tables        List available tables in a database</span><br><span class="line">  merge              Merge results of incremental imports</span><br><span class="line">  metastore          Run a standalone Sqoop metastore</span><br><span class="line">  version            Display version information</span><br><span class="line"></span><br><span class="line">See 'sqoop help COMMAND' for information on a specific command.</span><br></pre></td></tr></table></figure>
+<h3 id="35-测试sqoop是否能够成功连接数据库">3.5 测试Sqoop是否能够成功连接数据库</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 sqoop]$ sqoop list-databases --connect jdbc:mysql://192.168.9.101:3306/ --username root --password 123456</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 出现如下输出：</span></span><br><span class="line">information_schema</span><br><span class="line">mysql</span><br><span class="line">performance_schema</span><br><span class="line">rundeck</span><br><span class="line">ruozedata</span><br><span class="line">ruozedata_erp</span><br><span class="line">ruozedata_pk_hive</span><br><span class="line">sys</span><br></pre></td></tr></table></figure>
+<h2 id="4sqoop简单使用">4.Sqoop简单使用</h2>
+<p>查看mysql里的database</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqoop list-databases \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306 \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456'</span><br></pre></td></tr></table></figure>
+<p>查看mysql某个database里所有表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqoop list-tables \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456'</span><br></pre></td></tr></table></figure>
+<h2 id="5sqoop导入">5.Sqoop导入</h2>
+<p>以Hadoop作为参照物，如果数据时进入Hadoop的，那就是导入，反之就是导出</p>
+<p>查看导入帮助 <figure class="highlight plain"><figcaption><span>import --help```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 5.1 RDBMS到HDFS</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line"># 全部导入</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password &apos;123456&apos; \</span><br><span class="line">--table emp \</span><br><span class="line"></span><br><span class="line">默认是在/user/hadoop/emp 路径下，/user/当前用户/emp；</span><br><span class="line"></span><br><span class="line">hadoop fs -ls vs hadoop fs -ls / 的区别</span><br><span class="line">hadoop fs -ls 是 /user/用户名</span><br><span class="line">hadoop fs -ls / 是到hdfs的根目录的</span><br><span class="line"></span><br><span class="line">1)直接查看导入的文件 hadoop fs -ls tablename</span><br><span class="line">2）默认导入4个文件，同时4个task在运行</span><br><span class="line"></span><br><span class="line">目录已存在会报错</span><br><span class="line">FileAlreadyExistsException:</span><br><span class="line"> Output directory hdfs://ruozedata001:8020/user/hadoop/emp already exists</span><br><span class="line">可以手动删除，也可以添加参数 --delete-target-dir 先删除目标表在导入，-m 1 设置一个task运行</span><br><span class="line"></span><br><span class="line">--mapreduce-job-name 给作业改名字</span><br><span class="line">--target-dir 指定HDFS路径</span><br><span class="line">--null-string 指定字符替换字符串类型的null</span><br><span class="line">--null-non-string 指定字符替换非字符串类型的null</span><br><span class="line">--fields-terminated-by 指定分隔符</span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password &apos;123456&apos; \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">-m 1 \</span><br><span class="line">--null-string &apos;&apos; \</span><br><span class="line">--null-non-string 0 \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">--table emp \</span><br></pre></td></tr></table></figure></p>
+<p>导入指定列</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--columns "EMPNO,ENAME,JOB,SAL,COMM" \</span><br><span class="line">--mapreduce-job-name EmpFromMySQL2HDFS \</span><br><span class="line">--table emp \</span><br><span class="line">--null-string '' \</span><br><span class="line">--null-non-string 0 \</span><br><span class="line">--fields-terminated-by '\t' \</span><br><span class="line">--where 'SAL&gt;2000' \</span><br><span class="line">--target-dir EMP_COLUMN \</span><br><span class="line">-m 1 \</span><br><span class="line"></span><br><span class="line">提示：columns中如果涉及到多列，用逗号分隔，分隔时不要添加空格</span><br></pre></td></tr></table></figure>
+<p>查询导入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 注意： 使用 -e 参数与 --table 参数不能同时存在</span></span><br><span class="line">  使用-e 或者--query 参数 通过sql语句 来执行 末尾需要添加$CONDITIONS</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">-m 1 \</span><br><span class="line">--mapreduce-job-name EmpFromMySQL2HDFS \</span><br><span class="line">--null-string '' \</span><br><span class="line">--null-non-string 0 \</span><br><span class="line">--fields-terminated-by '\t' \</span><br><span class="line">-e 'SELECT * FROM emp WHERE EMPNO&gt;=7900 AND $CONDITIONS' \</span><br><span class="line">--target-dir EMP_COLUMN_QUERY</span><br></pre></td></tr></table></figure>
+<p><strong><em>提示：must contain ‘$CONDITIONS’ in WHERE clause.</em></strong><br>
+<strong><em>注意：如果query后使用的是双引号，则<code>\$CONDITIONS</code>前必须加转移符，防止shell识别为自己的变量。</em></strong></p>
+<p><strong><em>注意：如果表里没有设置主键会报错，解决方案 要么参数加-m 1 或者使用 --split-by参数 指定按照字段切换</em></strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--table product_info;</span><br><span class="line"></span><br><span class="line">ERROR tool.ImportTool: Import failed: No primary key could be found for table product_info. Please specify one with --split-by or perform a sequential import with '-m 1'.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加参数 -m 1 或者 --split-by参数 指定按照字段切换</span></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--table product_info \</span><br><span class="line">--split-by product_id</span><br></pre></td></tr></table></figure>
+<p>eval 执行一个SQL语句展示结果，在终端上显示</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-e 和 --query是一个意思</span><br><span class="line">sqoop eval \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--query 'select * from product_info'</span><br></pre></td></tr></table></figure>
+<p>–options-file  把SQL语句封装在一个文件里,通过执行文件来导入导出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 data]$ cat emp.opt </span><br><span class="line">import </span><br><span class="line">--connect</span><br><span class="line">jdbc:mysql://192.168.9.101:3306/ruozedata</span><br><span class="line">--username</span><br><span class="line">root</span><br><span class="line">--password</span><br><span class="line">'123456'</span><br><span class="line">--delete-target-dir</span><br><span class="line">--columns</span><br><span class="line">"EMPNO,ENAME,JOB,SAL,COMM"</span><br><span class="line">--mapreduce-job-name</span><br><span class="line">EmpFromMySQL2HDFS</span><br><span class="line">--table</span><br><span class="line">emp</span><br><span class="line">-m</span><br><span class="line">1</span><br><span class="line">--target-dir </span><br><span class="line">EMP_COLUMN</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">执行</span></span><br><span class="line">[hadoop@ruozedata001 data]$ sqoop --options-file emp.opt</span><br></pre></td></tr></table></figure>
+<p>–create 创建job任务执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sqoop job --create ruozedata_job -- \</span><br><span class="line">import --connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--table product_info \</span><br><span class="line">--split-by product_id</span><br><span class="line"></span><br><span class="line">sqoop job -list  查看当前配置的job</span><br><span class="line">sqoop job -exec ruozedata_job  执行job</span><br><span class="line">sqoop job -delete ruozedata_job 删除job</span><br></pre></td></tr></table></figure>
+<h3 id="52-rdbms-到-hive">5.2 RDBMS 到 Hive</h3>
+<p>提示：该过程分为两步，第一步将数据导入到HDFS，第二步将导入到HDFS的数据迁移到Hive仓库，第一步默认的临时目录是/user/hadoop/表名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查看帮助 sqoop <span class="built_in">help</span> import</span></span><br><span class="line"><span class="meta">#</span><span class="bash">注意：使用--create-hive-table这个参数 自动创建表，字段的数据类型会发生变化，在生产上不要用这个参数</span></span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-database ruozedata_hive \</span><br><span class="line">--hive-import \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--hive-table emp_column \</span><br><span class="line">--columns "empno,ename,job,sal,comm" \</span><br><span class="line">--mapreduce-job-name EmpFromMySQL2Hive \</span><br><span class="line">--table emp \</span><br><span class="line">-m 1 \</span><br><span class="line">--null-string '' \</span><br><span class="line">--null-non-string 0 \</span><br><span class="line">--fields-terminated-by '\t';</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果要导入分区表需要添加参数</span></span><br><span class="line">--hive-partition-key 'day' \</span><br><span class="line">--hive-partition-value 'yyyyMMdd' \</span><br></pre></td></tr></table></figure>
+<h2 id="6-导出数据">6. 导出数据</h2>
+<h3 id="61-hdfs到rdbms">6.1 HDFS到RDBMS</h3>
+<p><strong><em>使用关键字<code>export</code></em></strong><br>
+提示：Mysql中如果表不存在，不会自动创建，导出先要在mysql上把表建好</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 只创建表结构</span></span><br><span class="line">create table emp2 as select * from emp where 1=2;</span><br></pre></td></tr></table></figure>
+<p>导出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sqoop export \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--table emp2 \</span><br><span class="line">--fields-terminated-by '\t' \</span><br><span class="line">--export-dir /user/hadoop/emp</span><br></pre></td></tr></table></figure>
+<p>***sqoop导出 默认是&quot;,“号分隔，ive 建表时没有指定分隔符，默认是’\001’，如果hive里的数据时”\t&quot;分隔就会报错<br>
+20/12/17 22:24:24 ERROR tool.ExportTool: Error during export:<br>
+Export job failed! ***<br>
+<strong><em>解决办法：加–fields-terminated-by参数指定分隔符</em></strong></p>
+<h3 id="62-hive到rdbms">6.2 Hive到RDBMS</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sqoop export \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--table user_click_area_top \</span><br><span class="line">--clear-staging-table user_click_area_top \</span><br><span class="line">--columns "product_id,product_name,click_cnt,area,product_status,rank" \</span><br><span class="line">--export-dir /user/hive/warehouse/ruozedata_hive.db/user_click_area_top \</span><br><span class="line">--fields-terminated-by "\t" \</span><br><span class="line">-m 1</span><br></pre></td></tr></table></figure>
+<h2 id="7分组topn">7.分组TopN</h2>
+<p>需要用到窗口函数:<br>
+RANK() 排序相同时会重复，总数不会变<br>
+DENSE_RANK() 排序相同时会重复，总数会减少<br>
+ROW_NUMBER() 会根据顺序计算</p>
+<p>数据city_info.sql  product_info.sql 在mysql上， user_click.txt在hive上</p>
+<p>城市表：MySQL	<br>
+商品表：MySQL<br>
+用户行为日志：Hive</p>
+<p>Hive 建表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建user_click表</span></span><br><span class="line">create table user_click(</span><br><span class="line">user_id string,</span><br><span class="line">session_id string,</span><br><span class="line">time string,</span><br><span class="line">city_id int,</span><br><span class="line">product_id int</span><br><span class="line">) partitioned by(day string)</span><br><span class="line">row format delimited fields terminated by ',';</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">加载数据</span></span><br><span class="line">load data local inpath '/home/hadoop/data/topn/user_click.txt' overwrite into table user_click partition(day='2016-05-05');</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建city_info表</span></span><br><span class="line">create table city_info(</span><br><span class="line">city_id int,</span><br><span class="line">city_name string,</span><br><span class="line">area string</span><br><span class="line">)</span><br><span class="line">row format delimited fields terminated by '\t';	</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建product_info表</span></span><br><span class="line">create table product_info(</span><br><span class="line">product_id int,</span><br><span class="line">product_name string,</span><br><span class="line">extend_info string</span><br><span class="line">)</span><br><span class="line">row format delimited fields terminated by '\t';</span><br></pre></td></tr></table></figure>
+<p>导入数据到hive</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sqoop import --connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root --password '123456' \</span><br><span class="line">--table city_info \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--direct \</span><br><span class="line">--hive-import  \</span><br><span class="line">--hive-database ruozedata_hive \</span><br><span class="line">--hive-table city_info \</span><br><span class="line">--hive-overwrite  \</span><br><span class="line">--fields-terminated-by '\t' \</span><br><span class="line">--split-by city_id \</span><br><span class="line">-m 2 \</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sqoop import --connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root --password '123456' \</span><br><span class="line">--table product_info \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--direct \</span><br><span class="line">--hive-import \</span><br><span class="line">--hive-database ruozedata_hive \</span><br><span class="line">--hive-table product_info \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--fields-terminated-by '\t' \</span><br><span class="line">--split-by product_id \</span><br><span class="line">-m 2</span><br></pre></td></tr></table></figure>
+<p>需求：按照区域求最受欢迎商品的TopN</p>
+<p>product点击基本信息信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">drop table tmp_product_click_basic_info;</span><br><span class="line">create table tmp_product_click_basic_info as</span><br><span class="line">select </span><br><span class="line">u.product_id, u.city_id, c.city_name, c.area</span><br><span class="line">from </span><br><span class="line">(select product_id, city_id from user_click where day='2016-05-05') u</span><br><span class="line">join</span><br><span class="line">(select  city_id, city_name, area from city_info) c	</span><br><span class="line">on u.city_id = c.city_id;</span><br></pre></td></tr></table></figure>
+<p>区域下的product的点击次数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">若表存在先删除</span></span><br><span class="line">drop table tmp_area_product_click_cnt;</span><br><span class="line"></span><br><span class="line">create table tmp_area_product_click_cnt as</span><br><span class="line">select</span><br><span class="line">product_id, area, count(1) click_cnt</span><br><span class="line">from</span><br><span class="line">tmp_product_click_basic_info</span><br><span class="line">group by product_id, area;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查询</span></span><br><span class="line">select * from tmp_area_product_click_cnt limit 5;</span><br></pre></td></tr></table></figure>
+<p>获取完整的商品点击次数信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 若表存在先删除</span></span><br><span class="line">drop table tmp_area_product_full_click_cnt;</span><br><span class="line"></span><br><span class="line">create table tmp_area_product_full_click_cnt as</span><br><span class="line">select</span><br><span class="line">a.product_id, b.product_name, a.click_cnt, a.area,</span><br><span class="line">if(get_json_object(extend_info,'$.product_status') =='0','self','third') product_status</span><br><span class="line">from tmp_area_product_click_cnt a join product_info b</span><br><span class="line">on a.product_id = b.product_id;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询</span></span><br><span class="line">select * from tmp_area_product_full_click_cnt limit 5;</span><br></pre></td></tr></table></figure>
+<p>分组的TopN</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 若不存在先删除</span></span><br><span class="line">drop table user_click_area_top;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 建表</span></span><br><span class="line">create table user_click_area_top (</span><br><span class="line">product_id int,</span><br><span class="line">product_name string,</span><br><span class="line">click_cnt int,</span><br><span class="line">area string,</span><br><span class="line">product_status string,</span><br><span class="line">`rank` int</span><br><span class="line">) </span><br><span class="line">row format delimited fields terminated BY '\t';</span><br></pre></td></tr></table></figure>
+<p>插入数据到user_click_area_top表中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">insert into table  user_click_area_top</span><br><span class="line">select</span><br><span class="line">product_id,           	                    </span><br><span class="line">product_name,     	                    </span><br><span class="line">click_cnt,      	                    </span><br><span class="line">area,   	                    </span><br><span class="line">product_status,</span><br><span class="line">rank</span><br><span class="line">from</span><br><span class="line">    (</span><br><span class="line">    select</span><br><span class="line">    product_id , product_name, click_cnt, area, product_status,</span><br><span class="line">        --rank() over(partition by area order by click_cnt desc), 排序相同时会重复，总数不会变</span><br><span class="line">        --dense_rank() over(partition by area order by click_cnt desc), 排序相同时会重复，总数会减少</span><br><span class="line">        row_number() over(partition by area order by click_cnt desc) rank --会根据顺序计算</span><br><span class="line">    from</span><br><span class="line">        tmp_area_product_full_click_cnt ) t</span><br><span class="line">where</span><br><span class="line">    t.rank &lt;= 3</span><br></pre></td></tr></table></figure>
+<p>将分组TopN的结果export到MySQL</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 注意：hive 建表时没有指定分隔符，默认是<span class="string">'\001'</span>，分隔符不对会导致报错</span></span><br><span class="line">sqoop export \</span><br><span class="line">--connect jdbc:mysql://192.168.9.101:3306/ruozedata \</span><br><span class="line">--username root \</span><br><span class="line">--password '123456' \</span><br><span class="line">--table user_click_area_top \</span><br><span class="line">--clear-staging-table user_click_area_top \</span><br><span class="line">--columns "product_id,product_name,click_cnt,area,product_status,rank" \</span><br><span class="line">--export-dir /user/hive/warehouse/ruozedata_hive.db/user_click_area_top \</span><br><span class="line">--fields-terminated-by "\t" \</span><br><span class="line">-m 1</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Hive/03 Hive 分区表/" data-toggle="tooltip" data-placement="top" title="[Hive] 03-Hive 分区表">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1sqoop简介"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.Sqoop&#x7B80;&#x4ECB;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2sqoop原理"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.Sqoop&#x539F;&#x7406;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3sqoop安装"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.Sqoop&#x5B89;&#x88C5;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#31-下载并解压"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">3.1 &#x4E0B;&#x8F7D;&#x5E76;&#x89E3;&#x538B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#32-修改配置文件"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">3.2 &#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#34-系统环境变量"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">3.4 &#x7CFB;&#x7EDF;&#x73AF;&#x5883;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#35-验证sqoop"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">3.5 &#x9A8C;&#x8BC1;Sqoop</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#35-测试sqoop是否能够成功连接数据库"><span class="toc-nav-number">3.5.</span> <span class="toc-nav-text">3.5 &#x6D4B;&#x8BD5;Sqoop&#x662F;&#x5426;&#x80FD;&#x591F;&#x6210;&#x529F;&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4sqoop简单使用"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.Sqoop&#x7B80;&#x5355;&#x4F7F;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5sqoop导入"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">5.Sqoop&#x5BFC;&#x5165;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#52-rdbms-到-hive"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">5.2 RDBMS &#x5230; Hive</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-导出数据"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">6. &#x5BFC;&#x51FA;&#x6570;&#x636E;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#61-hdfs到rdbms"><span class="toc-nav-number">6.1.</span> <span class="toc-nav-text">6.1 HDFS&#x5230;RDBMS</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#62-hive到rdbms"><span class="toc-nav-number">6.2.</span> <span class="toc-nav-text">6.2 Hive&#x5230;RDBMS</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7分组topn"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">7.&#x5206;&#x7EC4;TopN</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2020 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
