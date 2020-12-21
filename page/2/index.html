@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -211,23 +211,21 @@
 
 <div class="post-preview">
 
-    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
+    <a href="/article/Hadoop/02.Hadoop伪分布式部署/">
         <h2 class="post-title">
                                  
-            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
+            [Hadoop]02-Hadoop伪分布式部署
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            
-修改原因
-
-Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
-
-Hadoop修改
-
-1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
+            系统环境：VMware虚拟机
+系统版本：CentOS Linux release 7.5.1804 (Core)
+修改主机名
+1[root@ruozedata001 ~]# hostnamectl set-hostname ruozedata001
+添加域名映射 centos–&gt;windows
+12345[root@ruozedata001 ~]# vim /etc/hosts127.......
         </div>
     </a>
     
@@ -247,21 +245,23 @@ Hadoop修改
 
 <div class="post-preview">
 
-    <a href="/article/Hadoop/02.Hadoop伪分布式部署/">
+    <a href="/article/Hadoop/03.Hadoop 2.6.0修改配置PID文件路径/">
         <h2 class="post-title">
                                  
-            [Hadoop]02-Hadoop伪分布式部署
+            [Hadoop]03.Hadoop 2.6.0修改配置PID文件路径
         </h2>
         <h3 class="post-subtitle">
             
         </h3>
         <div class="post-content-preview">
-            系统环境：VMware虚拟机
-系统版本：CentOS Linux release 7.5.1804 (Core)
-修改主机名
-1[root@ruozedata001 ~]# hostnamectl set-hostname ruozedata001
-添加域名映射 centos–&gt;windows
-12345[root@ruozedata001 ~]# vim /etc/hosts127.......
+            
+修改原因
+
+Hadoop启动后的PID文件默认配置是保存在 /tmp 目录下的，而linux下 /tmp 目录会定时清理，所以在集群运行一段时间后如果在停Hadoop相关服务是会出现类似：no datanode to stop 的错误提示，一般生产环境中我们需要重新修改PID的保存路径。
+
+Hadoop修改
+
+1、HDFS增加或者修改：$HADOOP_HOME/etc/hadoop/had......
         </div>
     </a>
     
