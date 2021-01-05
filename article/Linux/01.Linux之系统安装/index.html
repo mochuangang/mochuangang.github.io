@@ -315,6 +315,8 @@
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Runlevel VS System Target</span><br><span class="line">[root@mcg ~]<span class="comment"># cat /etc/inittab</span></span><br><span class="line"><span class="comment"># inittab is no longer used when using systemd.</span></span><br><span class="line"></span><br><span class="line">当前启动级别</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl get-default</span></span><br><span class="line">multi-user.target</span><br><span class="line">//设置启动级别</span><br><span class="line">systemctl set-default multi-user.target</span><br><span class="line"></span><br><span class="line">//ystemd一统天下</span><br><span class="line">//看看从前的runlevel都变成什么样了？</span><br><span class="line">ls -lh /usr/lib/systemd/system/runlevel*.target</span><br><span class="line">所有可用的单元文件存放在/usr/lib/systemd/system/和/etc/systemd/system/目录（后者优先级更高）。</span><br><span class="line">ll -h /etc/systemd/system/default.target</span><br></pre></td></tr></table></figure>
 <p><strong>区别6：管理服务</strong></p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chkconfig</span><br><span class="line">service</span><br><span class="line">/etc/init.d/</span><br><span class="line">systemctl:融合service和chkconfig的功能于一体,兼容SysV和LSB的启动脚本，而且够在进程启动过程中更有效地引导加载服务。</span><br><span class="line"></span><br><span class="line">//查看开机自启动的文件</span><br><span class="line">[root@mcg ~]<span class="comment"># systemctl list-unit-files |grep "enabled"</span></span><br></pre></td></tr></table></figure>
+<p>修改命令行颜色</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop102 ~]# vim /etc/profile</span><br><span class="line">export PS1='\[\e[32;1m\][\u@\[\e[33;1m\]\h\[\e[34;1m\] \W]\$ \[\e[0m\]'</span><br><span class="line">alias grep='grep --color=auto'</span><br><span class="line">alias egrep='egrep --color=auto'</span><br></pre></td></tr></table></figure>
 
                 
 
@@ -517,7 +519,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; 莫传刚 2020 
+                    Copyright &copy; 莫传刚 2021 
                     By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"

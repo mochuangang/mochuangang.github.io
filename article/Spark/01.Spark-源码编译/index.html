@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Hadoop]01 Spark2.4.7源码编译 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Spark/01.Spark-源码编译/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Spark" title="Spark">Spark</a>
+                            
+                        </div>
+                        <h1>[Hadoop]01 Spark2.4.7源码编译</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-12-25
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>编译spark2.4.7前置要求：使用Maven构建Spark需要Maven 3.5.4即以上和Java8</p>
+<h2 id="1环境条件">1.环境条件</h2>
+<p>Linux:      CentOS Linux release 7.5.1804<br>
+JDK:        jdk-8u144<br>
+Maven:    apache-maven-3.6.3<br>
+Spark:     spark-2.4.7<br>
+Scala:     scala-2.12.12</p>
+<p>这次编译是用普通用户hadoop来编译的</p>
+<p>创建存放的目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ cd /home/hadoop</span><br><span class="line">[hadoop@ruozedata001 ~]$ mkdir app software data lib source</span><br><span class="line">[hadoop@ruozedata001 ~]$ ll</span><br><span class="line">total 148</span><br><span class="line">drwxrwxr-x 11 hadoop hadoop   265 Dec 29 09:20 app</span><br><span class="line">drwxrwxr-x  5 hadoop hadoop   233 Dec 17 22:29 data</span><br><span class="line">drwxrwxr-x  2 hadoop hadoop     6 Nov 22 09:56 lib</span><br><span class="line">drwxrwxr-x 48 hadoop hadoop  4096 Dec 25 11:19 maven_repo</span><br><span class="line">drwxrwxr-x  2 hadoop hadoop   253 Dec 27 20:09 software</span><br><span class="line">drwxrwxr-x  3 hadoop hadoop    48 Dec 25 12:44 source</span><br><span class="line"></span><br><span class="line">app        存放安装软件的目录</span><br><span class="line">software   存放软件包的tar</span><br><span class="line">data       存放测试数据</span><br><span class="line">lib        存放自己的jar文件</span><br><span class="line">source     存放源码</span><br></pre></td></tr></table></figure>
+<p>上传软件包到指定目录下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ ll ~/software</span><br><span class="line">total 958420</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop   9506321 Dec 24 13:58 apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 185515842 Apr 30  2020 jdk-8u144-linux-x64.tar.gz</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop  20833104 Dec 24 14:03 scala-2.12.12.tgz</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop 248514739 Dec 25 22:27 spark-2.4.7-bin-2.6.0-cdh5.16.2.tgz</span><br></pre></td></tr></table></figure>
+<h2 id="2部署软件">2.部署软件</h2>
+<h3 id="21-安装jdk">2.1 安装jdk</h3>
+<p>1.解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ tar xf jdk-8u144-linux-x64.tar.gz -C ~/app/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改下用户组，jdk有时候解压后是数字的</span></span><br><span class="line">[hadoop@ruozedata001 software]$ chown -R hadoop:hadoop ~/app/jdk1.8.0_144/</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata001 software]$ ll ~/app/</span><br><span class="line">drwxr-xr-x  8 hadoop hadoop  255 Jul 22  2017 jdk1.8.0_144</span><br></pre></td></tr></table></figure>
+<p>2.配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ vim ~/.bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash">添加如下两行环境变量</span></span><br><span class="line"><span class="meta">#</span><span class="bash">JAVA_HOME:</span></span><br><span class="line">export JAVA_HOME=/home/hadoop/app/jdk1.8.0_144</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">环境变量生效</span></span><br><span class="line">[hadoop@ruozedata001 software]$ source ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">检查</span></span><br><span class="line">[hadoop@ruozedata001 software]$ java -version</span><br><span class="line">java version "1.8.0_144"</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_144-b01)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)</span><br></pre></td></tr></table></figure>
+<h3 id="22安装maven">2.2安装maven</h3>
+<p>1.解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ tar xf apache-maven-3.6.3-bin.tar.gz -C ~/app/</span><br></pre></td></tr></table></figure>
+<p>2.配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ vim ~/.bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash">添加如下两行环境变量</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MAVEN_HOME</span></span><br><span class="line">export MAVEN_HOME=/home/hadoop/app/maven-3.6.3</span><br><span class="line">export PATH=$MAVEN_HOME/bin:$PATH</span><br><span class="line"><span class="meta">#</span><span class="bash">MAVEN_OPTS设置了maven运行的内存，防止内存太小导致编译失败</span></span><br><span class="line">export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=2g"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">环境变量生效</span></span><br><span class="line">[hadoop@ruozedata001 software]$ source ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">检查</span></span><br><span class="line">[hadoop@ruozedata001 software]$ mvn -version</span><br><span class="line">Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)</span><br><span class="line">Maven home: /home/hadoop/app/maven-3.6.3</span><br><span class="line">Java version: 1.8.0_144, vendor: Oracle Corporation, runtime: /home/hadoop/app/jdk1.8.0_144/jre</span><br><span class="line">Default locale: en_US, platform encoding: UTF-8</span><br><span class="line">OS name: "linux", version: "3.10.0-862.el7.x86_64", arch: "amd64", family: "unix"</span><br></pre></td></tr></table></figure>
+<p>3.设置settings.xml</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ vim ~/app/maven-3.6.3/conf/settings.xml</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置maven的本地仓库位置</span></span><br><span class="line">&lt;localRepository&gt;/home/hadoop/maven_repo&lt;/localRepository&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="23-安装scala">2.3 安装scala</h3>
+<p>1.解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ tar xf scala-2.12.12.tgz -C ~/app/</span><br></pre></td></tr></table></figure>
+<p>2.配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ vim ~/.bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash">添加如下两行环境变量</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SCALA_HOME</span></span><br><span class="line">export SCALA_HOME=/home/hadoop/app/scala-2.12.12</span><br><span class="line">export PATH=$SCALA_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">环境变量生效</span></span><br><span class="line">[hadoop@ruozedata001 software]$ source ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 检查</span></span><br><span class="line">[hadoop@ruozedata001 software]$ scala</span><br><span class="line">Welcome to Scala 2.12.12 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_144).</span><br><span class="line">Type in expressions for evaluation. Or try :help.</span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<h3 id="24-安装git">2.4 安装git</h3>
+<p>建议是安装git</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ sudo yum install git -y</span><br></pre></td></tr></table></figure>
+<h3 id="25-安装spark">2.5 安装spark</h3>
+<p>1.解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ tar xf spark-2.4.7.tgz -C ~/source/</span><br></pre></td></tr></table></figure>
+<p>2.修改pom.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 software]$ cd ~/source/spark-2.4.7/</span><br><span class="line">[hadoop@ruozedata001 spark-2.4.7]$ vim pom.xml</span><br><span class="line"></span><br><span class="line">#添加CDH的仓库 注意一定要写在<span class="tag">&lt;<span class="name">repositories</span>&gt;</span><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span>之间</span><br><span class="line"><span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>cloudera<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>cloudera Repository<span class="tag">&lt;/<span class="name">name</span></span></span><br><span class="line">    &lt;url&gt;https://repository.cloudera.com/artifactory/cloudera-repos/&lt;/url&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>3.修改make-distribution.sh文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 spark-2.4.7]$ <span class="built_in">cd</span> ~/<span class="built_in">source</span>/spark-2.4.7/dev/</span><br><span class="line">[hadoop@ruozedata001 dev]$ vim make-distribution.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用#好注释一下内容，如果不修改会去找检查环境变量，会非常的久</span></span><br><span class="line"><span class="comment">#VERSION=$("$MVN" help:evaluate -Dexpression=project.version $@ 2&gt;/dev/null\</span></span><br><span class="line"><span class="comment">#    | grep -v "INFO"\</span></span><br><span class="line"><span class="comment">#    | grep -v "WARNING"\</span></span><br><span class="line"><span class="comment">#    | tail -n 1)</span></span><br><span class="line"><span class="comment">#SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2&gt;/dev/null\</span></span><br><span class="line"><span class="comment">#    | grep -v "INFO"\</span></span><br><span class="line"><span class="comment">#    | grep -v "WARNING"\</span></span><br><span class="line"><span class="comment">#    | tail -n 1)</span></span><br><span class="line"><span class="comment">#SPARK_HADOOP_VERSION=$("$MVN" help:evaluate -Dexpression=hadoop.version $@ 2&gt;/dev/null\</span></span><br><span class="line"><span class="comment">#    | grep -v "INFO"\</span></span><br><span class="line"><span class="comment">#    | grep -v "WARNING"\</span></span><br><span class="line"><span class="comment">#    | tail -n 1)</span></span><br><span class="line"><span class="comment">#SPARK_HIVE=$("$MVN" help:evaluate -Dexpression=project.activeProfiles -pl sql/hive $@ 2&gt;/dev/null\</span></span><br><span class="line"><span class="comment">#    | grep -v "INFO"\</span></span><br><span class="line"><span class="comment">#    | grep -v "WARNING"\</span></span><br><span class="line"><span class="comment">#    | fgrep --count "&lt;id&gt;hive&lt;/id&gt;";\</span></span><br><span class="line">    <span class="comment"># Reset exit status to 0, otherwise the script stops here if the last grep finds nothing\</span></span><br><span class="line">    <span class="comment"># because we use "set -o pipefail"</span></span><br><span class="line"><span class="comment">#    echo -n)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加如下内容</span></span><br><span class="line"><span class="comment"># 指定spark的版本</span></span><br><span class="line">VERSION=2.4.7</span><br><span class="line"><span class="comment"># 指定scala的版本,注意是大版本</span></span><br><span class="line">SCALA_VERSION=2.12</span><br><span class="line"><span class="comment"># spark和hadoop的版本</span></span><br><span class="line">SPARK_HADOOP_VERSION=2.6.0-cdh5.16.2</span><br><span class="line">SPARK_HIVE=1</span><br></pre></td></tr></table></figure>
+<p>4.执行命令编译</p>
+<p>编译前先指定scala版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 的指定scala版本 ，spark默认scala2.11版本的，这次用的是scala2.12版本的</span></span><br><span class="line">[hadoop@ruozedata001 spark-2.4.7]$ ./dev/change-scala-version.sh 2.12</span><br><span class="line">./dev/../mllib-local/pom.xml</span><br><span class="line">./dev/../resource-managers/kubernetes/integration-tests/pom.xml</span><br><span class="line">./dev/../resource-managers/kubernetes/core/pom.xml</span><br><span class="line">./dev/../resource-managers/mesos/pom.xml</span><br><span class="line">./dev/../resource-managers/yarn/pom.xml</span><br><span class="line">./dev/../launcher/pom.xml</span><br><span class="line">./dev/../common/network-common/pom.xml</span><br><span class="line">./dev/../common/unsafe/pom.xml</span><br><span class="line">./dev/../common/network-shuffle/pom.xml</span><br><span class="line">./dev/../common/kvstore/pom.xml</span><br><span class="line">./dev/../common/network-yarn/pom.xml</span><br><span class="line">./dev/../common/tags/pom.xml</span><br><span class="line">./dev/../common/sketch/pom.xml</span><br><span class="line">./dev/../tools/pom.xml</span><br><span class="line">./dev/../hadoop-cloud/pom.xml</span><br><span class="line">./dev/../sql/hive-thriftserver/pom.xml</span><br><span class="line">./dev/../sql/hive/pom.xml</span><br><span class="line">./dev/../sql/catalyst/pom.xml</span><br><span class="line">./dev/../sql/core/pom.xml</span><br><span class="line">./dev/../streaming/pom.xml</span><br><span class="line">./dev/../repl/pom.xml</span><br><span class="line">./dev/../examples/pom.xml</span><br><span class="line">./dev/../mllib/pom.xml</span><br><span class="line">./dev/../graphx/pom.xml</span><br><span class="line">./dev/../core/pom.xml</span><br><span class="line">./dev/../assembly/pom.xml</span><br><span class="line">./dev/../external/kafka-0-10-assembly/pom.xml</span><br><span class="line">./dev/../external/kafka-0-10-sql/pom.xml</span><br><span class="line">./dev/../external/kafka-0-8-assembly/pom.xml</span><br><span class="line">./dev/../external/avro/pom.xml</span><br><span class="line">./dev/../external/spark-ganglia-lgpl/pom.xml</span><br><span class="line">./dev/../external/kinesis-asl/pom.xml</span><br><span class="line">./dev/../external/flume/pom.xml</span><br><span class="line">./dev/../external/docker-integration-tests/pom.xml</span><br><span class="line">./dev/../external/kafka-0-10/pom.xml</span><br><span class="line">./dev/../external/flume-sink/pom.xml</span><br><span class="line">./dev/../external/flume-assembly/pom.xml</span><br><span class="line">./dev/../external/kinesis-asl-assembly/pom.xml</span><br><span class="line">./dev/../external/kafka-0-8/pom.xml</span><br><span class="line">./dev/../pom.xml</span><br><span class="line">./dev/../docs/_plugins/copy_api_dirs.rb</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">执行命令编译</span></span><br><span class="line">[hadoop@ruozedata001 spark-2.4.7]$  ./dev/make-distribution.sh --name 2.6.0-cdh5.16.2 \</span><br><span class="line">--tgz \</span><br><span class="line">-Dhadoop.version=2.6.0-cdh5.16.2 \</span><br><span class="line">-Phadoop-2.6 \</span><br><span class="line">-Phive -Phive-thriftserver \</span><br><span class="line">-Dscala.version=2.12.12 \</span><br><span class="line">-Pyarn </span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"> --name 2.6.0-cdh5.16.2             指定编译成功后安装包的名字，这里编译成功后是：spark-2.4.2-bin-2.6.0-cdh5.16.2 .tgz</span></span><br><span class="line"><span class="meta">#</span><span class="bash">--tgz                               编译成功后打成一个tgz的包</span></span><br><span class="line"><span class="meta">#</span><span class="bash">-Dhadoop.version=2.6.0-cdh5.16.2    指定hadoop的详细版本</span></span><br><span class="line"><span class="meta">#</span><span class="bash">-Phadoop-2.6                        指定spark支持的hadoop版本</span></span><br><span class="line"><span class="meta">#</span><span class="bash">-Phive                              支持hive相关服务</span></span><br><span class="line"><span class="meta">#</span><span class="bash">-Phive-thriftserver                 支持hive相关服务</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -Dscala.version=2.12.12            指定scala版本</span></span><br><span class="line"><span class="meta">#</span><span class="bash">-Pyarn                              启用yarm</span></span><br></pre></td></tr></table></figure>
+<p>5.编译成功的结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">[INFO] Building jar: /home/hadoop/source/spark-2.4.7/external/avro/target/spark-avro_2.12-2.4.7-test-sources.jar</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Reactor Summary for Spark Project Parent POM 2.4.7:</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] Spark Project Parent POM ........................... SUCCESS [ 19.842 s]</span><br><span class="line">[INFO] Spark Project Tags ................................. SUCCESS [ 20.267 s]</span><br><span class="line">[INFO] Spark Project Sketch ............................... SUCCESS [ 13.228 s]</span><br><span class="line">[INFO] Spark Project Local DB ............................. SUCCESS [  9.456 s]</span><br><span class="line">[INFO] Spark Project Networking ........................... SUCCESS [ 17.713 s]</span><br><span class="line">[INFO] Spark Project Shuffle Streaming Service ............ SUCCESS [ 11.790 s]</span><br><span class="line">[INFO] Spark Project Unsafe ............................... SUCCESS [ 16.345 s]</span><br><span class="line">[INFO] Spark Project Launcher ............................. SUCCESS [ 17.144 s]</span><br><span class="line">[INFO] Spark Project Core ................................. SUCCESS [04:45 min]</span><br><span class="line">[INFO] Spark Project ML Local Library ..................... SUCCESS [ 13.936 s]</span><br><span class="line">[INFO] Spark Project GraphX ............................... SUCCESS [ 28.691 s]</span><br><span class="line">[INFO] Spark Project Streaming ............................ SUCCESS [ 58.658 s]</span><br><span class="line">[INFO] Spark Project Catalyst ............................. SUCCESS [02:32 min]</span><br><span class="line">[INFO] Spark Project SQL .................................. SUCCESS [03:41 min]</span><br><span class="line">[INFO] Spark Project ML Library ........................... SUCCESS [01:57 min]</span><br><span class="line">[INFO] Spark Project Tools ................................ SUCCESS [  1.333 s]</span><br><span class="line">[INFO] Spark Project Hive ................................. SUCCESS [ 56.794 s]</span><br><span class="line">[INFO] Spark Project REPL ................................. SUCCESS [  7.443 s]</span><br><span class="line">[INFO] Spark Project YARN Shuffle Service ................. SUCCESS [ 13.447 s]</span><br><span class="line">[INFO] Spark Project YARN ................................. SUCCESS [ 17.372 s]</span><br><span class="line">[INFO] Spark Project Hive Thrift Server ................... SUCCESS [ 28.989 s]</span><br><span class="line">[INFO] Spark Project Assembly ............................. SUCCESS [  8.791 s]</span><br><span class="line">[INFO] Spark Integration for Kafka 0.10 ................... SUCCESS [ 14.014 s]</span><br><span class="line">[INFO] Kafka 0.10+ Source for Structured Streaming ........ SUCCESS [ 16.882 s]</span><br><span class="line">[INFO] Spark Project Examples ............................. SUCCESS [ 21.116 s]</span><br><span class="line">[INFO] Spark Integration for Kafka 0.10 Assembly .......... SUCCESS [  7.390 s]</span><br><span class="line">[INFO] Spark Avro ......................................... SUCCESS [  8.474 s]</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  20:06 min</span><br><span class="line">[INFO] Finished at: 2021-01-01T18:12:27+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">+ TARDIR_NAME=spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line">+ TARDIR=/home/hadoop/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line">+ rm -rf /home/hadoop/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line">+ cp -r /home/hadoop/source/spark-2.4.7/dist /home/hadoop/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line">+ tar czf spark-2.4.7-bin-2.6.0-cdh5.16.2.tgz -C /home/hadoop/source/spark-2.4.7 spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line">+ rm -rf /home/hadoop/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译成功的压缩文件存放在</span></span><br><span class="line">[hadoop@ruozedata001 spark-2.4.7]$ ll ~/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2.tgz </span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop 248514331 Jan  1 18:12 /home/hadoop/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2.tgz</span><br></pre></td></tr></table></figure>
+<p>6.编译好后解压到app目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 spark-2.4.7]$ tar xf ~/source/spark-2.4.7/spark-2.4.7-bin-2.6.0-cdh5.16.2.tgz -C ~/app/</span><br></pre></td></tr></table></figure>
+<p>7.spark目录说明</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[hadoop@ruozedata001 spark-2.4.7]$ cd ~/app/spark-2.4.7-bin-2.6.0-cdh5.16.2/ cd ~/app/spark-2.4.7-bin-2.6.0-cdh5.16.2/</span><br><span class="line">[hadoop@ruozedata001 spark-2.4.7-bin-2.6.0-cdh5.16.2]$ ll</span><br><span class="line">bin           存放客户端相关的脚本</span><br><span class="line">conf          存放配置文件</span><br><span class="line">data          存放测试数据</span><br><span class="line">examples      Spark自带的测试样例</span><br><span class="line">jars          存放Spark相应jar包</span><br><span class="line">sbin          存放服务端相关的脚本：启停集群</span><br><span class="line">yarn          存放yarn相关的jar</span><br></pre></td></tr></table></figure>
+<p>8.配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ vim ~/.bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash">SPARK_HOME</span></span><br><span class="line">export SPARK_HOME=/home/hadoop/app/spark-2.4.7-bin-2.6.0-cdh5.16.2</span><br><span class="line">export PATH=$SPARK_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">环境变量生效</span></span><br><span class="line">[hadoop@ruozedata001 ~]$ source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>9.启动spark</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 spark-2.4.7-bin-2.6.0-cdh5.16.2]$ spark-shell --master local</span><br><span class="line"></span><br><span class="line">21/01/01 18:31:39 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties</span><br><span class="line">Setting default log level to "WARN".</span><br><span class="line">To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).</span><br><span class="line">Spark context Web UI available at http://ruozedata001:4040</span><br><span class="line">Spark context available as 'sc' (master = local, app id = local-1609497117387).</span><br><span class="line">Spark session available as 'spark'.</span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  '_/</span><br><span class="line">   /___/ .__/\_,_/_/ /_/\_\   version 2.4.7</span><br><span class="line">      /_/</span><br><span class="line">         </span><br><span class="line">Using Scala version 2.12.12 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_144)</span><br><span class="line">Type in expressions to have them evaluated.</span><br><span class="line">Type :help for more information.</span><br><span class="line"></span><br><span class="line"><span class="meta">scala&gt;</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<p>Spark WebUI 默认是：<a href="http://ruozedata001:4040" target="_blank" rel="noopener">http://ruozedata001:4040</a></p>
+<p><img src="/img/article/spark/Snipaste_2021-01-01_18-34-29.png" alt="Snipaste_2021-01-01_18-34-29"></p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Sqoop/01 Sqoop/" data-toggle="tooltip" data-placement="top" title="[Hive] 01-Sqoop部署与使用">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1环境条件"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.&#x73AF;&#x5883;&#x6761;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2部署软件"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.&#x90E8;&#x7F72;&#x8F6F;&#x4EF6;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#21-安装jdk"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1 &#x5B89;&#x88C5;jdk</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#22安装maven"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">2.2&#x5B89;&#x88C5;maven</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#23-安装scala"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">2.3 &#x5B89;&#x88C5;scala</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#24-安装git"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">2.4 &#x5B89;&#x88C5;git</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#25-安装spark"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">2.5 &#x5B89;&#x88C5;spark</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Spark" title="Spark">Spark</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2021 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -211,6 +211,41 @@
 
 <div class="post-preview">
 
+    <a href="/article/Spark/01.Spark-源码编译/">
+        <h2 class="post-title">
+                                 
+            [Hadoop]01 Spark2.4.7源码编译
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            编译spark2.4.7前置要求：使用Maven构建Spark需要Maven 3.5.4即以上和Java8
+1.环境条件
+Linux:      CentOS Linux release 7.5.1804
+JDK:        jdk-8u144
+Maven:    apache-maven-3.6.3
+Spark:     spark-2.4.7
+Scala:     scala-2.1......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-12-25
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Spark" title="Spark">Spark</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/Sqoop/01 Sqoop/">
         <h2 class="post-title">
                                  
@@ -348,35 +383,6 @@ Apache的顶级项目或者是孵化项目
 
 <div class="post-preview">
 
-    <a href="/article/Hadoop/07.Hadoop-源码编译/">
-        <h2 class="post-title">
-                                 
-            [Hadoop]07 Hadoop源码编译
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            ...
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-12-03
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
     <a href="/article/Hadoop/08.Hadoop-container优化/">
         <h2 class="post-title">
                                  
@@ -396,6 +402,38 @@ container是虚拟化的，是memory + cpu vcore组成的，是专门运行任�
 1.2 系统要预留20%内存 （1G）
 给当前进程服务，防止出现oom-kill机制
 Linux系......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-12-04
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/Hadoop/07.Hadoop-源码编译/">
+        <h2 class="post-title">
+                                 
+            [Hadoop]07 Hadoop源码编译
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+1. 为什么要编译
+直接从官网上下载的hadoop-2.6.0-cdh5.16.2.tar.gz部署后，不支持压缩，生产上是不可接受的，所以我们要进行编译，让他支持压缩我们可以用下面命令查看：
+1234567891011# hadoop checknative 命令查看[hadoop@ruozedata001 ~]$ hadoop checknative20/12/27 22:07:00 ......
         </div>
     </a>
     
@@ -533,49 +571,6 @@ reduce 归约  汇总
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/Hadoop/01.Hadoop概述/">
-        <h2 class="post-title">
-                                 
-            [Hadoop]01-Hadoop概述
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1.Hadoop是什么
-
-
-Hadoop是一个由Apache基金会所开发的分不是系统基础架构
-主要解决，海量数据的存储和海量数据的分析计算问题
-广义上来说：Hadoop通常是指一个更广泛的概念–Hadoop生态圈
-
-
-以Apache Hadoop软件为主的生态圈 包含hive、sqoop、hbase、kafka、spark、flink
-
-
-狭义上来说：Apache Hadoop软件
-
-
-hd......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-22
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -621,6 +616,10 @@ hd......
             
         
             
+            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
+            
+        
+            
             <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
             
         
@@ -629,11 +628,11 @@ hd......
             
         
             
-            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
+            <a href="/tags/#Mysql" title="Mysql" rel="3">Mysql</a>
             
         
             
-            <a href="/tags/#Mysql" title="Mysql" rel="3">Mysql</a>
+            <a href="/tags/#Spark" title="Spark" rel="1">Spark</a>
             
         
     </div>
@@ -689,6 +688,10 @@ hd......
     <ul>
       
         <li>
+          <a href="/article/Spark/01.Spark-源码编译/">[Hadoop]01 Spark2.4.7源码编译</a>
+        </li>
+      
+        <li>
           <a href="/article/Sqoop/01 Sqoop/">[Hive] 01-Sqoop部署与使用</a>
         </li>
       
@@ -702,10 +705,6 @@ hd......
       
         <li>
           <a href="/article/Hive/01Hive部署/">[Hive] 01-Hive 部署</a>
-        </li>
-      
-        <li>
-          <a href="/article/Hadoop/07.Hadoop-源码编译/">[Hadoop]07 Hadoop源码编译</a>
         </li>
       
     </ul>
@@ -726,7 +725,7 @@ hd......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>
@@ -768,7 +767,7 @@ hd......
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; 莫传刚 2020 
+                    Copyright &copy; 莫传刚 2021 
                     By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
