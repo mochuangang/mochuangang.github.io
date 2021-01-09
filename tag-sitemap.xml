@@ -9,22 +9,8 @@
     </url>
 
     <url>
-        <loc>http://www.mochuangang.com/tags/Mysql/</loc>
-        <lastmod>2020-11-17T08:29:00.170Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://www.mochuangang.com/tags/Hive/</loc>
         <lastmod>2020-12-25T06:08:33.816Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.mochuangang.com/tags/Spark/</loc>
-        <lastmod>2021-01-01T10:47:35.133Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -39,6 +25,34 @@
     <url>
         <loc>http://www.mochuangang.com/tags/Linux/</loc>
         <lastmod>2021-01-05T12:00:53.262Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/tags/Spark/</loc>
+        <lastmod>2021-01-09T07:22:37.528Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/tags/Sqoop/</loc>
+        <lastmod>2021-01-09T07:23:19.535Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/tags/Mysql/</loc>
+        <lastmod>2021-01-09T07:23:54.701Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/tags/Scala/</loc>
+        <lastmod>2021-01-09T15:17:51.147Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,10 +211,45 @@
 
 <div class="post-preview">
 
+    <a href="/article/Scala/01.Scala/">
+        <h2 class="post-title">
+                                 
+            [Scala]01 Scala概述
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1 scala的概述
+1.1 学习scala的原因
+1）Spark-新一代内存级大数据计算框架，是大数据的重要内容
+2）Spark就是使用Scala编写的，因此为了更好的学习Spark,需要掌握Scala这门语言
+3）Scala是Scalable Language的简写，是一门多范式的编程语言
+4）联邦理工学院洛桑（EPFL）的Martin Odersky于2001年开始设计Scala
+5）......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2021-01-09
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Scala" title="Scala">Scala</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/Spark/01.Spark-源码编译/">
         <h2 class="post-title">
                                  
-            [Hadoop]01 Spark2.4.7源码编译
+            [Spark]01 Spark2.4.7源码编译
         </h2>
         <h3 class="post-subtitle">
             
@@ -249,7 +284,7 @@ Scala:     scala-2.1......
     <a href="/article/Sqoop/01 Sqoop/">
         <h2 class="post-title">
                                  
-            [Hive] 01-Sqoop部署与使用
+            [Sqoop] 01-Sqoop部署与使用
         </h2>
         <h3 class="post-subtitle">
             
@@ -267,7 +302,7 @@ Sqoop项目开始于2009年，最早是作为Hadoop的一个第三方模块存..
         </p>
         <div class="tags">
             
-              <a href="/tags/#Hive" title="Hive">Hive</a>
+              <a href="/tags/#Sqoop" title="Sqoop">Sqoop</a>
             
         </div>
     
@@ -526,51 +561,6 @@ reduce 归约  汇总
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/Hadoop/04.Hadoop-HDFS主从架构/">
-        <h2 class="post-title">
-                                 
-            [Hadoop]04.Hadoop HDFS主从架构
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            HDFS组成架构
-
-1.NameNode (nn)：就是Master，它是一个主管，管理者。
-
-管理HDFS的名称空间；
-配置副本策略；
-管理数据块（Block)映射信息；
-处理客户端读写请求。
-
-2.DataNode：就是Slave。NameNode下达命令，DataNode执行实际的操作。
-
-存储实际的数据块；
-执行数据块的读/写操作。
-
-3.Client：就是客户端。
-
-文件切分。文件......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-11-26
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -616,11 +606,7 @@ reduce 归约  汇总
             
         
             
-            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
-            
-        
-            
-            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
+            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
             
         
             
@@ -628,11 +614,23 @@ reduce 归约  汇总
             
         
             
+            <a href="/tags/#Linux" title="Linux" rel="21">Linux</a>
+            
+        
+            
             <a href="/tags/#Mysql" title="Mysql" rel="3">Mysql</a>
             
         
             
+            <a href="/tags/#Scala" title="Scala" rel="1">Scala</a>
+            
+        
+            
             <a href="/tags/#Spark" title="Spark" rel="1">Spark</a>
+            
+        
+            
+            <a href="/tags/#Sqoop" title="Sqoop" rel="1">Sqoop</a>
             
         
     </div>
@@ -688,11 +686,15 @@ reduce 归约  汇总
     <ul>
       
         <li>
-          <a href="/article/Spark/01.Spark-源码编译/">[Hadoop]01 Spark2.4.7源码编译</a>
+          <a href="/article/Scala/01.Scala/">[Scala]01 Scala概述</a>
         </li>
       
         <li>
-          <a href="/article/Sqoop/01 Sqoop/">[Hive] 01-Sqoop部署与使用</a>
+          <a href="/article/Spark/01.Spark-源码编译/">[Spark]01 Spark2.4.7源码编译</a>
+        </li>
+      
+        <li>
+          <a href="/article/Sqoop/01 Sqoop/">[Sqoop] 01-Sqoop部署与使用</a>
         </li>
       
         <li>
@@ -701,10 +703,6 @@ reduce 归约  汇总
       
         <li>
           <a href="/article/Hive/02 Hive命令/">[Hive] 02-Hive 属性配置及DDL语句</a>
-        </li>
-      
-        <li>
-          <a href="/article/Hive/01Hive部署/">[Hive] 01-Hive 部署</a>
         </li>
       
     </ul>
@@ -725,7 +723,7 @@ reduce 归约  汇总
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>
