@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Hadoop]09 Hadoop-HA - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Hadoop/09.Hadoop-HA/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+                            
+                        </div>
+                        <h1>[Hadoop]09 Hadoop-HA</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2020-12-04
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="1hdfs-ha-高可用">1.HDFS HA 高可用</h2>
+<h3 id="背景">背景：</h3>
+<ol>
+<li>在Hadoop2.0之前，NameNode是HDFS集群中的单点故障 SPOF（single point of failure)</li>
+<li>NameNode主要在以下两个方面影响HDFS集群
+<ul>
+<li>NameNode机器发生意外，如宕机，集群将无法使用，直到管理员重启</li>
+<li>NameNode机器需要升级，包括软件、硬件升级，此时集群也将无法使用</li>
+</ul>
+</li>
+</ol>
+<p>HDFS HA功能通过配置Active/Standby两个NameNodes实现在集群中对NameNode的热备来解决上述问题。如果出现故障，如机器崩溃或机器需要升级维护，这时可通过此种方式将NameNode很快的切换到另外一台机器。</p>
+<h2 id="2-hdfs-ha">2. HDFS-HA</h2>
+<h3 id="21-hdfs-ha-工作机制">2.1 HDFS-HA 工作机制</h3>
+<ul>
+<li>通过双NameNode消除单点故障</li>
+</ul>
+<h3 id="22-hdfs-ha工作要点">2.2 HDFS-HA工作要点</h3>
+<ol>
+<li>
+<p>元数据管理方式需要改变;</p>
+<ul>
+<li>Edits日志只有Active状态的NameNode节点可以做写操作；</li>
+<li>两个NameNode都可以读取Edits；</li>
+<li>共享的Edits放在一个共享存储中管理（qjournal和NFS两个主流实现）；</li>
+</ul>
+</li>
+<li>
+<p>需要一个状态管理功能模块</p>
+<ul>
+<li>实现了一个zkfailover，常驻在每一个namenode所在的节点，每一个zkfailover负责监控自己所在NameNode节点，利用zk进行状态标识，当需要进行状态切换时，由zkfailover来负责切换，切换时需要防止brain split现象的发生</li>
+</ul>
+</li>
+<li>
+<p>必须保证两个NameNode之间能够ssh无密码登录</p>
+</li>
+<li>
+<p>隔离（Fence），即同一时刻仅仅有一个NameNode对外提供服务</p>
+</li>
+</ol>
+<h3 id="3hdfs-ha自动故障转移工作机制">3.HDFS-HA自动故障转移工作机制</h3>
+<ul>
+<li>
+<p>自动故障转移为HDFS部署增加了两个新组件：</p>
+<ol>
+<li>ZooKeeper和ZKFailoverController（ZKFC）进程；</li>
+<li>ZooKeeper是维护少量协调数据，通知客户端这些数据的改变和监视客户端故障的高可用服务。HA的自动故障转移依赖于ZooKeeper的以下功能：
+<ul>
+<li>***故障检测：***集群中的每个NameNode在ZooKeep中维护了一个持久会话，如果机器崩溃，ZooKeeper中的会话将终止，ZooKeeper通知另一个NameNode需要触发故障转移。</li>
+<li>***现役NameNode选择：***ZooKeeper提供了一个简单的机制用于唯一的选择一个节点为active状态。如果目前现役NameNode崩溃，另一个节点可能从ZooKeeper获得特殊的排外锁以表明它应该成为现役NameNode</li>
+</ul>
+</li>
+</ol>
+<p>3.ZKFC是自动故障转移中的另一个新组件，是ZooKeeper的客户端，也监视和管理NameNode的状态。每个运行NameNode的主机也运行了一个ZKFC进程,ZKFC负责：</p>
+<ul>
+<li>***健康监测：***ZKFC使用一个健康检查命令定期地ping与之在相同主机的NameNode，只要该NameNode及时地回复健康状态，ZKFC认为该节点是健康的。如果该节点崩溃，冻结或进入不健康状态，健康监测器标识该节点为非健康的。</li>
+<li>***ZooKeeper会话管理：***当本地NameNode是健康的，ZKFC保持一个在ZooKeeper中打开的会话。如果本地NameNode处于active状态，ZKFC也保持一个特殊的znode锁，该锁使用了ZooKeeper对短暂节点的支持，如果会话终止，锁节点将自动删除。</li>
+<li>***基于ZooKeeper的选择：***如果本地NameNode是健康的，且ZKFC发现没有其它的节点当前持有znode锁，它将为自己获取该锁。如果成功，则它已经赢得了选择，并负责运行故障转移进程以使它的本地NameNode为Active。故障转移进程与前面描述的手动故障转移相似，首先如果必要保护之前的现役NameNode，然后本地NameNode转换为Active状态。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4hdfs-ha架构图">4.HDFS-HA架构图</h3>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CSnipaste_2021-01-18_20-22-47.png" alt="Snipaste_2021-01-18_20-22-47"></p>
+<blockquote>
+<p>active nn:<br>
+接收client的rpc请求，同时自己的editlog文件写一条记录。<br>
+同时发给jn日志集群写一条。<br>
+也同时接收dn的心跳和块报告。</p>
+<p>standby nn:<br>
+同时会接收jn日志集群的这条记录，在自己本身执行一下，<br>
+使得自己的元数据和active nn的元数据是一致的。这步叫做重演。<br>
+也同时接收dn的心跳和块报告。<br>
+也随时等待从standby–&gt;active状态，对外提供服务。</p>
+<p>jn: 是nn active standby的同步数据，至少3台，奇数。<br>
+允许失败 (N - 1) / 2 failures and continue to function normally.</p>
+<p>datanode: 同时向两个nn发送 心跳 and 块报告</p>
+<p>zkfc进程：<br>
+监控nn的健康状态<br>
+向zk集群定期发送心跳，使得自己被选举上，<br>
+当被zk集群选举为active时，<br>
+zkfc进程通过rpc调用nn状态变为active。</p>
+</blockquote>
+<h3 id="5yarn-ha架构图">5.Yarn HA架构图</h3>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CYARN_HA.png" alt="YARN_HA"></p>
+<blockquote>
+<p>rm：<br>
+a.启动时会向zk集群的hadoop-ha目录写个lock文件，<br>
+写成功就标识为active，否则为standby。<br>
+standby rm会一直监控lock文件是否存在，如果不存在就尝试去创建，争取为active。</p>
+<p>b.会接收client客户端的请求，接收和监控nm的资源汇报，<br>
+负责资源的分配和调度，启动和监控application master。</p>
+<p>nm:<br>
+启动container，运行task计算，上报资源和计算情况给application master。</p>
+<p>rmstore:<br>
+a.rm的作业信息是存储在zk的/rmstore，<br>
+active rm会向这个目录写作业app信息。</p>
+<p>b.当active rm挂了，另外一个standby rm成功转为active状态，<br>
+就会从读取对应的作业的信息，<br>
+重新构建作业的内存信息，启动内部服务，<br>
+开始接收NM心跳，构建集群资源信息，且开始接收客户端提交的作业的请求。</p>
+</blockquote>
+<p>hdfs ha与 yarn ha 对比</p>
+<table>
+<thead>
+<tr>
+<th>hdfs ha</th>
+<th>yarn ha</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zkfc是进程</td>
+<td>zkfc线程</td>
+</tr>
+<tr>
+<td>小弟汇报是2个nn</td>
+<td>小弟汇报是active节点 1个</td>
+</tr>
+<tr>
+<td>老大的状态存储是专门的日志集群</td>
+<td>利用现成的zk集群</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3ha部署">3.HA部署</h2>
+<h3 id="31-环境准备">3.1 环境准备</h3>
+<ul>
+<li>本次搭建使用的是VMware虚拟机</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件名</th>
+<th>版本</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Centos</td>
+<td>CentOS Linux release 7.5.1804 (Core)</td>
+<td></td>
+</tr>
+<tr>
+<td>JDK</td>
+<td>jdk-8u144-linux-x64.tar.gz</td>
+<td></td>
+</tr>
+<tr>
+<td>Hadoop</td>
+<td>hadoop-2.6.0-cdh5.16.2.tar.gz</td>
+<td></td>
+</tr>
+<tr>
+<td>Zookeeper</td>
+<td>zookeeper-3.4.5-cdh5.16.2.tar.gz</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>主机规划</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>host</th>
+<th>安装软件</th>
+<th>进程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.9.101</td>
+<td>ruozedata001</td>
+<td>hadoop、zookeeper</td>
+<td><span style="color:blue;background:背景颜色;font-size:17px;font-family:Microsoft YaHei;">NameNode</span><br><span style="color:;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">DFSZKFailoverController</span><br><span style="color:green;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">JournalNode</span><br><span style="color:blue;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">DataNode</span><br><br><span style="color:red;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">ResourcesManager</span><br><span style="color:orange;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">JobHistoryServer</span><br><span style="color:red;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">NodeManager</span><br><br><span style="color:;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">QuorumPeerMain</span></td>
+</tr>
+<tr>
+<td>192.168.9.102</td>
+<td>ruozedata002</td>
+<td>hadoop、zookeeper</td>
+<td><span style="color:blue;background:背景颜色;font-size:17px;font-family:Microsoft YaHei;">NameNode</span><br><span style="color:;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">DFSZKFailoverController</span><br><span style="color:green;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">JournalNode</span><br><span style="color:blue;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">DataNode</span><br><br><span style="color:red;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">ResourcesManager</span><br><span style="color:red;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">NodeManager</span><br><br><span style="color:;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">QuorumPeerMain</span></td>
+</tr>
+<tr>
+<td>192.168.9.103</td>
+<td>ruozedata003</td>
+<td>hadoop、zookeeper</td>
+<td><span style="color:green;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">JournalNode</span><br><span style="color:blue;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">DataNode</span><br><br><span style="color:red;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">NodeManager</span><br><span style="color:;background:背景颜色;font-size:文字大小;font-family:Microsoft YaHei;">QuorumPeerMain</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>目录规划</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>路径</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$HADOOP_HOME</td>
+<td>/home/hadoop/</td>
+<td></td>
+</tr>
+<tr>
+<td>software</td>
+<td>$HADOOP_HOME/software</td>
+<td>存放软件包的目录</td>
+</tr>
+<tr>
+<td>app</td>
+<td>$HADOOP_HOME/app</td>
+<td>安装软件的目录</td>
+</tr>
+<tr>
+<td>tmp</td>
+<td>$HADOOP_HOME/tmp</td>
+<td>临时目录，需要手动赋予权限777</td>
+</tr>
+<tr>
+<td>data</td>
+<td>$HADOOP_HOME/data</td>
+<td>存放数据目录</td>
+</tr>
+<tr>
+<td>log</td>
+<td>$HADOOP_HOME/log</td>
+<td>存放log日志目录</td>
+</tr>
+<tr>
+<td>lib</td>
+<td>$HADOOP_HOME/lib</td>
+<td>存放第三方lib包</td>
+</tr>
+<tr>
+<td>shell</td>
+<td>$HADOOP_HOME/shell</td>
+<td>存放脚本目录</td>
+</tr>
+<tr>
+<td>$ZOOKEEER_HOME</td>
+<td>/home/hadoop/app/zookeeper</td>
+<td>zookeeper家目录</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>修改ip</p>
+</li>
+<li>
+<p>修改主机名及主机名和ip地址的映射关系（3台）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 三台都要加上，最后一行追加</span><br><span class="line">[root@ruozedata002 ~]# vim /etc/hosts</span><br><span class="line">192.168.9.101 ruozedata001</span><br><span class="line">192.168.9.102 ruozedata002</span><br><span class="line">192.168.9.103 ruozedata003</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>关闭防火墙(3台)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ruozedata001 ~]# systemctl stop firewalld.service</span><br><span class="line">[root@ruozedata001 ~]# systemctl disable firewalld.service</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建目录结构（3台）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 创建hadoop用户</span><br><span class="line">[root@ruozedata01 ~]# useradd hadoop</span><br><span class="line">[root@ruozedata001 ~]# su - hadoop</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>创建目录</span><br><span class="line">[hadoop@ruozedata01 ~]$ mkdir software app tmp data log lib shell sourcecode</span><br><span class="line">[hadoop@ruozedata01 ~]$ chmod -R 777 /home/hadoop/tmp</span><br><span class="line">[hadoop@ruozedata01 ~]$ ll</span><br><span class="line">total 0</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 app</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 data</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 lib</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 log</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 shell</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 software</span><br><span class="line">drwxrwxr-x 2 hadoop hadoop 6 Jan 17 13:42 sourcecode</span><br><span class="line">drwxrwxrwx 2 hadoop hadoop 6 Jan 17 13:42 tmp</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>上传软件到software(3台)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 在root用户下修改所属权限</span><br><span class="line">[root@ruozedata01 ~]# chown -R hadoop.hadoop /home/hadoop/software/</span><br><span class="line">[root@ruozedata01 ~]# ll /home/hadoop/software/</span><br><span class="line">total 565232</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 357373424 Jan 17 13:46 hadoop-2.6.0-cdh5.16.2.tar.gz</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop 185515842 Jan 17 13:46 jdk-8u144-linux-x64.tar.gz</span><br><span class="line">-rw-r--r-- 1 hadoop hadoop  35905107 Jan 17 13:46 zookeeper-3.4.5-cdh5.16.2.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>
+<p>ssh免密登录（3台)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 切换hadoop用户</span><br><span class="line">[root@ruozedata01 ~] su - hadoop</span><br><span class="line"><span class="meta">#</span> 执行ssh-keygen命令，一直回车</span><br><span class="line">[hadoop@ruozedata001 ~]$ ssh-keygen -t rsa</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/home/hadoop/.ssh/id_rsa): </span><br><span class="line">Created directory '/home/hadoop/.ssh'.</span><br><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved in /home/hadoop/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /home/hadoop/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:MX7DOI00WXst7PQZBIEyVCqVPRbIcU1VmyIpH5/HrzA hadoop@ruozedata001</span><br><span class="line">The key's randomart image is:</span><br><span class="line">+---[RSA 2048]----+</span><br><span class="line">|       o+*==++o..|</span><br><span class="line">|       .*==ooo  o|</span><br><span class="line">|      . B=.==.oo |</span><br><span class="line">|       + Oo++o+o |</span><br><span class="line">|        S =..ooo |</span><br><span class="line">|         o .  . .|</span><br><span class="line">|            E   .|</span><br><span class="line">|             o . |</span><br><span class="line">|              .  |</span><br><span class="line">+----[SHA256]-----+</span><br><span class="line"><span class="meta">#</span> 在家目录下的.ssh目录会生成两个文件id_rsa（私钥）、id_rsa.pub（公钥）</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 将公钥拷贝到要免密登录的目标机器上 </span><br><span class="line">[hadoop@ruozedata01 .ssh]$ ssh-copy-id ruozedata002</span><br><span class="line">/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/hadoop/.ssh/id_rsa.pub"</span><br><span class="line">The authenticity of host 'ruozedata002 (192.168.9.102)' can't be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:B9OlyXu535CjFp0Bz853/LisRD3hvzHbRpuj8vOsRO8.</span><br><span class="line">ECDSA key fingerprint is MD5:2d:fc:84:db:01:4c:41:bf:0c:b0:fe:60:51:ef:3e:7a.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes # 第一次要输入yes</span><br><span class="line">/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed</span><br><span class="line">/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys</span><br><span class="line">hadoop@ruozedata002's password:  #输入用户密码</span><br><span class="line"></span><br><span class="line">Number of key(s) added: 1</span><br><span class="line"></span><br><span class="line">Now try logging into the machine, with:   "ssh 'ruozedata002'"</span><br><span class="line">and check to make sure that only the key(s) you wanted were added.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 第二台</span><br><span class="line">[hadoop@ruozedata01 .ssh]$ ssh-copy-id ruozedata003</span><br><span class="line">/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/hadoop/.ssh/id_rsa.pub"</span><br><span class="line">The authenticity of host 'ruozedata003 (192.168.9.103)' can't be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:B9OlyXu535CjFp0Bz853/LisRD3hvzHbRpuj8vOsRO8.</span><br><span class="line">ECDSA key fingerprint is MD5:2d:fc:84:db:01:4c:41:bf:0c:b0:fe:60:51:ef:3e:7a.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed</span><br><span class="line">/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys</span><br><span class="line">hadoop@ruozedata003's password: </span><br><span class="line"></span><br><span class="line">Number of key(s) added: 1</span><br><span class="line"></span><br><span class="line">Now try logging into the machine, with:   "ssh 'ruozedata003'"</span><br><span class="line">and check to make sure that only the key(s) you wanted were added.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 自己也要</span><br><span class="line">[hadoop@ruozedata01 .ssh]$ ssh-copy-id ruozedata001</span><br><span class="line">/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/hadoop/.ssh/id_rsa.pub"</span><br><span class="line">The authenticity of host 'ruozedata001 (192.168.9.101)' can't be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:B9OlyXu535CjFp0Bz853/LisRD3hvzHbRpuj8vOsRO8.</span><br><span class="line">ECDSA key fingerprint is MD5:2d:fc:84:db:01:4c:41:bf:0c:b0:fe:60:51:ef:3e:7a.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed</span><br><span class="line">/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys</span><br><span class="line">hadoop@ruozedata001's password: </span><br><span class="line"></span><br><span class="line">Number of key(s) added: 1</span><br><span class="line"></span><br><span class="line">Now try logging into the machine, with:   "ssh 'ruozedata001'"</span><br><span class="line">and check to make sure that only the key(s) you wanted were added.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 在102和103上重复以上的操作并相互配置互信</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>3台机器相互检查互信，（必须要不输入密码），如果输入yes之后，还出现要输入密码，绝对是你配置操作有问题</span><br><span class="line">[hadoop@ruozedata01 .ssh]$ ssh hadoop@ruozedata002 date</span><br><span class="line">Sun Jan 17 18:34:44 CST 2021</span><br><span class="line">[hadoop@ruozedata01 .ssh]$ ssh hadoop@ruozedata003 date</span><br><span class="line">Sun Jan 17 18:34:51 CST 2021</span><br><span class="line">[hadoop@ruozedata01 .ssh]$ ssh hadoop@ruozedata001 date</span><br><span class="line">Sun Jan 17 18:35:10 CST 2021</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="32-jdk部署">3.2 JDK部署</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 需要在root用户下部署</span><br><span class="line">[root@ruozedata01 ~]# mkdir /usr/java -p</span><br><span class="line">[root@ruozedata01 ~]# tar xf /home/hadoop/software/jdk-8u144-linux-x64.tar.gz -C /usr/java/</span><br><span class="line">[root@ruozedata01 ~]# chown -R root.root /usr/java/</span><br><span class="line">[root@ruozedata01 ~]# ll /usr/java/</span><br><span class="line">total 0</span><br><span class="line">drwxr-xr-x 8 root root 255 Jul 22  2017 jdk1.8.0_144</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 配置环境变量</span><br><span class="line">[root@ruozedata01 ~]# vim /etc/profile</span><br><span class="line"><span class="meta">#</span>JAVA_HOME</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</span><br><span class="line">[root@ruozedata01 ~]# source /etc/profile</span><br></pre></td></tr></table></figure>
+<h3 id="33-zookeeper部署">3.3 Zookeeper部署</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>1 解压安装zookeeper到/home/hadoop/app/目录下</span><br><span class="line">[hadoop@ruozedata01 software]$ tar xf zookeeper-3.4.5-cdh5.16.2.tar.gz -C ../app/</span><br><span class="line">[hadoop@ruozedata001 software]$ cd ..</span><br><span class="line">[hadoop@ruozedata001 ~]$ cd app</span><br><span class="line">[hadoop@ruozedata001 app]$ ll</span><br><span class="line">drwxr-xr-x 14 hadoop hadoop 4096 Jun  3  2019 zookeeper-3.4.5-cdh5.16.2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>2 创建软连接</span><br><span class="line">[hadoop@ruozedata01 app]$ ln -s /home/hadoop/app/zookeeper-3.4.5-cdh5.16.2 zookeeper</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>3 配置zoo.cfg文件</span><br><span class="line">[hadoop@ruozedata01 app]$ cd zookeeper</span><br><span class="line">[hadoop@ruozedata01 zookeeper]$ cd conf</span><br><span class="line">[hadoop@ruozedata01 conf]$ ll</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop  535 Jun  3  2019 configuration.xsl</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop 2693 Jun  3  2019 log4j.properties</span><br><span class="line">-rw-rw-r-- 1 hadoop hadoop  922 Jun  3  2019 zoo_sample.cfg</span><br><span class="line">[hadoop@ruozedata01 conf]$ cp zoo_sample.cfg zoo.cfg</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata01 conf]$ vim zoo.cfg</span><br><span class="line"><span class="meta">#</span>修改具体配置</span><br><span class="line">dataDir=/home/hadoop/tmp/zookeeper</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>增加如下配置</span><br><span class="line"><span class="meta">#</span>######################cluster##########################</span><br><span class="line">server.1=ruozedata001:2888:3888</span><br><span class="line">server.2=ruozedata002:2888:3888</span><br><span class="line">server.3=ruozedata003:2888:3888</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>4 配置参数解读</span><br><span class="line">Server.A=B:C:D</span><br><span class="line">A是一个数字，表示这个是第几号服务器；</span><br><span class="line">B是这个服务器的IP地址；</span><br><span class="line">C是这个服务器与集群中的Leader服务器交换信息的端口；</span><br><span class="line">D是万一集群中的Leader服务器挂了，需要一个端口来重新进行选举，选出一个新的Leader，而这个端口就是用来执行选举时服务器相互通信的端口。</span><br><span class="line"></span><br><span class="line">集群模式下配置一个文件myid，这个文件在dataDir目录下，这个文件里面有一个数据就是A的值，Zookeeper启动时读取此文件，拿到里面的数据与zoo.cfg里面的配置信息比较从而判断到底是哪个server。</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>5 创建dataDir目录</span><br><span class="line">[hadoop@ruozedata01 zookeeper]$ mkdir /home/hadoop/tmp/zookeeper</span><br><span class="line">mkdir /home/hadoop/tmp/zookeeper</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>6. 在dataDir目录下创建myid文件</span><br><span class="line">[hadoop@ruozedata01 zookeeper]$ touch /home/hadoop/tmp/zookeeper/myid</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>7 在文件中添加与server对应的编号：</span><br><span class="line"><span class="meta">#</span> 切记不可 echo 1/home/hadoop/tmp/zookeeper/myid, 将&gt;前后空格保留，否则无法将1写入myid文件</span><br><span class="line">[hadoop@ruozedata01 zookeeper]$ echo 1 &gt; /home/hadoop/tmp/zookeeper/myid</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>8 拷贝配置好的zookeeper到其它机器上</span><br><span class="line">[hadoop@ruozedata01 app]$ scp -rp zookeeper-3.4.5-cdh5.16.2/ hadoop@ruozedata002:/home/hadoop/app/</span><br><span class="line">[hadoop@ruozedata01 app]$ scp -rp zookeeper-3.4.5-cdh5.16.2/ hadoop@ruozedata003:/home/hadoop/app/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 分别修改myid文件中的内容为2、3</span><br><span class="line">[hadoop@ruozedata02 zookeeper]$ echo 2 &gt; /home/hadoop/tmp/zookeeper/myid</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata03 zookeeper]$ echo 3 &gt; /home/hadoop/tmp/zookeeper/myid</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>分别启动zookeeper</span><br><span class="line">[hadoop@ruozedata001 bin]$ sh zkServer.sh start</span><br><span class="line">[hadoop@ruozedata002 bin]$ sh zkServer.sh start</span><br><span class="line">[hadoop@ruozedata003 bin]$ sh zkServer.sh start</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查看状态</span><br><span class="line">[hadoop@ruozedata01 bin]$ sh zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/hadoop/app/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata002 bin]$ sh zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/hadoop/app/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata003 bin]$ sh zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/hadoop/app/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: leader</span><br></pre></td></tr></table></figure>
+<h3 id="34-hdfs-ha部署">3.4 HDFS-HA部署</h3>
+<h4 id="341-解压hadoop-260-cdh5162targz">3.4.1 解压hadoop-2.6.0-cdh5.16.2.tar.gz</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>解压hadoop-2.6.0-cdh5.16.2</span><br><span class="line">[hadoop@ruozedata001 ~]$  tar xf /home/hadoop/software/hadoop-2.6.0-cdh5.16.2.tar.gz -C /home/hadoop/app/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 创建软连接</span><br><span class="line">[hadoop@ruozedata001 ~]$ ln -s /home/hadoop/app/hadoop-2.6.0-cdh5.16.2 hadoop</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 配置环境变量,添加如下内容</span><br><span class="line">[hadoop@ruozedata01 ~]$ vim .bashrc</span><br><span class="line"><span class="meta">#</span>HADOOP_HOME</span><br><span class="line">export HADOOP_HOME=/home/hadoop/app/hadoop</span><br><span class="line">export PATH=$&#123;HADOOP_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/sbin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 让文件生效</span><br><span class="line">[hadoop@ruozedata001 ~]$ source /home/hadoop/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 测试是否安装成功</span><br><span class="line">[hadoop@ruozedata01 ~]$ hadoop version</span><br><span class="line">Hadoop 2.6.0-cdh5.16.2</span><br><span class="line">Subversion Unknown -r Unknown</span><br><span class="line">Compiled by root on 2020-12-28T23:57Z</span><br><span class="line">Compiled with protoc 2.5.0</span><br><span class="line">From source with checksum 79b9b24a29c6358b53597c3b49575e37</span><br><span class="line">This command was run using /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/share/hadoop/common/hadoop-common-2.6.0-cdh5.16.2.jar</span><br></pre></td></tr></table></figure>
+<h4 id="342-修改hadoop-envsh">3.4.2 <a href="http://xn--hadoop-env-yu6pe85r.sh" target="_blank" rel="noopener">修改hadoop-env.sh</a></h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 ~]$ cd /home/hadoop/app/hadoop/etc/hadoop/</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ vim hadoop-env.sh</span><br><span class="line"><span class="meta">#</span>修改如下内容</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line">export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib:$HADOOP_HOME/lib/native"</span><br><span class="line"></span><br><span class="line">export HADOOP_PID_DIR=/home/hadoop/tmp</span><br><span class="line">上述配置，影响</span><br><span class="line">NameNode、DataNode、SecondaryNameNode进程pid的存储位置</span><br></pre></td></tr></table></figure>
+<h4 id="343-配置yarn-envsh">3.4.3 <a href="http://xn--yarn-env-vz2ve12k.sh" target="_blank" rel="noopener">配置yarn-env.sh</a></h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">配置一下JAVA_HOME</span><br><span class="line">[hadoop@ruozedata001 hadoop]$ vim yarn-env.sh</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 修改或者添加（不存在此项配置时），这个配置文件里我没找到pid的环境设置变量，所以直接添加了</span><br><span class="line">export YARN_PID_DIR=/home/hadoop/tmp</span><br><span class="line"><span class="meta">#</span>上述配置，影响 NodeManager、ResourceManager进程pid存储,配置完后重写相关服务</span><br></pre></td></tr></table></figure>
+<h4 id="344-配置mapred-envsh">3.4.4 <a href="http://xn--mapred-env-o150at28m.sh" target="_blank" rel="noopener">配置mapred-env.sh</a></h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>配置一下JAVA_HOME</span><br><span class="line">[hadoop@ruozedata001 hadoop]$ vim mapred-env.sh</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line"></span><br><span class="line">export HADOOP_MAPRED_PID_DIR=/home/hadoop/tmp</span><br><span class="line"><span class="meta">#</span> 上述配置，影响 JobHistoryServer进程pid存储</span><br></pre></td></tr></table></figure>
+<h4 id="345-配置core-sitexml">3.4.5 配置core-site.xml</h4>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 ~]$ cd /home/hadoop/app/hadoop/etc/hadoop</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ vim core-site.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--Yarn 需要使用 fs.defaultFS 指定NameNode URI --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://ruozeclusterg10<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--==============================Trash机制======================================= --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--多长时间创建CheckPoint NameNode截点上运行的CheckPointer 从Current文件夹创建CheckPoint;默认：0 由fs.trash.interval项指定 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.trash.checkpoint.interval<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>0<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--多少分钟.Trash下的CheckPoint目录会被删除,该配置服务器设置优先级大于客户端，默认：0 不删除 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.trash.interval<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>10080<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--指定hadoop临时目录, hadoop.tmp.dir 是hadoop文件系统依赖的基础配置，很多路径都依赖它。如果hdfs-site.xml中不配 置namenode和datanode的存放位置，默认就放在这&gt;个路径中 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/tmp/hadoop<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 指定zookeeper地址 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>ha.zookeeper.quorum<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:2181,ruozedata002:2181,ruozedata003:2181<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--指定ZooKeeper超时间隔，单位毫秒 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>ha.zookeeper.session-timeout.ms<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>2000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.proxyuser.hadoop.hosts<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>*<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.proxyuser.hadoop.groups<span class="tag">&lt;/<span class="name">name</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>*<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>io.compression.codecs<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.io.compress.GzipCodec,</span><br><span class="line">		org.apache.hadoop.io.compress.DefaultCodec,</span><br><span class="line">		org.apache.hadoop.io.compress.BZip2Codec,</span><br><span class="line">		org.apache.hadoop.io.compress.SnappyCodec</span><br><span class="line">		<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>3.4.4 配置hdfs-site.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 ~]$ cd /home/hadoop/app/hadoop/etc/hadoop</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ vim hdfs-site.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--HDFS超级用户 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.permissions.superusergroup<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>hadoop<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--开启web hdfs --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.webhdfs.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.name.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/data/dfs/name<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span> namenode 存放name table(fsimage)本地目录（需要修改）<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;dfs.namenode.name.dir&#125;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>namenode粗放 transaction file(edits)本地目录（需要修改）<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.datanode.data.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/data/dfs/data<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>datanode存放block本地目录（需要修改）<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 块大小128M （默认128M） --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.blocksize<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>134217728<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--======================================================================= --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--HDFS高可用配置 --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--指定hdfs的nameservice为ruozeclusterg7,需要和core-site.xml中的保持一致 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.nameservices<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozeclusterg10<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--设置NameNode IDs 此版本最大只支持两个NameNode --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.namenodes.ruozeclusterg10<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>nn1,nn2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- Hdfs HA: dfs.namenode.rpc-address.[nameservice ID] rpc 通信地址 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.rpc-address.ruozeclusterg10.nn1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:8020<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.rpc-address.ruozeclusterg10.nn2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:8020<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- Hdfs HA: dfs.namenode.http-address.[nameservice ID] http 通信地址 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.http-address.ruozeclusterg10.nn1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:50070<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.http-address.ruozeclusterg10.nn2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:50070<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--==================Namenode editlog同步 ============================================ --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--保证数据恢复 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.journalnode.http-address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>0.0.0.0:8480<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.journalnode.rpc-address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>0.0.0.0:8485<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--设置JournalNode服务器地址，QuorumJournalManager 用于存储editlog --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--格式：qjournal://&lt;host1:port1&gt;;&lt;host2:port2&gt;;&lt;host3:port3&gt;/&lt;journalId&gt; 端口同journalnode.rpc-address --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.shared.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>qjournal://ruozedata001:8485;ruozedata002:8485;ruozedata003:8485/ruozeclusterg10<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--JournalNode存放数据地址 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.journalnode.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/data/dfs/jn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!--==================DataNode editlog同步 ============================================ --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!--DataNode,Client连接Namenode识别选择Active NameNode策略 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 配置失败自动切换实现方式 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.client.failover.proxy.provider.ruozeclusterg10<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!--==================Namenode fencing：=============================================== --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--Failover后防止停掉的Namenode启动，造成两个服务 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.fencing.methods<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>sshfence<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.fencing.ssh.private-key-files<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/.ssh/id_rsa<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--多少milliseconds 认为fencing失败 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.fencing.ssh.connect-timeout<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>30000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--==================NameNode auto failover base ZKFC and Zookeeper====================== --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--开启基于Zookeeper  --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.automatic-failover.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--动态许可datanode连接namenode列表 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.hosts<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/app/hadoop/etc/hadoop/slaves<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="346-配置mapred-sitexml">3.4.6 配置mapred-site.xml</h4>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 hadoop]$ cp mapred-site.xml.template mapred-site.xml</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ vim mapred-site.xml</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 配置 MapReduce Applications --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- JobHistory Server ============================================================== --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 配置 MapReduce JobHistory Server 地址 ，默认端口10020 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.jobhistory.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:10020<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 配置 MapReduce JobHistory Server web ui 地址， 默认端口19888 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.jobhistory.webapp.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:19888<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 配置 Map段输出的压缩,snappy--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.map.output.compress<span class="tag">&lt;/<span class="name">name</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.map.output.compress.codec<span class="tag">&lt;/<span class="name">name</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.io.compress.SnappyCodec<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="347-配置slaves">3.4.7 配置slaves</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 添加如下内容</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ vim slaves</span><br><span class="line">ruozedata001</span><br><span class="line">ruozedata002</span><br><span class="line">ruozedata003</span><br></pre></td></tr></table></figure>
+<h4 id="348-配置yarn-sitexml">3.4.8  配置yarn-site.xml</h4>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 hadoop]$ vim yarn-site.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line">&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- nodemanager 配置 ================================================= --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services.mapreduce.shuffle.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.mapred.ShuffleHandler<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.localizer.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>0.0.0.0:23344<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>Address where the localizer IPC is.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.webapp.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>0.0.0.0:23999<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>NM Webapp address.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- HA 配置 =============================================================== --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- Resource Manager Configs --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.connect.retry-interval.ms<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>2000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.ha.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.ha.automatic-failover.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 使嵌入式自动故障转移。HA环境启动，与 ZKRMStateStore 配合 处理fencing --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.ha.automatic-failover.embedded<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- 集群名称，确保HA选举时对应的集群 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.cluster-id<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn-cluster<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.ha.rm-ids<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>rm1,rm2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--这里RM主备结点需要单独指定,（可选）</span></span><br><span class="line"><span class="comment">	&lt;property&gt;</span></span><br><span class="line"><span class="comment">		&lt;name&gt;yarn.resourcemanager.ha.id&lt;/name&gt;</span></span><br><span class="line"><span class="comment">		&lt;value&gt;rm2&lt;/value&gt;</span></span><br><span class="line"><span class="comment">	&lt;/property&gt;</span></span><br><span class="line"><span class="comment">	--&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.scheduler.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.recovery.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.app.mapreduce.am.scheduler.connection.wait.interval-ms<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>5000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- ZKRMStateStore 配置 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.store.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--指定zookeeper集群的地址--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.zk-address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:2181,ruozedata002:2181,ruozedata003:2181<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.zk.state-store.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:2181,ruozedata002:2181,ruozedata003:2181<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- Client访问RM的RPC地址 (applications manager interface) --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.address.rm1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:23140<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.address.rm2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:23140<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- AM访问RM的RPC地址(scheduler interface) --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.scheduler.address.rm1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:23130<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.scheduler.address.rm2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:23130<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- RM admin interface --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.admin.address.rm1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:23141<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.admin.address.rm2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:23141<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!--NM访问RM的RPC端口 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.resource-tracker.address.rm1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:23125<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.resource-tracker.address.rm2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:23125<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">&lt;!-- RM web application 地址,修改yarn8088端口 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.webapp.address.rm1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:7776<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.webapp.address.rm2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:8088<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.webapp.https.address.rm1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata001:23189<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.webapp.https.address.rm2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>ruozedata002:23189<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.log-aggregation-enable<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.log.server.url<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>http://ruozedata001:19888/jobhistory/logs<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.resource.memory-mb<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>2048<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.minimum-allocation-mb<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>1024<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">discription</span>&gt;</span>单个任务可申请最少内存，默认1024MB<span class="tag">&lt;/<span class="name">discription</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.scheduler.maximum-allocation-mb<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>2048<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">discription</span>&gt;</span>单个任务可申请最大内存，默认8192MB<span class="tag">&lt;/<span class="name">discription</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.resource.cpu-vcores<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="349-启动hdfs-ha集群第一次系统启动需要初始化">3.4.9 启动HDFS-HA集群(第一次系统启动，需要初始化)</h4>
+<ol>
+<li>
+<p>启功zookeeper</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> command: ./zkServer.sh start|stop|status</span><br><span class="line">[hadoop@ruozedata01 sbin]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@ruozedata001 zookeeper]$ $ZOOKEEPER_HOME/bin/zkServer.sh start</span><br><span class="line">[hadoop@ruozedata002 zookeeper]$ $ZOOKEEPER_HOME/bin/zkServer.sh start</span><br><span class="line">[hadoop@ruozedata003 zookeeper]$ $ZOOKEEPER_HOME/bin/zkServer.sh start</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查看状态</span><br><span class="line">[hadoop@ruozedata01 zookeeper]$ $ZOOKEEPER_HOME/bin/zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/hadoop/app/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata002 zookeeper]$ $ZOOKEEPER_HOME/bin/zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/hadoop/app/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: leader</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata003 zookeeper]$ $ZOOKEEPER_HOME/bin/zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/hadoop/app/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="2">
+<li>
+<p>启动journalnode服务</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 在各个JournalNode节点上，输入以下命令启动journalnode服务</span><br><span class="line">[hadoop@ruozedata01 ~]$ cd /home/hadoop/app/hadoop/sbin/</span><br><span class="line">[hadoop@ruozedata01 sbin]$ sbin/hadoop-daemon.sh start journalnode</span><br><span class="line">[hadoop@ruozedata02 ~]$ cd /home/hadoop/app/hadoop/sbin/</span><br><span class="line">[hadoop@ruozedata02 sbin]$ sbin/hadoop-daemon.sh start journalnode</span><br><span class="line">[hadoop@ruozedata03 ~]$ cd /home/hadoop/app/hadoop/sbin/</span><br><span class="line">[hadoop@ruozedata03 sbin]$ sbin/hadoop-daemon.sh start journalnode</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>NameNode格式化(在ruozedata001机器上执行)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 ~]$ cd /home/hadoop/app/hadoop</span><br><span class="line">[hadoop@ruozedata001 hadoop]$ hadoop namenode-format</span><br><span class="line"></span><br><span class="line">************************************************************/</span><br><span class="line">21/01/17 19:59:51 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]</span><br><span class="line">21/01/17 19:59:51 INFO namenode.NameNode: createNameNode [-format]</span><br><span class="line">21/01/17 19:59:53 WARN common.Util: Path /home/hadoop/data/dfs/name should be specified as a URI in configuration files. Please update hdfs configuration.</span><br><span class="line">21/01/17 19:59:53 WARN common.Util: Path /home/hadoop/data/dfs/name should be specified as a URI in configuration files. Please update hdfs configuration.</span><br><span class="line">Formatting using clusterid: CID-eea60d52-8e7a-4fa0-9e56-ee2396ad5b2a</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSEditLog: Edit logging is async:true</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: No KeyProvider found.</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: fsLock is fair: true</span><br><span class="line">21/01/17 19:59:53 INFO util.HostsFileReader: Adding a node "ruozedata001" to the list of included hosts from /home/hadoop/app/hadoop/etc/hadoop/slaves</span><br><span class="line">21/01/17 19:59:53 INFO util.HostsFileReader: Adding a node "ruozedata002" to the list of included hosts from /home/hadoop/app/hadoop/etc/hadoop/slaves</span><br><span class="line">21/01/17 19:59:53 INFO util.HostsFileReader: Adding a node "ruozedata003" to the list of included hosts from /home/hadoop/app/hadoop/etc/hadoop/slaves</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: The block deletion will start around 2021 Jan 17 19:59:53</span><br><span class="line">21/01/17 19:59:53 INFO util.GSet: Computing capacity for map BlocksMap</span><br><span class="line">21/01/17 19:59:53 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">21/01/17 19:59:53 INFO util.GSet: 2.0% max memory 966.7 MB = 19.3 MB</span><br><span class="line">21/01/17 19:59:53 INFO util.GSet: capacity      = 2^21 = 2097152 entries</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false</span><br><span class="line">21/01/17 19:59:53 WARN conf.Configuration: No unit for dfs.heartbeat.interval(3) assuming SECONDS</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: defaultReplication         = 3</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: maxReplication             = 512</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: minReplication             = 1</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: encryptDataTransfer        = false</span><br><span class="line">21/01/17 19:59:53 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: fsOwner             = hadoop (auth:SIMPLE)</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: supergroup          = hadoop</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: isPermissionEnabled = true</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: Determined nameservice ID: ruozeclusterg10</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: HA Enabled: true</span><br><span class="line">21/01/17 19:59:53 INFO namenode.FSNamesystem: Append Enabled: true</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: Computing capacity for map INodeMap</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: 1.0% max memory 966.7 MB = 9.7 MB</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: capacity      = 2^20 = 1048576 entries</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSDirectory: POSIX ACL inheritance enabled? false</span><br><span class="line">21/01/17 19:59:54 INFO namenode.NameNode: Caching file names occuring more than 10 times</span><br><span class="line">21/01/17 19:59:54 INFO snapshot.SnapshotManager: Loaded config captureOpenFiles: false, skipCaptureAccessTimeOnlyChange: false, snapshotDiffAllowSnapRootDescendant: true</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: Computing capacity for map cachedBlocks</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: 0.25% max memory 966.7 MB = 2.4 MB</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: capacity      = 2^18 = 262144 entries</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000</span><br><span class="line">21/01/17 19:59:54 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10</span><br><span class="line">21/01/17 19:59:54 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10</span><br><span class="line">21/01/17 19:59:54 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: Retry cache on namenode is enabled</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: Computing capacity for map NameNodeRetryCache</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: 0.029999999329447746% max memory 966.7 MB = 297.0 KB</span><br><span class="line">21/01/17 19:59:54 INFO util.GSet: capacity      = 2^15 = 32768 entries</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: ACLs enabled? false</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: XAttrs enabled? true</span><br><span class="line">21/01/17 19:59:54 INFO namenode.FSNamesystem: Maximum size of an xattr: 16384</span><br><span class="line">21/01/17 19:59:55 INFO namenode.FSImage: Allocated new BlockPoolId: BP-1614662332-192.168.9.101-1610884795714</span><br><span class="line">21/01/17 19:59:55 INFO common.Storage: Storage directory /home/hadoop/data/dfs/name has been successfully formatted.</span><br><span class="line">21/01/17 19:59:56 INFO namenode.FSImageFormatProtobuf: Saving image file /home/hadoop/data/dfs/name/current/fsimage.ckpt_0000000000000000000 using no compression</span><br><span class="line">21/01/17 19:59:56 INFO namenode.FSImageFormatProtobuf: Image file /home/hadoop/data/dfs/name/current/fsimage.ckpt_0000000000000000000 of size 308 bytes saved in 0 seconds .</span><br><span class="line">21/01/17 19:59:56 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid &gt;= 0</span><br><span class="line">21/01/17 19:59:56 INFO util.ExitUtil: Exiting with status 0</span><br><span class="line">21/01/17 19:59:56 INFO namenode.NameNode: SHUTDOWN_MSG: </span><br><span class="line">/************************************************************</span><br><span class="line">SHUTDOWN_MSG: Shutting down NameNode at ruozedata001/192.168.9.101</span><br><span class="line">************************************************************/</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>同步NameNode元数据</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>同步ruozedata001元数据到ruozedata002主要是：dfs.namenode.name.dir，dfs.namenode.edits.dir还应该确保共享存储目录下(dfs.namenode.shared.edits.dir ) 包含NameNode 所有的元数据。</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata01 bin]$ scp -rp /home/hadoop/data/dfs hadoop@ruozedata002:/home/hadoop/data/</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>初始化ZKFC</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 ~]$ cd /home/hadoop/app/hadoop/</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ bin/hdfs zkfc -formatZK</span><br><span class="line"></span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:java.library.path=/home/hadoop/app/hadoop-2.6.0-cdh5.16.2/lib/native</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:java.io.tmpdir=/tmp</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:java.compiler=&lt;NA&gt;</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:os.name=Linux</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:os.arch=amd64</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:os.version=3.10.0-862.el7.x86_64</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:user.name=hadoop</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:user.home=/home/hadoop</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Client environment:user.dir=/home/hadoop/app/hadoop-2.6.0-cdh5.16.2/bin</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ZooKeeper: Initiating client connection, connectString=ruozedata001:2181,ruozedata002:2181,ruozedata003:2181 sessionTimeout=2000 watcher=org.apache.hadoop.ha.ActiveStandbyElector$WatcherWithClientRef@6d763516</span><br><span class="line">21/01/17 20:04:12 INFO zookeeper.ClientCnxn: Opening socket connection to server ruozedata002/192.168.9.102:2181. Will not attempt to authenticate using SASL (unknown error)</span><br><span class="line">21/01/17 20:04:13 INFO zookeeper.ClientCnxn: Socket connection established, initiating session, client: /192.168.9.101:41862, server: ruozedata002/192.168.9.102:2181</span><br><span class="line">21/01/17 20:04:13 INFO zookeeper.ClientCnxn: Session establishment complete on server ruozedata002/192.168.9.102:2181, sessionid = 0x2771033118c0000, negotiated timeout = 4000</span><br><span class="line">21/01/17 20:04:13 INFO ha.ActiveStandbyElector: Successfully created /hadoop-ha/ruozeclusterg10 in ZK.</span><br><span class="line">21/01/17 20:04:13 INFO zookeeper.ZooKeeper: Session: 0x2771033118c0000 closed</span><br><span class="line">21/01/17 20:04:13 WARN ha.ActiveStandbyElector: Ignoring stale result from old client with sessionId 0x2771033118c0000</span><br><span class="line">21/01/17 20:04:13 INFO zookeeper.ClientCnxn: EventThread shut down</span><br><span class="line">21/01/17 20:04:13 INFO tools.DFSZKFailoverController: SHUTDOWN_MSG: </span><br><span class="line">/************************************************************</span><br><span class="line">SHUTDOWN_MSG: Shutting down DFSZKFailoverController at ruozedata001/192.168.9.101</span><br><span class="line">************************************************************/</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>启动HDFS分布式存储系统</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 集群启动,在hadoop001执行start-dfs.sh</span><br><span class="line"><span class="meta">#</span> 集群关闭,在hadoop001执行stop-dfs.sh</span><br><span class="line">[hadoop@ruozedata01 ~]$ cd /home/hadoop/app/hadoop </span><br><span class="line">[hadoop@ruozedata01 hadoop]$ sbin/start-dfs.sh</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动yarn</span><br><span class="line">[hadoop@ruozedata01 hadoop]$ sbin/start-yarn.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 另一个resourcesmanager需要单独到ruozedata002启动</span><br><span class="line">[hadoop@ruozedata002 hadoop]$ sbin/yarn-daemon.sh start resourcemanager</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启功历史服务</span><br><span class="line">[hadoop@ruozedata001 hadoop]$ sbin/mr-jobhistory-daemon.sh start historyserver</span><br><span class="line">[hadoop@ruozedata002 hadoop]$ sbin/mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>验证进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata01 ~]$ jps</span><br><span class="line">1508 QuorumPeerMain</span><br><span class="line">2005 JournalNode</span><br><span class="line">2393 NodeManager</span><br><span class="line">1722 NameNode</span><br><span class="line">2186 DFSZKFailoverController</span><br><span class="line">2762 JobHistoryServer</span><br><span class="line">1819 DataNode</span><br><span class="line">2300 ResourceManager</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata002 ~]$ jps</span><br><span class="line">1894 DFSZKFailoverController</span><br><span class="line">1671 DataNode</span><br><span class="line">2169 ResourceManager</span><br><span class="line">2537 JobHistoryServer</span><br><span class="line">1499 QuorumPeerMain</span><br><span class="line">1756 JournalNode</span><br><span class="line">1613 NameNode</span><br><span class="line">1981 NodeManager</span><br><span class="line"></span><br><span class="line">[hadoop@ruozedata003 ~]$ jps</span><br><span class="line">1618 DataNode</span><br><span class="line">1497 QuorumPeerMain</span><br><span class="line">1709 JournalNode</span><br><span class="line">1805 NodeManager</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看HDFS页面</p>
+<p><a href="http://ruozedata001:50070" target="_blank" rel="noopener">http://ruozedata001:50070</a></p>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CSnipaste_2021-01-18_20-54-42.png" alt="Snipaste_2021-01-18_20-54-42"></p>
+</li>
+</ol>
+<p><a href="http://ruozedata002:50070" target="_blank" rel="noopener">http://ruozedata002:50070</a></p>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CSnipaste_2021-01-18_20-53-26.png" alt="Snipaste_2021-01-18_20-53-26"></p>
+<ol start="9">
+<li>
+<p>查看YARN界面</p>
+<p><a href="http://ruozedata001:7776/cluster" target="_blank" rel="noopener">http://ruozedata001:7776/cluster</a></p>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CSnipaste_2021-01-18_21-01-56.png" alt="Snipaste_2021-01-18_21-01-56"></p>
+</li>
+</ol>
+<p><strong><em>节点二yarn访问需要加上两个cluster</em></strong></p>
+<p><a href="http://ruozedata002:7776/cluster/cluster" target="_blank" rel="noopener">http://ruozedata002:7776/cluster/cluster</a></p>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CSnipaste_2021-01-18_21-02-54.png" alt="Snipaste_2021-01-18_21-02-54"></p>
+<ol start="10">
+<li>
+<p>JobHistoryServer</p>
+<p><img src="D:%5Cblog%5Cmochuangang-hexo%5Csource%5Cimg%5Carticle%5Chadoop%5CSnipaste_2021-01-18_21-12-21.png" alt="Snipaste_2021-01-18_21-12-21"></p>
+</li>
+</ol>
+<h2 id="4关闭集群">4.关闭集群</h2>
+<h3 id="41-关闭hadoopyarngthdfs">4.1 关闭Hadoop(YARN–&gt;HDFS)</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ sbin/stop-yarn.sh</span><br><span class="line">[hadoop@hadoop002 hadoop]$ sbin/yarn-daemon.sh stop resourcemanager</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/stop-dfs.sh</span><br></pre></td></tr></table></figure>
+<h3 id="42-关闭zookeeper">4.2 关闭zookeeper</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 ~]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@hadoop001 zookeeper]$ bin/zkServer.sh stop</span><br><span class="line">[hadoop@hadoop002 ~]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@hadoop002 zookeeper]$ bin/zkServer.sh stop</span><br><span class="line">[hadoop@hadoop003 ~]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@hadoop003 zookeeper]$ bin/zkServer.sh stop</span><br></pre></td></tr></table></figure>
+<h2 id="5再次启动集群">5.再次启动集群</h2>
+<h3 id="51-启动zookeeper">5.1 启动Zookeeper</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 ~]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@hadoop001 zookeeper]$ zkServer.sh start</span><br><span class="line">[hadoop@hadoop002 ~]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@hadoop002 zookeeper]$ zkServer.sh start</span><br><span class="line">[hadoop@hadoop003 ~]$ cd /home/hadoop/app/zookeeper</span><br><span class="line">[hadoop@hadoop003 zookeeper]$ zkServer.sh start</span><br></pre></td></tr></table></figure>
+<h3 id="52启动-hadoophdfs-gtyarn">5.2启动 Hadoop(HDFS-&gt;YARN)</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ sbin/start-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/start-yarn.sh</span><br><span class="line">[hadoop@hadoop002 hadoop]$ sbin/yarn-daemon.sh start resourcemanager</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/mr-jobhistory-daemon.sh start historyserver</span><br><span class="line">[hadoop@hadoop002 hadoop]$ sbin/mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
+<h2 id="6监控集群">6.监控集群</h2>
+<p>[hadoop@hadoop001 ~]$ hdfs dfsadmin -report</p>
+<p>HDFS:<a href="http://192.168.9.101:50070/" target="_blank" rel="noopener">http://192.168.9.101:50070/</a><br>
+HDFS:<a href="http://192.168.9.102:50070/" target="_blank" rel="noopener">http://192.168.9.102:50070/</a><br>
+ResourceManger（Active）：<a href="http://192.168.9.101:7776" target="_blank" rel="noopener">http://192.168.9.101:7776</a><br>
+ResourceManger（Standby）：<a href="http://192.168.9.102:7776/cluster/cluster" target="_blank" rel="noopener">http://192.168.9.102:7776/cluster/cluster</a><br>
+JobHistory:<a href="http://192.168.137.130:19888/jobhistory" target="_blank" rel="noopener">http://192.168.137.130:19888/jobhistory</a></p>
+<h2 id="7hadoop集群启动的顺序">7.Hadoop集群启动的顺序</h2>
+<p>namenode–&gt;datanode–&gt;journalnode–&gt;zkfc</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@ruozedata001 sbin]$ sh start-dfs.sh</span><br><span class="line">which: no start-dfs.sh in (/usr/java/jdk1.8.0_45/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/hadoop/.local/bin:/home/hadoop/bin)</span><br><span class="line">21/01/16 22:15:06 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Starting namenodes on [ruozedata001 ruozedata002]</span><br><span class="line">ruozedata002: starting namenode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-namenode-ruozedata002.out</span><br><span class="line">ruozedata001: starting namenode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-namenode-ruozedata001.out</span><br><span class="line">ruozedata003: starting datanode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-datanode-ruozedata003.out</span><br><span class="line">ruozedata002: starting datanode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-datanode-ruozedata002.out</span><br><span class="line">ruozedata001: starting datanode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-datanode-ruozedata001.out</span><br><span class="line">Starting journal nodes [ruozedata001 ruozedata002 ruozedata003]</span><br><span class="line">ruozedata003: journalnode running as process 19276. Stop it first.</span><br><span class="line">ruozedata002: journalnode running as process 19149. Stop it first.</span><br><span class="line">ruozedata001: journalnode running as process 19269. Stop it first.</span><br><span class="line">21/01/16 22:15:24 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Starting ZK Failover Controllers on NN hosts [ruozedata001 ruozedata002]</span><br><span class="line">ruozedata002: starting zkfc, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-zkfc-ruozedata002.out</span><br><span class="line">ruozedata001: starting zkfc, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-zkfc-ruozedata001.out</span><br></pre></td></tr></table></figure>
+<h2 id="8单进程点启动">8.单进程点启动</h2>
+<h3 id="81-hdfs单进程启动">8.1 HDFS单进程启动</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 启动namenode</span><br><span class="line">[hadoop@ruozedata01 ~]$ hadoop-daemon.sh start namenode</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动datanode</span><br><span class="line">[hadoop@ruozedata01 ~]$ hadoop-daemon.sh start datanode</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动journamnode(ruozedata001,ruozedata002,ruozedata003)</span><br><span class="line">[hadoop@ruozedata01 ~]$ hadoop-daemon.sh start journalnode</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动zkfc(ruozedata001,ruozedata002)</span><br><span class="line">[hadoop@ruozedata01 ~]$ hadoop-daemon.sh start zkfc</span><br></pre></td></tr></table></figure>
+<h3 id="82-yarn单进程启动">8.2 YARN单进程启动</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 启动resourcemanager</span><br><span class="line">[hadoop@ruozedata01 ~]$ yarn-daemon.sh start resourcemanager</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动nodemanager</span><br><span class="line">[hadoop@ruozedata01 ~]$ yarn-daemon.sh start nodemanager</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Hadoop/08.Hadoop-container优化/" data-toggle="tooltip" data-placement="top" title="[Hadoop]08 container优化">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Hadoop/07.Hadoop-源码编译/" data-toggle="tooltip" data-placement="top" title="[Hadoop]07 Hadoop源码编译">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1hdfs-ha-高可用"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1.HDFS HA &#x9AD8;&#x53EF;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#背景"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x80CC;&#x666F;&#xFF1A;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-hdfs-ha"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2. HDFS-HA</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#21-hdfs-ha-工作机制"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1 HDFS-HA &#x5DE5;&#x4F5C;&#x673A;&#x5236;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#22-hdfs-ha工作要点"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">2.2 HDFS-HA&#x5DE5;&#x4F5C;&#x8981;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3hdfs-ha自动故障转移工作机制"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">3.HDFS-HA&#x81EA;&#x52A8;&#x6545;&#x969C;&#x8F6C;&#x79FB;&#x5DE5;&#x4F5C;&#x673A;&#x5236;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4hdfs-ha架构图"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">4.HDFS-HA&#x67B6;&#x6784;&#x56FE;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5yarn-ha架构图"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">5.Yarn HA&#x67B6;&#x6784;&#x56FE;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3ha部署"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.HA&#x90E8;&#x7F72;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#31-环境准备"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">3.1 &#x73AF;&#x5883;&#x51C6;&#x5907;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#32-jdk部署"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">3.2 JDK&#x90E8;&#x7F72;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#33-zookeeper部署"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">3.3 Zookeeper&#x90E8;&#x7F72;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#34-hdfs-ha部署"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">3.4 HDFS-HA&#x90E8;&#x7F72;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#341-解压hadoop-260-cdh5162targz"><span class="toc-nav-number">3.4.1.</span> <span class="toc-nav-text">3.4.1 &#x89E3;&#x538B;hadoop-2.6.0-cdh5.16.2.tar.gz</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#342-修改hadoop-envsh"><span class="toc-nav-number">3.4.2.</span> <span class="toc-nav-text">3.4.2 <a href="http://xn--hadoop-env-yu6pe85r.sh" target="_blank" rel="noopener">&#x4FEE;&#x6539;hadoop-env.sh</a></span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#343-配置yarn-envsh"><span class="toc-nav-number">3.4.3.</span> <span class="toc-nav-text">3.4.3 <a href="http://xn--yarn-env-vz2ve12k.sh" target="_blank" rel="noopener">&#x914D;&#x7F6E;yarn-env.sh</a></span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#344-配置mapred-envsh"><span class="toc-nav-number">3.4.4.</span> <span class="toc-nav-text">3.4.4 <a href="http://xn--mapred-env-o150at28m.sh" target="_blank" rel="noopener">&#x914D;&#x7F6E;mapred-env.sh</a></span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#345-配置core-sitexml"><span class="toc-nav-number">3.4.5.</span> <span class="toc-nav-text">3.4.5 &#x914D;&#x7F6E;core-site.xml</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#346-配置mapred-sitexml"><span class="toc-nav-number">3.4.6.</span> <span class="toc-nav-text">3.4.6 &#x914D;&#x7F6E;mapred-site.xml</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#347-配置slaves"><span class="toc-nav-number">3.4.7.</span> <span class="toc-nav-text">3.4.7 &#x914D;&#x7F6E;slaves</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#348-配置yarn-sitexml"><span class="toc-nav-number">3.4.8.</span> <span class="toc-nav-text">3.4.8  &#x914D;&#x7F6E;yarn-site.xml</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#349-启动hdfs-ha集群第一次系统启动需要初始化"><span class="toc-nav-number">3.4.9.</span> <span class="toc-nav-text">3.4.9 &#x542F;&#x52A8;HDFS-HA&#x96C6;&#x7FA4;(&#x7B2C;&#x4E00;&#x6B21;&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#xFF0C;&#x9700;&#x8981;&#x521D;&#x59CB;&#x5316;)</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4关闭集群"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.&#x5173;&#x95ED;&#x96C6;&#x7FA4;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#41-关闭hadoopyarngthdfs"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">4.1 &#x5173;&#x95ED;Hadoop(YARN&#x2013;&gt;HDFS)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#42-关闭zookeeper"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">4.2 &#x5173;&#x95ED;zookeeper</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5再次启动集群"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">5.&#x518D;&#x6B21;&#x542F;&#x52A8;&#x96C6;&#x7FA4;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#51-启动zookeeper"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">5.1 &#x542F;&#x52A8;Zookeeper</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#52启动-hadoophdfs-gtyarn"><span class="toc-nav-number">5.2.</span> <span class="toc-nav-text">5.2&#x542F;&#x52A8; Hadoop(HDFS-&gt;YARN)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6监控集群"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">6.&#x76D1;&#x63A7;&#x96C6;&#x7FA4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7hadoop集群启动的顺序"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">7.Hadoop&#x96C6;&#x7FA4;&#x542F;&#x52A8;&#x7684;&#x987A;&#x5E8F;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#8单进程点启动"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">8.&#x5355;&#x8FDB;&#x7A0B;&#x70B9;&#x542F;&#x52A8;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#81-hdfs单进程启动"><span class="toc-nav-number">8.1.</span> <span class="toc-nav-text">8.1 HDFS&#x5355;&#x8FDB;&#x7A0B;&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#82-yarn单进程启动"><span class="toc-nav-number">8.2.</span> <span class="toc-nav-text">8.2 YARN&#x5355;&#x8FDB;&#x7A0B;&#x542F;&#x52A8;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2021 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

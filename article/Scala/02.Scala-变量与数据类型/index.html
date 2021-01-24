@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [Scala]02 Scala变量和数据类型 - 莫传刚 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.mochuangang.com/article/Scala/02.Scala-变量与数据类型/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_bg.jpg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Scala" title="Scala">Scala</a>
+                            
+                        </div>
+                        <h1>[Scala]02 Scala变量和数据类型</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 莫传刚 on
+                            2021-01-10
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">莫传刚</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="第2章-变量和数据类型">第2章 变量和数据类型</h2>
+<h3 id="scala-程序反编译-说明scala-程序的执行流程">Scala 程序反编译-说明scala 程序的执行流程</h3>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        println(<span class="string">"Hello World"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//下面我们说明一下 scala 程序的一执行流程</span></span><br><span class="line"><span class="comment">//分析</span></span><br><span class="line"><span class="comment">//1. object  在底层会生成两个类 Hello , Hello$</span></span><br><span class="line"><span class="comment">//2. Hello  中有个 main 函数，调用 Hello$  类的一个静态对象 MODULES$</span></span><br><span class="line">public <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Hello</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    public static void main(<span class="type">String</span>[] paramArrayOfString)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="type">Hello</span>$.<span class="type">MODULE</span>$.main(paramArrayOfString);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//3. Hello$.MODULE$. 对象时静态的，通过该对象调用 Hello$的 main 函数</span></span><br><span class="line">public void main(<span class="type">String</span>[] args)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">Predef</span>..<span class="type">MODULE</span>$.println(<span class="string">"hello,scala"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//4. 可以理解我们在 main 中写的代码在放在 Hello$ 的 main, 在底层执行 scala 编译器做了一个包装</span></span><br></pre></td></tr></table></figure>
+<h3 id="21-变量和常量">2.1 变量和常量</h3>
+<h4 id="211-基本语法">2.1.1 基本语法</h4>
+<p>var 变量名 [: 变量类型] = 初始值<br>
+val 常量名 [: 常量类型] = 初始值</p>
+<p><strong><em>注意：</em></strong> 能用常量的地方不用变量</p>
+<p>注意事项</p>
+<ol>
+<li>声明变量时，类型可以省略，编译器自动推导，即类型推导</li>
+<li>类型确定后，就不能修改，说明Scala是强数据类型语言。</li>
+<li>变量声明时，必须要有初始值</li>
+<li>在声明/定义一个变量时，可以使用var或者val来修饰，var修饰的变量可改变，val修 饰的变量不可改。</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.chapter02</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestVar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（1）声明变量时，类型可以省略，编译器自动推导，即类型推导</span></span><br><span class="line">        <span class="keyword">var</span> age = <span class="number">18</span></span><br><span class="line">        age = <span class="number">30</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（2）类型确定后，就不能修改，说明Scala是强数据类型语言。</span></span><br><span class="line"><span class="comment">//        age = "tom" // 错误</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（3）变量声明时，必须要有初始值</span></span><br><span class="line"><span class="comment">//        var name //错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//（4）在声明/定义一个变量时，可以使用var或者val来修饰，var修饰的变量可改变，val修饰的变量不可改。</span></span><br><span class="line">        <span class="keyword">var</span> num1 = <span class="number">10</span>   <span class="comment">// 可变</span></span><br><span class="line">        <span class="keyword">val</span> num2 = <span class="number">20</span>   <span class="comment">// 不可变</span></span><br><span class="line"></span><br><span class="line">        num1 = <span class="number">30</span>  <span class="comment">// 正确</span></span><br><span class="line">        <span class="comment">//num2 = 100  //错误，因为num2是val修饰的</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>var修饰的对象引用可以改变，val修饰的对象则不可改变，但对象的状态（值）却是可以改变的。（比如：自定义对象、数组、集合等等）</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestVar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// p1是var修饰的，p1的属性可以变，而且p1本身也可以变</span></span><br><span class="line">        <span class="keyword">var</span> p1 = <span class="keyword">new</span> <span class="type">Person</span>()</span><br><span class="line">        p1.name = <span class="string">"dalang"</span></span><br><span class="line">        p1 = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// p2是val修饰的，那么p2本身就不可变（即p2的内存地址不能变），但是，p2的属性是可以变，因为属性并没有用val修饰。</span></span><br><span class="line">        <span class="keyword">val</span> p2 = <span class="keyword">new</span> <span class="type">Person</span>()</span><br><span class="line">        p2.name=<span class="string">"jinlian"</span></span><br><span class="line"><span class="comment">// p2 = null // 错误的，因为p2是val修饰的</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name : <span class="type">String</span> = <span class="string">"jinlian"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>val 修饰的变量在编译后，等同于加上final</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 通过反编译看下底层代码</span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">VarDemo03</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">"hello"</span></span><br><span class="line">    <span class="keyword">val</span> age = <span class="number">100</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        println(<span class="string">"ok"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 对应的底层反编译的代码</span><br><span class="line">public <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">VarDemo03$</span></span>&#123;</span><br><span class="line">    public static <span class="keyword">final</span> <span class="type">MODULE</span>$;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span> name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Final</span> int age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="22-标识符的命名规范">2.2 标识符的命名规范</h3>
+<p>Scala对各种变量、方法、函数等命名时使用的字符序列称为标识符。即：凡是自己可以起名字的地方都叫标识符。</p>
+<h4 id="221命名规则">2.2.1命名规则</h4>
+<p>Scala中的标识符声明，基本和Java是一致的，但是细节上会有所变化，有以下四种规则：</p>
+<ol>
+<li>
+<p>以字母或者下划线开头，后接字母、数字、下划线</p>
+</li>
+<li>
+<p>数字不可以开头</p>
+</li>
+<li>
+<p>以操作符开头，且只包含操作符（+ - *  / # !）</p>
+</li>
+<li>
+<p>操作符(±*/)不能再标识符的中间</p>
+</li>
+<li>
+<p>用反引号<code>`...`</code> 包括的任意字符，即使是Scala关键字（39个）也可以</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">•<span class="keyword">package</span>, <span class="keyword">import</span>, <span class="class"><span class="keyword">class</span>, <span class="title">object</span>, <span class="title">trait</span>, <span class="keyword">extends</span>, <span class="keyword">with</span>, <span class="title">type</span>, <span class="title">for</span></span></span><br><span class="line"><span class="class"><span class="title">•private</span>, <span class="title">protected</span>, <span class="title">abstract</span>, <span class="title">sealed</span>, <span class="title">final</span>, <span class="title">implicit</span>, <span class="title">lazy</span>, <span class="title">override</span></span></span><br><span class="line"><span class="class"><span class="title">•try</span>, <span class="title">catch</span>, <span class="title">finally</span>, <span class="title">throw</span> </span></span><br><span class="line"><span class="class"><span class="title">•if</span>, <span class="title">else</span>, <span class="title">match</span>, <span class="title">case</span>, <span class="title">do</span>, <span class="title">while</span>, <span class="title">for</span>, <span class="title">return</span>, <span class="title">yield</span></span></span><br><span class="line"><span class="class"><span class="title">•def</span>, <span class="title">val</span>, <span class="title">var</span> </span></span><br><span class="line"><span class="class"><span class="title">•this</span>, <span class="title">super</span></span></span><br><span class="line"><span class="class"><span class="title">•new</span></span></span><br><span class="line"><span class="class"><span class="title">•true</span>, <span class="title">false</span>, <span class="title">null</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestName</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// （1）以字母或者下划线开头，后接字母、数字、下划线</span></span><br><span class="line">        <span class="keyword">var</span> hello: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok</span></span><br><span class="line">        <span class="keyword">var</span> <span class="type">Hello12</span>: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok</span></span><br><span class="line">        <span class="keyword">var</span> <span class="number">1</span>hello: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// error 数字不能开头</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> h-b: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// error   不能用-</span></span><br><span class="line">        <span class="keyword">var</span> x h: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// error   不能有空格</span></span><br><span class="line">        <span class="keyword">var</span> h_4: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok</span></span><br><span class="line">        <span class="keyword">var</span> _ab: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok</span></span><br><span class="line">        <span class="keyword">var</span> <span class="type">Int</span>: <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok 因为在Scala中Int是预定义的字符,不是关键字，但不推荐</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> _: <span class="type">String</span> = <span class="string">"hello"</span> <span class="comment">// ok 单独一个下划线不可以作为标识符，因为_被认为是一个方法</span></span><br><span class="line">        println(_)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（2）以操作符开头，且只包含操作符（+ - * / # !等）</span></span><br><span class="line">        <span class="keyword">var</span> +*-/#! : <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok</span></span><br><span class="line">        <span class="keyword">var</span> +*-/#!<span class="number">1</span> : <span class="type">String</span> = <span class="string">""</span> <span class="comment">// error 以操作符开头，必须都是操作符</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（3）用反引号`....`包括的任意字符串，即使是Scala关键字（39个）也可以</span></span><br><span class="line">        <span class="keyword">var</span> <span class="keyword">if</span> : <span class="type">String</span> = <span class="string">""</span> <span class="comment">// error 不能用关键字</span></span><br><span class="line">        <span class="keyword">var</span> `<span class="keyword">if</span>` : <span class="type">String</span> = <span class="string">""</span> <span class="comment">// ok 用反引号`....`包括的任意字符串,包括关键字</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="23-字符串输出">2.3 字符串输出</h3>
+<p>2.3.1 基本语法</p>
+<ol>
+<li>字符串，通过+号连接</li>
+<li>printf用法：字符串，通过%传值</li>
+<li>字符串模板：通过$获取变量值</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">PrintDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="comment">//使用+</span></span><br><span class="line">        <span class="keyword">var</span> str1: <span class="type">String</span> = <span class="string">"hello"</span></span><br><span class="line">        <span class="keyword">var</span> str2: <span class="type">String</span> = <span class="string">"world"</span></span><br><span class="line">        println(str1 + <span class="string">" "</span> + str2)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> name: <span class="type">String</span> = <span class="string">"Tom"</span></span><br><span class="line">        <span class="keyword">var</span> age: <span class="type">Int</span> = <span class="number">28</span></span><br><span class="line">        <span class="keyword">var</span> sal: <span class="type">Float</span> = <span class="number">10.67</span>f</span><br><span class="line">        <span class="keyword">var</span> height: <span class="type">Double</span> = <span class="number">180.15</span></span><br><span class="line">        <span class="comment">//使用格式化输出方式printf</span></span><br><span class="line">        printf(<span class="string">"名字=%s 年龄=%d 薪水=%.2f 高%.3f"</span>,name,age,sal,height) <span class="comment">//%.2f 保留2位小数的意思</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//scala支持使用$输出内容，编译器会去解析$对应的变量</span></span><br><span class="line">        println(<span class="string">s"\n个人信息如下： \n名字<span class="subst">$name</span> \n年龄<span class="subst">$age</span> \n薪水<span class="subst">$sal</span> \n高<span class="subst">$height</span>"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果下字符串中出现了类似$&#123;age +10&#125; 则表示&#123;&#125;是一个表达式</span></span><br><span class="line">        println(<span class="string">s"\n个人信息如下： \n名字<span class="subst">$name</span> \n年龄<span class="subst">$&#123;age + 10&#125;</span> \n薪水<span class="subst">$&#123;sal * 100&#125;</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="24-键盘输入">2.4 键盘输入</h3>
+<p>在编程中，需要接收用户输入的数据，就可以使用键盘输入语句来获取。</p>
+<h4 id="241-基本语法">2.4.1 基本语法</h4>
+<p>StdIn.readLine()、StdIn.readShort()、StdIn.readDouble()</p>
+<h4 id="242-案例">2.4.2 案例</h4>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 需求：可以从控制台接收用户信息，【姓名，年龄，薪水】</span><br><span class="line"><span class="keyword">import</span> scala.io.<span class="type">StdIn</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestInput</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1 输入姓名</span></span><br><span class="line">        println(<span class="string">"input name:"</span>)</span><br><span class="line">        <span class="keyword">var</span> name = <span class="type">StdIn</span>.readLine()</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2 输入年龄</span></span><br><span class="line">        println(<span class="string">"input age:"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readShort()</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3 输入薪水</span></span><br><span class="line">        println(<span class="string">"input sal:"</span>)</span><br><span class="line">        <span class="keyword">var</span> sal = <span class="type">StdIn</span>.readDouble()</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4 打印</span></span><br><span class="line">        println(<span class="string">"name="</span> + name)</span><br><span class="line">        println(<span class="string">"age="</span> + age)</span><br><span class="line">        println(<span class="string">"sal="</span> + sal)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="25-数据类型重点">2.5 数据类型（重点）</h3>
+<h4 id="251-scala数据类型">2.5.1 Scala数据类型</h4>
+<p><img src="/img/article/scala/Snipaste_2021-01-10_11-52-33.png" alt="Snipaste_2021-01-10_11-52-33"></p>
+<ol>
+<li>Scala中一切数据都是对象，都是Any的子类</li>
+<li>Scala中数据类型分为两大类：数值类型（AnyVal）、引用类型（AnyRef),不管是数值类型还是引用类型都是对象。</li>
+<li>Scala数据类型任然遵守，低精度的值类型向高精度值类型，自动转换（隐式转换)</li>
+<li>Scala中的StringOps是对Java中的String增强</li>
+<li>Unit：对应Java中的void，用于方法返回值的位置，表示方法没有返回值。Unit是一个数据类型，只有一个对象就是()。Void 不是数据类型，只是一个关键字。</li>
+<li>Null是一个类型，只有一个对象就是null。它是所有引用类型（AnyRef)的子类。</li>
+<li>Nothing, 是所有数据类型的子类，主要用于在一个函数没有明确返回值时使用，因为这样我们可以把抛出的返回值，返回给任何的变量或者函数。</li>
+</ol>
+<h4 id="252整数类型byte-short-int-long">2.5.2整数类型（Byte、Short、Int、Long）</h4>
+<p>Scala的整数类型就是用于存放整数值的，比如12，30，3456等等。</p>
+<p>整型分类</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Byte[1]</td>
+<td>8位有符号补码整数。数值区间为 -128 到 127</td>
+</tr>
+<tr>
+<td>Short[2]</td>
+<td>16位有符号补码整数。数值区间为 -32768 到 32767</td>
+</tr>
+<tr>
+<td>Int[4]</td>
+<td>32位有符号补码整数。数值区间为 -2147483648 到 2147483647</td>
+</tr>
+<tr>
+<td>Long[8]</td>
+<td>64位有符号补码整数。数值区间为 -9223372036854775808 到 9223372036854775807 = 2的(64-1)次方-1</td>
+</tr>
+</tbody>
+</table>
+<p>案例</p>
+<p>（1）Scala各整数类型有固定的表数范围和字段长度，不受具体操作的影响，以保证Scala程序的可移植性。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestDataType</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 正确</span></span><br><span class="line">        <span class="keyword">var</span> n1:<span class="type">Byte</span> = <span class="number">127</span></span><br><span class="line">        <span class="keyword">var</span> n2:<span class="type">Byte</span> = <span class="number">-128</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 错误</span></span><br><span class="line">        <span class="comment">// var n3:Byte = 128</span></span><br><span class="line">        <span class="comment">// var n4:Byte = -129</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（2）Scala的整型，默认为Int型，声明Long型，须后加‘l’或‘L’</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestDataType</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">var</span> n5 = <span class="number">10</span></span><br><span class="line">        println(n5)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> n6 = <span class="number">9223372036854775807</span>L</span><br><span class="line">        println(n6)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（3）Scala程序中变量常声明为Int型，除非不足以表示大数，才使用Long</p>
+<h4 id="253-浮点类型float-double">2.5.3 浮点类型（Float、Double）</h4>
+<p>Scala的浮点类型可以表示一个小数，比如123.4f，7.8，0.12等等。</p>
+<p>浮点型分类</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Float [4]</td>
+<td>32 位, IEEE 754标准的单精度浮点数</td>
+</tr>
+<tr>
+<td>Double [8]</td>
+<td>64 位 IEEE 754标准的双精度浮点数</td>
+</tr>
+</tbody>
+</table>
+<p>案例</p>
+<p>Scala的浮点型常量默认为Double型，声明Float型常量，须后加‘f’或‘F’。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestDataType</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 建议，在开发中需要高精度小数时，请选择Double</span></span><br><span class="line">        <span class="keyword">var</span> n7 = <span class="number">2.2345678912</span>f</span><br><span class="line">        <span class="keyword">var</span> n8 = <span class="number">2.2345678912</span></span><br><span class="line"></span><br><span class="line">        println(<span class="string">"n7="</span> + n7)</span><br><span class="line">        println(<span class="string">"n8="</span> + n8)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//运行结果,Float会损失精度</span></span><br><span class="line">n7=<span class="number">2.2345679</span>  </span><br><span class="line">n8=<span class="number">2.2345678912</span></span><br></pre></td></tr></table></figure>
+<h4 id="254字符类型char">2.5.4字符类型（Char)</h4>
+<p>字符类型可以表示单个字符，字符类型是Char。</p>
+<p>案例</p>
+<p>（1）字符常量是用单引号 ’ ’ 括起来的单个字符。</p>
+<p>（2）\t ：一个制表位，实现对齐的功能</p>
+<p>（3）\n ：换行符</p>
+<p>（4）\ ：表示\</p>
+<p>（5）&quot; ：表示&quot;</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestCharType</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（1）字符常量是用单引号 ' ' 括起来的单个字符。</span></span><br><span class="line">        <span class="keyword">var</span> c1: <span class="type">Char</span> = 'a'</span><br><span class="line">        println(<span class="string">"c1="</span> + c1)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//（2）\t ：一个制表位，实现对齐的功能</span></span><br><span class="line">        println(<span class="string">"姓名\t年龄"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（3）\n ：换行符</span></span><br><span class="line">        println(<span class="string">"西门庆\n潘金莲"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（4）\\ ：表示\</span></span><br><span class="line">        println(<span class="string">"c:\\岛国\\avi"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（5）\" ：表示"</span></span><br><span class="line">        println(<span class="string">"呵呵：\"宁波真大"</span><span class="string">")</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="255布尔类型boolean">2.5.5布尔类型：Boolean</h4>
+<p>基本说明：</p>
+<ol>
+<li>布尔类型也叫Boolean类型，Booolean类型数据只允许取值true和false</li>
+<li>boolean类型占1个字节。</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestBooleanType</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> isResult : <span class="type">Boolean</span> = <span class="literal">false</span></span><br><span class="line">        <span class="keyword">var</span> isResult2 : <span class="type">Boolean</span> = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="256-unit类型-null类型和nothing类型重点">2.5.6 Unit类型、Null类型和Nothing类型（重点）</h4>
+<p>基本说明</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit</td>
+<td>表示无值，和其他语言中void等同。用作不返回任何结果的方法的结果类型。Unit只有一个实例值，写成()。</td>
+</tr>
+<tr>
+<td>Null</td>
+<td>null , Null 类型只有一个实例值null</td>
+</tr>
+<tr>
+<td>Nothing</td>
+<td>Nothing类型在Scala的类层级最低端；它是任何其他类型的子类型。当一个函数，我们确定没有正常的返回值，可以用Nothing来指定返回类型，这样有一个好处，就是我们可以把返回的值（异常）赋给其它的函数或者变量（兼容性）</td>
+</tr>
+</tbody>
+</table>
+<p>案例</p>
+<ol>
+<li>
+<p>Unit类型用来标识过程，也就是没有明确返回值的函数。</p>
+<p>由此可见，Unit类似于Java里的void。Unit只有一个实例——<strong><em>*( )*</em></strong>，这个实例也没有实质意义</p>
+</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestSpecialType</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">sayOk</span> </span>: <span class="type">Unit</span> = &#123;<span class="comment">// unit表示没有返回值，即void  </span></span><br><span class="line">        &#125;</span><br><span class="line">        println(sayOk)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Null类只有一个实例对象，Null类似于Java中的<strong><em>null</em></strong>引用。Null可以赋值给任意引用类型（AnyRef），但是不能赋值给值类型（AnyVal）</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestDataType</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//null可以赋值给任意引用类型（AnyRef），但是不能赋值给值类型（AnyVal）</span></span><br><span class="line">        <span class="keyword">var</span> cat = <span class="keyword">new</span> <span class="type">Cat</span>();</span><br><span class="line">        cat = <span class="literal">null</span>	<span class="comment">// 正确</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> n1: <span class="type">Int</span> = <span class="literal">null</span> <span class="comment">// 错误</span></span><br><span class="line">        println(<span class="string">"n1:"</span> + n1)</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Nothing，可以作为没有正常返回值的方法的返回类型，非常直观的告诉你这个方法不会正常返回，而且由于Nothing是其他任意类型的子类，他还能跟要求返回值的方法兼容。</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestSpecialType</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">test</span></span>() : <span class="type">Nothing</span>=&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>()</span><br><span class="line">        &#125;</span><br><span class="line">        test</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="26-类型转换">2.6 类型转换</h3>
+<h4 id="261-数值类型自动转换">2.6.1 数值类型自动转换</h4>
+<p>当Scala程序在进行赋值或者运算时，精度小的类型自动转换为精度大的数值类型，这个就是自动类型转换（隐式转换）。数据类型按精度（容量）大小排序为：</p>
+<p><img src="/img/article/scala/Snipaste_2021-01-10_12-38-37.png" alt="Snipaste_2021-01-10_12-38-37"></p>
+<p>基本说明</p>
+<ol>
+<li>自动提升原则：有多种类型的数据混合运算时，系统首先自动将所有数据转换成精度大的那种数据类型，然后再进行计算。</li>
+<li>把精度大的数值类型赋值给精度小的数值类型时，就会报错，反之就会进行自动类型转换。</li>
+<li>（byte，short）和char之间不会相互自动转换。</li>
+<li>byte，short，char他们三者可以计算，在计算时首先转换为int类型。</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestValueTransfer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（1）自动提升原则：有多种类型的数据混合运算时，系统首先自动将所有数据转换成精度大的那种数值类型，然后再进行计算。</span></span><br><span class="line">        <span class="keyword">var</span> n = <span class="number">1</span> + <span class="number">2.0</span></span><br><span class="line">        println(n)  <span class="comment">// n 就是Double</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（2）把精度大的数值类型赋值给精度小的数值类型时，就会报错，反之就会进行自动类型转换。</span></span><br><span class="line">        <span class="keyword">var</span> n2 : <span class="type">Double</span>= <span class="number">1.0</span></span><br><span class="line">        <span class="comment">//var n3 : Int = n2 //错误，原因不能把高精度的数据直接赋值和低精度。</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（3）（byte，short）和char之间不会相互自动转换。</span></span><br><span class="line">        <span class="keyword">var</span> n4 : <span class="type">Byte</span> = <span class="number">1</span></span><br><span class="line">        <span class="comment">//var c1 : Char = n4  //错误</span></span><br><span class="line">        <span class="keyword">var</span> n5:<span class="type">Int</span> = n4</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（4）byte，short，char他们三者可以计算，在计算时首先转换为int类型。</span></span><br><span class="line">        <span class="keyword">var</span> n6 : <span class="type">Byte</span> = <span class="number">1</span></span><br><span class="line">        <span class="keyword">var</span> c2 : <span class="type">Char</span> = <span class="number">1</span></span><br><span class="line">        <span class="comment">// var n : Short = n6 + c2 //当n6 + c2 结果类型就是int</span></span><br><span class="line">        <span class="comment">// var n7 : Short = 10 + 90 //错误</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：Scala还提供了非常强大的隐式转换机制（隐式函数，隐式类等），我们放在高级部分专门用一个章节来讲解。</p>
+<h4 id="363-数据类型转换练习">3.6.3 数据类型转换练习</h4>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 判断是否能通过编译，并说明原因</span><br><span class="line"><span class="number">1.</span> <span class="keyword">var</span> s: <span class="type">Short</span> = <span class="number">5</span> <span class="comment">//ok</span></span><br><span class="line">   s = s<span class="number">-2</span>  <span class="comment">//error，Int-&gt;Short</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> <span class="keyword">var</span> b: <span class="type">Byte</span> = <span class="number">3</span> <span class="comment">//ok</span></span><br><span class="line">   b = b+<span class="number">4</span>  <span class="comment">//error ,Int-&gt;Byte</span></span><br><span class="line">   b = (b+<span class="number">4</span>).toByte <span class="comment">//ok ,使用强制转换</span></span><br><span class="line"></span><br><span class="line"><span class="number">3.</span><span class="keyword">var</span> c: <span class="type">Char</span> = 'a' <span class="comment">//ok</span></span><br><span class="line">  <span class="keyword">var</span> i: <span class="type">Int</span> = <span class="number">5</span> <span class="comment">//ok</span></span><br><span class="line">  <span class="keyword">var</span> d: <span class="type">Float</span> = <span class="number">3.14</span>F <span class="comment">//ok</span></span><br><span class="line">  <span class="keyword">var</span> result: <span class="type">Double</span> = c+i+d <span class="comment">//ok Float-&gt;Double</span></span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> <span class="keyword">var</span> b: <span class="type">Byte</span> = <span class="number">5</span> <span class="comment">//ok</span></span><br><span class="line">   <span class="keyword">var</span> s: <span class="type">Short</span> = <span class="number">3</span> <span class="comment">//ok</span></span><br><span class="line">   <span class="keyword">var</span> t: <span class="type">Short</span> = s+b <span class="comment">//error ，Int-&gt;Short</span></span><br><span class="line">   <span class="keyword">var</span> t2 = s+b <span class="comment">//ok, 使用类型推导</span></span><br></pre></td></tr></table></figure>
+<h4 id="262-强制类型转换">2.6.2 强制类型转换</h4>
+<p>基本说明</p>
+<p>自动类型转换的逆过程，将精度大的数值类型转换为精度小的数值类型。使用时要加上强制转函数，但可能造成精度降低或溢出，格外要注意。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Java</span>  :  int num = (int)<span class="number">2.5</span></span><br><span class="line"><span class="type">Scala</span> :  <span class="keyword">var</span> num : <span class="type">Int</span> = <span class="number">2.7</span>.toInt</span><br></pre></td></tr></table></figure>
+<p>案例</p>
+<ol>
+<li>将数据由高精度转换为低精度，就需要使用到强制转换</li>
+<li>强制符号只针对于最近的操作数有效，往往会使用小括号提升优先级</li>
+<li>Char类型可以保持Int的常量值，但不能保存Int的变量值，需要强转</li>
+<li>Byte 和 Short 类型在进行运算时，当做Int类型处理</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestForceTransfer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（1）将数据由高精度转换为低精度，就需要使用到强制转换</span></span><br><span class="line">        <span class="keyword">var</span> n1: <span class="type">Int</span> = <span class="number">2.5</span>.toInt <span class="comment">// 这个存在精度损失</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//（2）强转符号只针对于最近的操作数有效，往往会使用小括号提升优先级</span></span><br><span class="line">        <span class="keyword">var</span> r1: <span class="type">Int</span> = <span class="number">10</span> * <span class="number">3.5</span>.toInt + <span class="number">6</span> * <span class="number">1.5</span>.toInt  <span class="comment">// 10 *3 + 6*1 = 36</span></span><br><span class="line">        <span class="keyword">var</span> r2: <span class="type">Int</span> = (<span class="number">10</span> * <span class="number">3.5</span> + <span class="number">6</span> * <span class="number">1.5</span>).toInt  <span class="comment">// 44.0.toInt = 44</span></span><br><span class="line">        println(<span class="string">"r1="</span> + r1 + <span class="string">" r2="</span> + r2)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">val</span> char1: <span class="type">Char</span> = <span class="number">1</span></span><br><span class="line">        <span class="keyword">val</span> num3 = <span class="number">1</span></span><br><span class="line">        <span class="comment">//val char2: Char = num3 //错误的</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.6.3  数值类型和String类型间转换</p>
+<p>基本说明</p>
+<p>在程序开发中，我们经常需要将基本数值类型转成String类型。或者将String类型转成基本数值类型。</p>
+<p>案例</p>
+<ol>
+<li>基本类型转String类型（语法：将基本类型的值+&quot;&quot; 即可）</li>
+<li>String类型转基本数值类型（语法：s1.toInt、s1.toFloat、s1.toDouble、s1.toByte、s1.toLong、s1.toShort）</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestStringTransfer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（1）基本类型转String类型（语法：将基本类型的值+"" 即可）</span></span><br><span class="line">        <span class="keyword">var</span> str1 : <span class="type">String</span> = <span class="literal">true</span> + <span class="string">""</span></span><br><span class="line">        <span class="keyword">var</span> str2 : <span class="type">String</span> = <span class="number">4.5</span> + <span class="string">""</span></span><br><span class="line">        <span class="keyword">var</span> str3 : <span class="type">String</span> = <span class="number">100</span> +<span class="string">""</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（2）String类型转基本数值类型（语法：调用相关API）</span></span><br><span class="line">        <span class="keyword">var</span> s1 : <span class="type">String</span> = <span class="string">"12"</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> n1 : <span class="type">Byte</span> = s1.toByte</span><br><span class="line">        <span class="keyword">var</span> n2 : <span class="type">Short</span> = s1.toShort</span><br><span class="line">        <span class="keyword">var</span> n3 : <span class="type">Int</span> = s1.toInt</span><br><span class="line">        <span class="keyword">var</span> n4 : <span class="type">Long</span> = s1.toLong</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong><em>注意：在将String类型转成基本数值类型时，要确保String类型能够转成有效的数据，比如我们可以把&quot;123&quot;，转成一个整数，但是不能把&quot;hello&quot;转成一个整数。</em></strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">在scala中，不是将小数点后的数据进行截取，而是会抛出异常</span><br><span class="line"><span class="keyword">var</span> n5:<span class="type">Int</span> = <span class="string">"12.6"</span>.toInt会出现<span class="type">NumberFormatException</span>异常。</span><br><span class="line"><span class="keyword">var</span> n6 = <span class="string">"12.5"</span></span><br><span class="line">println(n6.toInt) <span class="comment">//error</span></span><br><span class="line">println(n6.toDouble) <span class="comment">//ok</span></span><br></pre></td></tr></table></figure>
+<h2 id="第3章-运算符">第3章 运算符</h2>
+<h3 id="31-算术运算符">3.1 算术运算符</h3>
+<p>基本语法</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>运算</th>
+<th>范例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>正号</td>
+<td>+3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>-</td>
+<td>负号</td>
+<td>b=4; -b</td>
+<td>-4</td>
+</tr>
+<tr>
+<td>+</td>
+<td>加</td>
+<td>5+5</td>
+<td>10</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减</td>
+<td>6-4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘</td>
+<td>3*4</td>
+<td>12</td>
+</tr>
+<tr>
+<td>/</td>
+<td>除</td>
+<td>5/5</td>
+<td>1</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取模(取余)</td>
+<td>7%5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>+</td>
+<td>字符串相加</td>
+<td>“He”+”llo”</td>
+<td>“Hello”</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>对于除号“/”，它的整数除和小数除是有区别的：整数之间做除法时，只保留整数部分而舍弃小数部分。</li>
+<li>第一个数取模a%b,可以等价 a%b=a-a/b*b, 这样我们可以看到取模的一个本质运算</li>
+<li>注意：Scala中没有++、–操作符，需要通过+=、-=来实现同样的效果</li>
+</ol>
+<p>案例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestArithmetic</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//（1）对于除号“/”，它的整数除和小数除是有区别的：整数之间做除法时，只保留整数部分而舍弃小数部分。</span></span><br><span class="line">        <span class="keyword">var</span> r1: <span class="type">Int</span> = <span class="number">10</span> / <span class="number">3</span> <span class="comment">// 3</span></span><br><span class="line">        println(<span class="string">"r1="</span> + r1)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> r2: <span class="type">Double</span> = <span class="number">10</span> / <span class="number">3</span> <span class="comment">// 3.0</span></span><br><span class="line">        println(<span class="string">"r2="</span> + r2)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> r3: <span class="type">Double</span> = <span class="number">10.0</span> / <span class="number">3</span> <span class="comment">// 3.3333</span></span><br><span class="line">        println(<span class="string">"r3="</span> + r3)</span><br><span class="line">        println(<span class="string">"r3="</span> + r3.formatted(<span class="string">"%.2f"</span>)) <span class="comment">// 含义：保留小数点2位，使用四舍五入</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//（2）对一个数取模a%b，和Java的取模规则一样。</span></span><br><span class="line">        <span class="comment">// % 的运算原则： a%b = a - a/b * b</span></span><br><span class="line">        println(<span class="number">10</span> % <span class="number">3</span>) <span class="comment">//1</span></span><br><span class="line">        println(<span class="number">-10</span> % <span class="number">3</span>) <span class="comment">//-1 //-10%3=-10-(10/3) *3=-10 + 9=-1</span></span><br><span class="line">        println(<span class="number">-10</span>%<span class="number">-3</span>) <span class="comment">//-1 // -10%-3=(-10)-(-10/-3)*(-3)=-10+9=-1</span></span><br><span class="line">        println(<span class="number">10</span>%<span class="number">-3</span>) <span class="comment">//1</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//++和--</span></span><br><span class="line">        <span class="comment">//在scala中没有 ++ 和 --，而使用 +=1 和 -=1</span></span><br><span class="line">        <span class="keyword">var</span> num1 = <span class="number">10</span></span><br><span class="line">        <span class="comment">//num1++ 错误</span></span><br><span class="line">        num1 += <span class="number">1</span> <span class="comment">//替代 num1++</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//num1-- 错误</span></span><br><span class="line">        num1 -= <span class="number">1</span> <span class="comment">//替代 num1--</span></span><br><span class="line">        println(num1)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>小练习</p>
+<ol>
+<li>假如还有97天放假，问：xx个星期零xx天</li>
+<li>定义一个变量保存华氏温度，华氏温度转换摄氏温度的公式为：5/9*(华氏温度-100)，请求出华氏温度对应的摄氏温度。【测试：232.5】</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="32-关系运算符">3.2 关系运算符</h3>
+<ol>
+<li>关系运算符的结果都是boolean型，也就是要么是true,要么是false</li>
+<li>关系表达式 经常用在 if结构的条件中或循环结构的条件中</li>
+<li>比较运算符&quot;==&quot; 不能误写成  “=”</li>
+<li>如果两个浮点数进行比较，应当保证数据类型一致</li>
+</ol>
+<p>基本语法</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>运算</th>
+<th>范例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>==</td>
+<td>相等于</td>
+<td>4==3</td>
+<td>false</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>不等于</td>
+<td>4！=3</td>
+<td>true</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>小于</td>
+<td>4&lt;3</td>
+<td>false</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>大于</td>
+<td>4&gt;3</td>
+<td>true</td>
+</tr>
+<tr>
+<td>&lt;=</td>
+<td>小于等于</td>
+<td>4&lt;=3</td>
+<td>false</td>
+</tr>
+<tr>
+<td>&gt;=</td>
+<td>大于等于</td>
+<td>4&gt;=3</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<p><strong><em>注意：在Scala中 ==比较的是字符串的内容是否一致，eq()比较的是地址值</em></strong></p>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span></span>&#123; </span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    	<span class="keyword">val</span> s1 = <span class="string">"abc"</span></span><br><span class="line">        <span class="keyword">val</span> s2 = <span class="keyword">new</span> <span class="type">String</span>(<span class="string">"abc"</span>)</span><br><span class="line">        </span><br><span class="line">        println(s1==s2) <span class="comment">// true</span></span><br><span class="line">        println(s1.eq(s2))<span class="comment">// false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="33-逻辑运算符">3.3 逻辑运算符</h3>
+<p>基本语法</p>
+<p>用于连接多个条件（一般来讲就是关系表达式），最终的结果也是一个Boolean值。<br>
+假定：变量A为true，B为false</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;&amp;</td>
+<td>逻辑与</td>
+<td>(A &amp;&amp; B) 运算结果为 false</td>
+</tr>
+<tr>
+<td>||</td>
+<td>逻辑或</td>
+<td>(A || B) 运算结果为 true</td>
+</tr>
+<tr>
+<td>!</td>
+<td>逻辑非</td>
+<td>!(A &amp;&amp; B) 运算结果为 true</td>
+</tr>
+</tbody>
+</table>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestLogic</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 测试：&amp;&amp;、||、!</span></span><br><span class="line">        <span class="keyword">var</span> a = <span class="literal">true</span></span><br><span class="line">        <span class="keyword">var</span> b = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">        println(<span class="string">"a&amp;&amp;b="</span> + (a &amp;&amp; b))     <span class="comment">// a&amp;&amp;b=false</span></span><br><span class="line">        println(<span class="string">"a||b="</span> + (a || b))     <span class="comment">// a||b=true</span></span><br><span class="line">        println(<span class="string">"!(a&amp;&amp;b)="</span> + (!(a &amp;&amp; b))) <span class="comment">// !(a&amp;&amp;b)=true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="34-赋值运算符">3.4 赋值运算符</h3>
+<p>基本语法</p>
+<p>赋值运算符就是将某个运算后的值，赋给指定的变量。</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>=</td>
+<td>简单的赋值运算符，将一个表达式的值赋给一个左值</td>
+<td>C = A + B 将 A + B 表达式结果赋值给 C</td>
+</tr>
+<tr>
+<td>+=</td>
+<td>相加后再赋值</td>
+<td>C += A 等于 C = C + A</td>
+</tr>
+<tr>
+<td>-=</td>
+<td>相减后再赋值</td>
+<td>C -= A 等于 C = C - A</td>
+</tr>
+<tr>
+<td>*=</td>
+<td>相乘后再赋值</td>
+<td>C *= A 等于 C = C * A</td>
+</tr>
+<tr>
+<td>/=</td>
+<td>相除后再赋值</td>
+<td>C /= A 等于 C = C / A</td>
+</tr>
+<tr>
+<td>%=</td>
+<td>求余后再赋值</td>
+<td>C %= A 等于 C = C % A</td>
+</tr>
+<tr>
+<td>&lt;&lt;=</td>
+<td>左移后赋值</td>
+<td>C &lt;&lt;= 2等于 C = C &lt;&lt; 2</td>
+</tr>
+<tr>
+<td>&gt;&gt;=</td>
+<td>右移后赋值</td>
+<td>C &gt;&gt;= 2 等于 C = C &gt;&gt; 2</td>
+</tr>
+<tr>
+<td>&amp;=</td>
+<td>按位与后赋值</td>
+<td>C &amp;= 2  等于 C = C &amp; 2</td>
+</tr>
+<tr>
+<td>^=</td>
+<td>按位异或后赋值</td>
+<td>C ^= 2  等于 C = C ^ 2</td>
+</tr>
+<tr>
+<td>|=</td>
+<td>按位或后赋值</td>
+<td>C |= 2  等于 C = C | 2</td>
+</tr>
+</tbody>
+</table>
+<p><strong><em>注意：Scala中没有++、–操作符，可以通过+=、-=来实现同样的效果；?:可以用if()…替换</em></strong></p>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestAssignment</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> r1 = <span class="number">10</span></span><br><span class="line">        </span><br><span class="line">        r1 += <span class="number">1</span> <span class="comment">// 没有++</span></span><br><span class="line">        r1 -= <span class="number">2</span> <span class="comment">// 没有--</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//求两个数的最大值</span></span><br><span class="line">        <span class="comment">//求三个数的最大值</span></span><br><span class="line">        <span class="keyword">val</span> n1 = <span class="number">4</span></span><br><span class="line">        <span class="keyword">val</span> n2 = <span class="number">8</span></span><br><span class="line">        <span class="keyword">var</span> res = <span class="keyword">if</span>(n1&gt;n2) n1 <span class="keyword">else</span> n2</span><br><span class="line">        println(<span class="string">"res = "</span> + res)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">val</span> n3 = <span class="number">11</span></span><br><span class="line">        res = <span class="keyword">if</span>(res&gt;n3) res <span class="keyword">else</span> n3</span><br><span class="line">        println(<span class="string">"res = "</span> + res)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="35-位运算符">3.5 位运算符</h3>
+<p>基本语法</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;</td>
+<td>按位与运算符</td>
+<td>(a &amp; b) 输出结果 12 ，二进制解释： 0000 1100</td>
+</tr>
+<tr>
+<td>|</td>
+<td>按位或运算符</td>
+<td>(a | b) 输出结果 61 ，二进制解释： 0011 1101</td>
+</tr>
+<tr>
+<td>^</td>
+<td>按位异或运算符</td>
+<td>(a ^ b) 输出结果 49 ，二进制解释： 0011 0001</td>
+</tr>
+<tr>
+<td>~</td>
+<td>按位取反运算符</td>
+<td>(~a ) 输出结果 -61 ，二进制解释： 1100 0011， 在一个有符号二进制数的补码形式。</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>左移动运算符</td>
+<td>a &lt;&lt; 2 输出结果 240 ，二进制解释： 1111 0000</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>右移动运算符</td>
+<td>a &gt;&gt; 2 输出结果 15 ，二进制解释： 0000 1111</td>
+</tr>
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>无符号右移</td>
+<td>A &gt;&gt;&gt;2 输出结果 15, 二进制解释: 0000 1111</td>
+</tr>
+</tbody>
+</table>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestPosition</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 测试：1000 &lt;&lt; 1 =&gt;10000</span></span><br><span class="line">        <span class="keyword">var</span> n1 :<span class="type">Int</span> =<span class="number">8</span></span><br><span class="line"></span><br><span class="line">        n1 = n1 &lt;&lt; <span class="number">1</span></span><br><span class="line">        println(n1)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//交换两个数的值</span></span><br><span class="line">        <span class="keyword">var</span> num = <span class="number">2</span></span><br><span class="line">        num &lt;&lt;= <span class="number">2</span> <span class="comment">//num = 8</span></span><br><span class="line">        num &gt;&gt;=<span class="number">3</span> <span class="comment">//num = 4</span></span><br><span class="line">        println(<span class="string">"num ="</span> + num)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//在scala中支持代码块，返回值</span></span><br><span class="line">        <span class="keyword">val</span> res = &#123;</span><br><span class="line">            <span class="keyword">if</span>(num &gt;<span class="number">1</span>) <span class="string">"hello,ok"</span> <span class="keyword">else</span> <span class="number">100</span></span><br><span class="line">        &#125;</span><br><span class="line">        println(<span class="string">"res="</span> + res)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//有两个变量，a和b 要求将其进行交换，但是不允许使用中间变量，最终打印结果</span></span><br><span class="line">        <span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line">        <span class="keyword">var</span> b = <span class="number">20</span></span><br><span class="line">        </span><br><span class="line">        a=a+b</span><br><span class="line">        b=a-b <span class="comment">//==&gt;(a+b)-b=a</span></span><br><span class="line">        a=a-b <span class="comment">//==&gt;(a+b)-a=b</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.6 Scala运算符本质</p>
+<p>在Scala中其实是没有运算符的，所有运算符都是方法。</p>
+<ol>
+<li>
+<p>调用对象的方法时，点<code>.</code>可以省略</p>
+</li>
+<li>
+<p>如果函数参数只有一个，或者没有参数，()可以省略</p>
+</li>
+</ol>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestOpt</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 标准的加法运算</span></span><br><span class="line">        <span class="keyword">val</span> i:<span class="type">Int</span> = <span class="number">1.</span>+(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// （1）当调用对象的方法时，.可以省略</span></span><br><span class="line">        <span class="keyword">val</span> j:<span class="type">Int</span> = <span class="number">1</span> + (<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// （2）如果函数参数只有一个，或者没有参数，()可以省略</span></span><br><span class="line">        <span class="keyword">val</span> k:<span class="type">Int</span> = <span class="number">1</span> + <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        println(<span class="number">1.</span>toString())</span><br><span class="line">        println(<span class="number">1</span> toString())</span><br><span class="line">        println(<span class="number">1</span> toString)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="37-运算符优先级">3.7 运算符优先级</h3>
+<ol>
+<li>运算符有不同的优先级，所谓优先级就是表达式运算中的运算顺序，如右表，上一行运算符总优先于下一行。</li>
+<li>只有单目运算符，赋值运算符是从右向左运算的。</li>
+</ol>
+<p>运算符优先级小结</p>
+<ol>
+<li>() []</li>
+<li>单目运算</li>
+<li>算术运算符</li>
+<li>移位运算</li>
+<li>比较运算符（关系运算符）</li>
+<li>位运算</li>
+<li>关系运算符</li>
+<li>赋值运算</li>
+<li><code>.</code>, <code>,</code></li>
+</ol>
+<p>3.8 键盘输入语句</p>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.io.<span class="type">Stdin</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo01</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        要求：可以从控制台接收用户信息，【姓名，年龄，薪水】</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        println(<span class="string">"请输入姓名："</span>)</span><br><span class="line">        <span class="keyword">val</span> name = <span class="type">StdIn</span>.readLine()</span><br><span class="line">        println(<span class="string">"请输入年龄："</span>)</span><br><span class="line">        <span class="keyword">val</span> age = <span class="type">StdIn</span>.readInt()</span><br><span class="line">        println(<span class="string">"请输入薪水："</span>)</span><br><span class="line">        <span class="keyword">val</span> sal = <span class="type">StdIn</span>.readDouble()</span><br><span class="line">        printf(<span class="string">"用户的信息为 name=%s, age=%d, sal=%.2f"</span>, name, age, sal)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4流程控制">4.流程控制</h2>
+<h3 id="41-分支控制if-else">4.1 分支控制if-else</h3>
+<h4 id="411单分支的使用">4.1.1单分支的使用</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (条件表达式)&#123; <span class="comment">//说明：当条件表达式为ture时，就会执行&#123; &#125;的代码。</span></span><br><span class="line">	执行代码块 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栗子</p>
+<p>需求：输入人的年龄，如果该同志的年龄小于18岁，则输出“童年”</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        </span><br><span class="line">        println(<span class="string">"input age:"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readShort()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (age &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            println(<span class="string">"童年"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="412-双分支">4.1.2 双分支</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (条件表达式)&#123; <span class="comment">//说明：当条件表达式为ture时，就会执行代码2。</span></span><br><span class="line">    执行代码块<span class="number">1</span></span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">    执行代码块<span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栗子</p>
+<p>需求：输入年龄，如果年龄小于18岁，则输出“童年”。否则，输出“成年”。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    </span><br><span class="line">        println(<span class="string">"input age:"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readShort()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (age &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            println(<span class="string">"童年"</span>)</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            println(<span class="string">"成年"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单分支和双分支练习</p>
+<ol>
+<li>编写程序，声明2个Int型变量并赋值，判断两数之和，如果大于等于50，打印&quot;hello world&quot;</li>
+<li>编写程序，声明2个Double型变量并赋值，判断第一个数大于10.0，且第2个小数小于20.0，打印两数之和。</li>
+<li>定义两个变量Int，判断二者的和，是否即能被3又能被5整除，打印提示信息</li>
+<li>判断一个年份是否是闰年，闰年的条件是符合下面二者之一：（1）年份能被4整除，但不能被100整除；（2）能被400整除</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="413-多分支">4.1.3 多分支</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (条件表达式<span class="number">1</span>) &#123;</span><br><span class="line">	执行代码块<span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (条件表达式<span class="number">2</span>) &#123;</span><br><span class="line">	执行代码块<span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line">   ……</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	执行代码块n</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栗子</p>
+<p>（1）需求1：需求：输入年龄，如果年龄小于18岁，则输出“童年”。如果年龄大于等于18且小于等于30，则输出“中年”，否则，输出“老年”。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span>  </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"input age"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readInt()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (age &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            println(<span class="string">"童年"</span>)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(age&gt;=<span class="number">18</span> &amp;&amp; age&lt;<span class="number">30</span>)&#123;</span><br><span class="line">            println(<span class="string">"中年"</span>)</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            println(<span class="string">"老年"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（2）需求2：Scala中if else表达式其实是有返回值的，具体返回值取决于满足条件的代码体的最后一行内容。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span>  </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"input age"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readInt()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> res :<span class="type">String</span> = <span class="keyword">if</span> (age &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            <span class="string">"童年"</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(age&gt;=<span class="number">18</span> &amp;&amp; age&lt;<span class="number">30</span>)&#123;</span><br><span class="line">            <span class="string">"中年"</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="string">"老年"</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println(res)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（3）需求3：Scala中返回值类型不一致，取它们共同的祖先类型。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span>  </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"input age"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readInt()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> res:<span class="type">Any</span> = <span class="keyword">if</span> (age &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            <span class="string">"童年"</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(age&gt;=<span class="number">18</span> &amp;&amp; age&lt;<span class="number">30</span>)&#123;</span><br><span class="line">            <span class="string">"中年"</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="number">100</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println(res)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（4）需求4：三元运算符可以用if else实现</p>
+<p>如果大括号{}内的逻辑代码只有一行，大括号可以省略。如果省略大括号，if只对最近的一行逻辑代码起作用。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Java</span></span><br><span class="line"><span class="comment">// int result = flag?1:0</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Scala</span></span><br><span class="line">        println(<span class="string">"input age"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readInt()</span><br><span class="line">        <span class="keyword">val</span> res:<span class="type">Any</span> = <span class="keyword">if</span> (age &lt; <span class="number">18</span>)  <span class="string">"童年"</span> <span class="keyword">else</span> <span class="string">"成年"</span></span><br><span class="line"><span class="string">"不起作用"</span></span><br><span class="line"></span><br><span class="line">        println(res)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="42-嵌套分支">4.2 嵌套分支</h3>
+<p>基本语法</p>
+<p><strong><em>注意</em>: 嵌套分支不要超过3层。</strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>()&#123;</span><br><span class="line">    <span class="keyword">if</span>()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栗子</p>
+<p>需求：如果输入的年龄小于18，返回“童年”。如果输入的年龄大于等于18，需要再判断：如果年龄大于等于18且小于30，返回“中年”；如果其他，返回“老年”。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestIfElse</span>  </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"input age"</span>)</span><br><span class="line">        <span class="keyword">var</span> age = <span class="type">StdIn</span>.readInt()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> res :<span class="type">String</span> = <span class="keyword">if</span> (age &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            <span class="string">"童年"</span></span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(age&gt;=<span class="number">18</span> &amp;&amp; age&lt;<span class="number">30</span>)&#123;</span><br><span class="line">                <span class="string">"中年"</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="string">"老年"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println(res)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="43-switch分支结构">4.3 Switch分支结构</h3>
+<p>在Scala中没有Switch，而是使用模式匹配来处理。</p>
+<p>模式匹配涉及到的知识点较为综合，因此我们放在后面讲解。</p>
+<h3 id="44-for循环控制">4.4 For循环控制</h3>
+<p>Scala也为for循环这一常见的控制结构提供了非常多的特性，这些for循环的特性被称为for推导式或for表达式。</p>
+<h4 id="441-范围数据循环to">4.4.1 范围数据循环（To)</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">    println(i + <span class="string">" "</span>)</span><br><span class="line">&#125;</span><br><span class="line">println()</span><br></pre></td></tr></table></figure>
+<p>（1）i 表示循环的变量，&lt;- 规定to</p>
+<p>（2）i 将会从 1-3 循环，前后闭合</p>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 需求：输出5句 "宋宋，告别海狗人参丸吧"</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestFor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">5</span>)&#123;</span><br><span class="line">            println(<span class="string">"宋宋，告别海狗人参丸吧"</span>+i)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="442-范围数据循环until">4.4.2 范围数据循环（Until)</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> until <span class="number">3</span>) &#123;</span><br><span class="line">    print(i + <span class="string">" "</span>)</span><br><span class="line">&#125;</span><br><span class="line">println()</span><br></pre></td></tr></table></figure>
+<p>（1）这种方式和前面的区别在于i是从1到3-1</p>
+<p>（2）即使前闭合后开的范围</p>
+<p>栗子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestFor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i &lt;- <span class="number">1</span> until <span class="number">5</span> + <span class="number">1</span>)&#123;</span><br><span class="line">            println(<span class="string">"宋宋，告别海狗人参丸吧"</span> + i)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="443-循环守卫">4.4.3 循环守卫</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span> <span class="keyword">if</span> i != <span class="number">2</span>) &#123;</span><br><span class="line">    print(i + <span class="string">" "</span>)</span><br><span class="line">&#125;</span><br><span class="line">println()</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<p>（1）循环守卫，即循环保护式（也称条件判断式，守卫）。保护式为true则进入循环体内部，为false则跳过，类似于continue。</p>
+<p>（2）上面的代码等价</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(i !=<span class="number">2</span>)&#123;</span><br><span class="line">        print(i + <span class="string">" "</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栗子</p>
+<p>需求：输出1到5中，不等于3的值</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestFor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i &lt;- <span class="number">1</span> to <span class="number">5</span> <span class="keyword">if</span> i != <span class="number">3</span>) &#123;</span><br><span class="line">            println(i + <span class="string">"宋宋"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="444循环步长">4.4.4循环步长</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">10</span> by <span class="number">2</span>)&#123;</span><br><span class="line">    println(<span class="string">"i="</span> + i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">说明： by 表示步长</span><br></pre></td></tr></table></figure>
+<p>栗子</p>
+<p>需求：输出1到10以内的所有奇数</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">10</span> by <span class="number">2</span>)&#123;</span><br><span class="line">    println(<span class="string">"i="</span> + i)</span><br><span class="line">&#125;</span><br><span class="line">输出结果： <span class="number">1</span>、<span class="number">3</span>、<span class="number">5</span>、<span class="number">7</span>、<span class="number">9</span></span><br></pre></td></tr></table></figure>
+<h4 id="445-嵌套循环">4.4.5 嵌套循环</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>; j &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">    println(<span class="string">"i="</span> + i + <span class="string">" j="</span> + j)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：没有关键字，所以范围后一定要加<code>；</code>来隔断逻辑</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">MultiFor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">            println(<span class="string">"i="</span> + i + <span class="string">" j="</span> +j)<span class="comment">//输出9句</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//上面的写法，可以写成</span></span><br><span class="line">        println(<span class="string">"---------------------"</span>)</span><br><span class="line">        <span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(j &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">                println(<span class="string">"i="</span> + i + <span class="string">" j="</span> +j)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="446引入变量">4.4.6引入变量</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>; j = <span class="number">4</span>-i)&#123;</span><br><span class="line">    print(j + <span class="string">" "</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码等价</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">    <span class="keyword">val</span> j = <span class="number">4</span> - i</span><br><span class="line">    print(j + <span class="string">" "</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明:</p>
+<p>(1) for推导式一行中有多个表达式时，范围后一定要加<code>;</code> 号来隔断逻辑。<br>
+(2）for推导式有一个不成文的约定：当for推导式仅包含单一表达式时使用圆括号，当包含多个表达式时，一般每行一个表达式，并用花括号代替圆括号，如下</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> &#123;</span><br><span class="line">    i &lt;- <span class="number">1</span> to <span class="number">3</span></span><br><span class="line">    j = <span class="number">4</span> - i</span><br><span class="line">&#125;&#123;</span><br><span class="line">    println(<span class="string">"i="</span> + i + <span class="string">" j="</span> + j)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//上面代码等价于</span></span><br><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">3</span>)&#123;</span><br><span class="line">    j = <span class="number">4</span> - i</span><br><span class="line">   println(<span class="string">"i="</span> + i + <span class="string">" j="</span> + j) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="447循环返回值">4.4.7循环返回值</h4>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> res = <span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">10</span>) <span class="keyword">yield</span> i</span><br><span class="line">println(res)</span><br></pre></td></tr></table></figure>
+<p>说明：将遍历过程中处理的结果返回到一个新Vector集合中，使用yield关键字。<br>
+注意：开发中很少使用。</p>
+<p>栗子<br>
+需求：将原数据中所有值乘以2，并把数据返回到一个新的集合中。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestFor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">var</span> res = <span class="keyword">for</span>(i &lt;<span class="number">-1</span> to <span class="number">10</span>) <span class="keyword">yield</span> &#123;</span><br><span class="line">            i * <span class="number">2</span></span><br><span class="line">        &#125;</span><br><span class="line">        println(res)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出结果 Vector(2,4,6,8,10,12,14,16,18,20)</span></span><br></pre></td></tr></table></figure>
+<h4 id="448倒序打印">4.4.8倒序打印</h4>
+<p>说明：如果想倒序打印一组数据，可以用reverse。<br>
+栗子<br>
+需求：倒序打印10到1</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">10</span> reverse)&#123;</span><br><span class="line">    println(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="45-while-和-dowhile循环控制">4.5 while 和 do…while循环控制</h2>
+<h3 id="451-while循环控制">4.5.1 while循环控制</h3>
+<ol>
+<li>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">循环变量初始化</span><br><span class="line"><span class="keyword">while</span>(循环条件)&#123;</span><br><span class="line">    循环体（语句）</span><br><span class="line">    循环变量迭代</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>说明：<br>
+（1）循环条件是返回一个布尔值的表达式<br>
+（2）while循环是先判断再执行语句<br>
+（3）与if语句不同，while语句没有返回值，即整个while语句的结果是Unit类型()<br>
+（4）因为while中没有返回值，所以当要用该语句来计算并返回结果时，就不可避免的使用变量，而变量需要声明在while循环的外部，那么就等同于循环的内部对外部的变量造成了影响，也就违背了函数式编程的重要思想（输入=&gt;函数=&gt;输出，不对外界造成影响），所以不推荐使用，而是推荐使用for循环。</p>
+<p>栗子<br>
+需求：输出10句 “宋宋，喜欢海狗人参丸”</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestWhile</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span>(i &lt; <span class="number">10</span>)&#123;</span><br><span class="line">            println(<span class="string">"宋宋，喜欢海狗人参丸"</span>)</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="452-dowhile-循环控制">4.5.2 do…while 循环控制</h3>
+<ol>
+<li>
+<p>基本语法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">循环变量初始化</span><br><span class="line">do&#123;</span><br><span class="line">    循环体(语句)</span><br><span class="line">    循环变量迭代</span><br><span class="line">&#125;<span class="keyword">while</span>(循环条件)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>说明：<br>
+（1）循环条件是返回一个布尔值的表达式<br>
+（2）do…while循环是先执行，再判断</p>
+<p>栗子<br>
+需求：输出10句 “宋宋，喜欢海狗人参丸”</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestDoWhile</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line">        do&#123;</span><br><span class="line">            println(<span class="string">"宋宋，喜欢海狗人参丸"</span>)</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        &#125;<span class="keyword">while</span>(i &lt; <span class="number">10</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>练习：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="46-循环中断">4.6 循环中断</h2>
+<p>基本说明<br>
+Scala内置控制结构特地<strong><em>去掉了break和continue</em></strong>*，是为了更好的适应*<strong>函数式编程</strong>，推荐使用函数式的风格解决break和continue的功能，而不是一个关键字。Scala中使用breakable控制结构来实现break和continue功能。</p>
+<p>栗子<br>
+需求1：采用异常的方式退出循环</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (elem &lt;- <span class="number">1</span> to <span class="number">10</span>) &#123;</span><br><span class="line">            println(elem)</span><br><span class="line">            <span class="keyword">if</span> (elem == <span class="number">5</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">RuntimeException</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">catch</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> e =&gt;</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"正常结束循环"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需求2：采用Scala自带的函数，退出循环</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.util.control.<span class="type">Breaks</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">Breaks</span>.breakable(</span><br><span class="line">        <span class="keyword">for</span> (elem &lt;- <span class="number">1</span> to <span class="number">10</span>) &#123;</span><br><span class="line">            println(elem)</span><br><span class="line">            <span class="keyword">if</span> (elem == <span class="number">5</span>) <span class="type">Breaks</span>.<span class="keyword">break</span>()</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    println(<span class="string">"正常结束循环"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需求3：对break进行省略</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.util.control.<span class="type">Breaks</span>._</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestBreak</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    </span><br><span class="line">        breakable &#123;</span><br><span class="line">            <span class="keyword">for</span> (elem &lt;- <span class="number">1</span> to <span class="number">10</span>) &#123;</span><br><span class="line">                println(elem)</span><br><span class="line">                <span class="keyword">if</span> (elem == <span class="number">5</span>) <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        println(<span class="string">"正常结束循环"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需求4：循环遍历10以内的所有数据，奇数打印，偶数跳过（continue）</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestBreak</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (elem &lt;- <span class="number">1</span> to <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (elem % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                println(elem)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                println(<span class="string">"continue"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.bigdata.scala.chapter05</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> util.control.<span class="type">Breaks</span>._</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @author Mocg</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">WhileApp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">        <span class="keyword">var</span> x = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> (x &lt; <span class="number">20</span>) &#123;</span><br><span class="line">            breakable &#123;</span><br><span class="line">                x += <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> (x % <span class="number">2</span> != <span class="number">0</span>) &#123;</span><br><span class="line">                    println(x + <span class="string">"....."</span>)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    println(x + <span class="string">"继续走"</span>)</span><br><span class="line">                    <span class="keyword">break</span>()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="48-多重循环">4.8 多重循环</h2>
+<p>基本说明</p>
+<p>（1）将一个循环放在另一个循环体内，就形成了嵌套循环。其中，for，while，do…while均可以作为外层循环和内层循环。【<strong><em>建议一般使用两层，最多不要超过3层</em></strong>】</p>
+<p>（2）设外层循环次数为m次，内层为n次，则内层循环体实际上需要执行<strong><em>m*n</em></strong>次。</p>
+<p>栗子<br>
+需求：<br>
+1）统计三个班成绩情况，每个班有5名同学，求出各个班的平均分和所有班级的平均分【学生的成绩从键盘输入】<br>
+2）统计三个班及格人数，每个班有5名同学<br>
+3）打印出九九乘法表</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i &lt;- <span class="number">1</span> to <span class="number">9</span>)&#123;</span><br><span class="line">    <span class="keyword">for</span>(j &lt;- <span class="number">1</span> to i)&#123;</span><br><span class="line">    	print(j + <span class="string">"*"</span> + i + <span class="string">"="</span> + (i * j) + <span class="string">"\t"</span>)</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="49-练习">4.9 练习</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/Scala/03.Scala-函数式编程/" data-toggle="tooltip" data-placement="top" title="[Scala]03 Scala函数式编程">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/Scala/01.Scala概述/" data-toggle="tooltip" data-placement="top" title="[Scala]01 Scala概述">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                    <div class="reward">
+                        <div class="reward-button">赏 <span class="reward-code"> 
+                            <span class="alipay-code"> <img class="alipay-img" src="alipay_url"><b>支付宝打赏</b></span> 
+                            <span class="wechat-code"> <img class="wechat-img" src="wechatpay_url"><b>微信打赏</b> </span>
+                            </span></div>
+                        <p class="reward-notice">赞赏一下</p>
+                    </div>
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#第2章-变量和数据类型"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x7B2C;2&#x7AE0; &#x53D8;&#x91CF;&#x548C;&#x6570;&#x636E;&#x7C7B;&#x578B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#scala-程序反编译-说明scala-程序的执行流程"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Scala &#x7A0B;&#x5E8F;&#x53CD;&#x7F16;&#x8BD1;-&#x8BF4;&#x660E;scala &#x7A0B;&#x5E8F;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#21-变量和常量"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">2.1 &#x53D8;&#x91CF;&#x548C;&#x5E38;&#x91CF;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#211-基本语法"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">2.1.1 &#x57FA;&#x672C;&#x8BED;&#x6CD5;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#22-标识符的命名规范"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">2.2 &#x6807;&#x8BC6;&#x7B26;&#x7684;&#x547D;&#x540D;&#x89C4;&#x8303;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#221命名规则"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">2.2.1&#x547D;&#x540D;&#x89C4;&#x5219;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#23-字符串输出"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">2.3 &#x5B57;&#x7B26;&#x4E32;&#x8F93;&#x51FA;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#24-键盘输入"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">2.4 &#x952E;&#x76D8;&#x8F93;&#x5165;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#241-基本语法"><span class="toc-nav-number">1.5.1.</span> <span class="toc-nav-text">2.4.1 &#x57FA;&#x672C;&#x8BED;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#242-案例"><span class="toc-nav-number">1.5.2.</span> <span class="toc-nav-text">2.4.2 &#x6848;&#x4F8B;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#25-数据类型重点"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">2.5 &#x6570;&#x636E;&#x7C7B;&#x578B;&#xFF08;&#x91CD;&#x70B9;&#xFF09;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#251-scala数据类型"><span class="toc-nav-number">1.6.1.</span> <span class="toc-nav-text">2.5.1 Scala&#x6570;&#x636E;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#252整数类型byte-short-int-long"><span class="toc-nav-number">1.6.2.</span> <span class="toc-nav-text">2.5.2&#x6574;&#x6570;&#x7C7B;&#x578B;&#xFF08;Byte&#x3001;Short&#x3001;Int&#x3001;Long&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#253-浮点类型float-double"><span class="toc-nav-number">1.6.3.</span> <span class="toc-nav-text">2.5.3 &#x6D6E;&#x70B9;&#x7C7B;&#x578B;&#xFF08;Float&#x3001;Double&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#254字符类型char"><span class="toc-nav-number">1.6.4.</span> <span class="toc-nav-text">2.5.4&#x5B57;&#x7B26;&#x7C7B;&#x578B;&#xFF08;Char)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#255布尔类型boolean"><span class="toc-nav-number">1.6.5.</span> <span class="toc-nav-text">2.5.5&#x5E03;&#x5C14;&#x7C7B;&#x578B;&#xFF1A;Boolean</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#256-unit类型-null类型和nothing类型重点"><span class="toc-nav-number">1.6.6.</span> <span class="toc-nav-text">2.5.6 Unit&#x7C7B;&#x578B;&#x3001;Null&#x7C7B;&#x578B;&#x548C;Nothing&#x7C7B;&#x578B;&#xFF08;&#x91CD;&#x70B9;&#xFF09;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#26-类型转换"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">2.6 &#x7C7B;&#x578B;&#x8F6C;&#x6362;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#261-数值类型自动转换"><span class="toc-nav-number">1.7.1.</span> <span class="toc-nav-text">2.6.1 &#x6570;&#x503C;&#x7C7B;&#x578B;&#x81EA;&#x52A8;&#x8F6C;&#x6362;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#363-数据类型转换练习"><span class="toc-nav-number">1.7.2.</span> <span class="toc-nav-text">3.6.3 &#x6570;&#x636E;&#x7C7B;&#x578B;&#x8F6C;&#x6362;&#x7EC3;&#x4E60;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#262-强制类型转换"><span class="toc-nav-number">1.7.3.</span> <span class="toc-nav-text">2.6.2 &#x5F3A;&#x5236;&#x7C7B;&#x578B;&#x8F6C;&#x6362;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#第3章-运算符"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x7B2C;3&#x7AE0; &#x8FD0;&#x7B97;&#x7B26;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#31-算术运算符"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">3.1 &#x7B97;&#x672F;&#x8FD0;&#x7B97;&#x7B26;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#32-关系运算符"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">3.2 &#x5173;&#x7CFB;&#x8FD0;&#x7B97;&#x7B26;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#33-逻辑运算符"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">3.3 &#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x7B26;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#34-赋值运算符"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">3.4 &#x8D4B;&#x503C;&#x8FD0;&#x7B97;&#x7B26;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#35-位运算符"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">3.5 &#x4F4D;&#x8FD0;&#x7B97;&#x7B26;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#37-运算符优先级"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">3.7 &#x8FD0;&#x7B97;&#x7B26;&#x4F18;&#x5148;&#x7EA7;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4流程控制"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">4.&#x6D41;&#x7A0B;&#x63A7;&#x5236;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#41-分支控制if-else"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">4.1 &#x5206;&#x652F;&#x63A7;&#x5236;if-else</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#411单分支的使用"><span class="toc-nav-number">3.1.1.</span> <span class="toc-nav-text">4.1.1&#x5355;&#x5206;&#x652F;&#x7684;&#x4F7F;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#412-双分支"><span class="toc-nav-number">3.1.2.</span> <span class="toc-nav-text">4.1.2 &#x53CC;&#x5206;&#x652F;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#413-多分支"><span class="toc-nav-number">3.1.3.</span> <span class="toc-nav-text">4.1.3 &#x591A;&#x5206;&#x652F;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#42-嵌套分支"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">4.2 &#x5D4C;&#x5957;&#x5206;&#x652F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#43-switch分支结构"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">4.3 Switch&#x5206;&#x652F;&#x7ED3;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#44-for循环控制"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">4.4 For&#x5FAA;&#x73AF;&#x63A7;&#x5236;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#441-范围数据循环to"><span class="toc-nav-number">3.4.1.</span> <span class="toc-nav-text">4.4.1 &#x8303;&#x56F4;&#x6570;&#x636E;&#x5FAA;&#x73AF;&#xFF08;To)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#442-范围数据循环until"><span class="toc-nav-number">3.4.2.</span> <span class="toc-nav-text">4.4.2 &#x8303;&#x56F4;&#x6570;&#x636E;&#x5FAA;&#x73AF;&#xFF08;Until)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#443-循环守卫"><span class="toc-nav-number">3.4.3.</span> <span class="toc-nav-text">4.4.3 &#x5FAA;&#x73AF;&#x5B88;&#x536B;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#444循环步长"><span class="toc-nav-number">3.4.4.</span> <span class="toc-nav-text">4.4.4&#x5FAA;&#x73AF;&#x6B65;&#x957F;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#445-嵌套循环"><span class="toc-nav-number">3.4.5.</span> <span class="toc-nav-text">4.4.5 &#x5D4C;&#x5957;&#x5FAA;&#x73AF;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#446引入变量"><span class="toc-nav-number">3.4.6.</span> <span class="toc-nav-text">4.4.6&#x5F15;&#x5165;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#447循环返回值"><span class="toc-nav-number">3.4.7.</span> <span class="toc-nav-text">4.4.7&#x5FAA;&#x73AF;&#x8FD4;&#x56DE;&#x503C;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#448倒序打印"><span class="toc-nav-number">3.4.8.</span> <span class="toc-nav-text">4.4.8&#x5012;&#x5E8F;&#x6253;&#x5370;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#45-while-和-dowhile循环控制"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.5 while &#x548C; do&#x2026;while&#x5FAA;&#x73AF;&#x63A7;&#x5236;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#451-while循环控制"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">4.5.1 while&#x5FAA;&#x73AF;&#x63A7;&#x5236;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#452-dowhile-循环控制"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">4.5.2 do&#x2026;while &#x5FAA;&#x73AF;&#x63A7;&#x5236;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#46-循环中断"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">4.6 &#x5FAA;&#x73AF;&#x4E2D;&#x65AD;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#48-多重循环"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">4.8 &#x591A;&#x91CD;&#x5FAA;&#x73AF;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#49-练习"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">4.9 &#x7EC3;&#x4E60;</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Scala" title="Scala">Scala</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/mochuangang">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 莫传刚 2021 
+                    By <a href="http://www.mochuangang.com">欢迎来搞</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=mochuangang&repo=mochuangang.github.io
+&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.mochuangang.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://www.mochuangang.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
