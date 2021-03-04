@@ -7,8 +7,24 @@
     </url>
 
     <url>
+        <loc>http://www.mochuangang.com/article/Linux/06.Linux%E4%B9%8B%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86/</loc>
+        <lastmod>2021-02-12T12:17:22.625Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/article/Sqoop/01%20Sqoop/</loc>
+        <lastmod>2021-02-10T14:12:54.313Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://www.mochuangang.com/article/Scala/03.Scala-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/</loc>
-        <lastmod>2021-01-24T08:45:48.041Z</lastmod>
+        <lastmod>2021-01-28T01:27:56.426Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -16,7 +32,7 @@
 
     <url>
         <loc>http://www.mochuangang.com/article/Scala/02.Scala-%E5%8F%98%E9%87%8F%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</loc>
-        <lastmod>2021-01-24T03:46:03.749Z</lastmod>
+        <lastmod>2021-01-26T07:04:24.085Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -57,14 +73,6 @@
     <url>
         <loc>http://www.mochuangang.com/article/MySql/01Mysql%E5%AE%89%E8%A3%85/</loc>
         <lastmod>2021-01-09T07:23:48.475Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.mochuangang.com/article/Sqoop/01%20Sqoop/</loc>
-        <lastmod>2021-01-09T07:23:19.535Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -113,14 +121,6 @@
     <url>
         <loc>http://www.mochuangang.com/article/Hive/01Hive%E9%83%A8%E7%BD%B2/</loc>
         <lastmod>2020-12-25T06:08:33.816Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.mochuangang.com/article/Hive/03%20Hive%20%E5%88%86%E5%8C%BA%E8%A1%A8/</loc>
-        <lastmod>2020-12-18T15:10:10.343Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -433,14 +433,6 @@
     <url>
         <loc>http://www.mochuangang.com/article/Linux/07.Linux%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%9D%83%E9%99%90/</loc>
         <lastmod>2020-11-14T14:19:34.746Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.mochuangang.com/article/Linux/06.Linux%E4%B9%8B%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86/</loc>
-        <lastmod>2020-11-14T11:58:11.711Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

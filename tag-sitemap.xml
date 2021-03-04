@@ -16,22 +16,8 @@
     </url>
 
     <url>
-        <loc>http://www.mochuangang.com/tags/Linux/</loc>
-        <lastmod>2021-01-05T12:00:53.262Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://www.mochuangang.com/tags/Spark/</loc>
         <lastmod>2021-01-09T07:22:37.528Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.mochuangang.com/tags/Sqoop/</loc>
-        <lastmod>2021-01-09T07:23:19.535Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -52,7 +38,21 @@
 
     <url>
         <loc>http://www.mochuangang.com/tags/Scala/</loc>
-        <lastmod>2021-01-24T08:45:48.041Z</lastmod>
+        <lastmod>2021-01-28T01:27:56.426Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/tags/Sqoop/</loc>
+        <lastmod>2021-02-10T14:12:54.313Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.mochuangang.com/tags/Linux/</loc>
+        <lastmod>2021-02-12T12:17:22.625Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

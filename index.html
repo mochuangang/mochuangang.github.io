@@ -381,39 +381,6 @@ Sqoop项目开始于2009年，最早是作为Hadoop的一个第三方模块存..
 
 <div class="post-preview">
 
-    <a href="/article/Hive/03 Hive 分区表/">
-        <h2 class="post-title">
-                                 
-            [Hive] 03-Hive 分区表
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            1.分区表
-分区表实际上就是对应一个HDFS文件系统上的独立的文件夹，该文件夹下是该分区所有的数据文件。Hive中的分区就是分目录，把一个大的数据集根据业务需要分割成小的数据集。在查询时通过WHERE子句中的表达式选择查询所需要的指定的分区，这样的查询效率会提高很多。
-1.1 分区表基本操作
-1.引入分区表（需要根据日期对日志进行管理：记录日志、查询操作）
-1234# 例如/user/hiv......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by 莫传刚 on
-            2020-12-13
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hive" title="Hive">Hive</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
     <a href="/article/Hive/02 Hive命令/">
         <h2 class="post-title">
                                  
@@ -563,6 +530,38 @@ HDFS HA功能通过配......
 </div>
 <hr>
 
+<div class="post-preview">
+
+    <a href="/article/Hadoop/07.Hadoop-源码编译/">
+        <h2 class="post-title">
+                                 
+            [Hadoop]07 Hadoop源码编译
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+1. 为什么要编译
+直接从官网上下载的hadoop-2.6.0-cdh5.16.2.tar.gz部署后，不支持压缩，生产上是不可接受的，所以我们要进行编译，让他支持压缩我们可以用下面命令查看：
+1234567891011# hadoop checknative 命令查看[hadoop@ruozedata001 ~]$ hadoop checknative20/12/27 22:07:00 ......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by 莫传刚 on
+            2020-12-03
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
 
 
 <!-- Pager -->
@@ -608,7 +607,7 @@ HDFS HA功能通过配......
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
+            <a href="/tags/#Hive" title="Hive" rel="2">Hive</a>
             
         
             
@@ -620,19 +619,19 @@ HDFS HA功能通过配......
             
         
             
-            <a href="/tags/#Scala" title="Scala" rel="3">Scala</a>
-            
-        
-            
             <a href="/tags/#Mysql" title="Mysql" rel="3">Mysql</a>
             
         
             
-            <a href="/tags/#Sqoop" title="Sqoop" rel="1">Sqoop</a>
+            <a href="/tags/#Scala" title="Scala" rel="3">Scala</a>
             
         
             
             <a href="/tags/#Spark" title="Spark" rel="1">Spark</a>
+            
+        
+            
+            <a href="/tags/#Sqoop" title="Sqoop" rel="1">Sqoop</a>
             
         
     </div>
@@ -725,7 +724,7 @@ HDFS HA功能通过配......
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">20</span></li></ul>
     </div>
 
         <hr>
